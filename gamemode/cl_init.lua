@@ -18,6 +18,7 @@ include("vgui/poptions.lua")
 include("vgui/phelp.lua")
 include("vgui/pclasses.lua")
 include("cl_dermaskin.lua")
+include("zs_options.lua")
 
 color_white = Color(255, 255, 255, 220)
 color_black = Color(50, 50, 50, 255)
@@ -53,6 +54,9 @@ ActualNearZombies = 0
 
 local cvar_zs_roundtime = GetConVar("zs_roundtime")
 local cvar_zs_intermission_time = GetConVar("zs_intermission_time")
+local LASTHUMANSOUNDLENGTH = SoundDuration(LASTHUMANSOUND)
+local UNLIFESOUNDLENGTH = SoundDuration(UNLIFESOUND)
+local HALFLIFESOUNDLENGTH = SoundDuration(HALFLIFESOUND)
 
 local Top = {}
 local TopZ = {}
@@ -594,6 +598,13 @@ local function LoopUnlife()
 	end
 end
 
+local function LoopHalflife()
+	if HALFLIFE and not ENDROUND and not LASTHUMAN and not UNLIFE then
+		surface.PlaySound(HALFLIFESOUND)
+		timer.Simple(HALFLIFESOUNDLENGTH, LoopHalflife)
+	end
+end
+
 local function SetInf(infliction)
 	INFLICTION = infliction
 
@@ -613,12 +624,19 @@ local function SetInf(infliction)
 		if INFLICTION >= 0.75 and not UNLIFE then
 			UNLIFE = true
 			HALFLIFE = true
-			RunConsoleCommand("stopsound")
-			timer.Simple(0.5, LoopUnlife)
+			if not UNLIFEMUTE then 
+				RunConsoleCommand("stopsound")
+				timer.Simple(0.5, LoopUnlife)
+			end
 			GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontAA>Un-Life</font></color>", "<color=ltred><font=HUDFontSmallAA>Horde locked at 75%</font></color>")
 			GAMEMODE:SetUnlifeText()
 		elseif INFLICTION >= 0.5 and not HALFLIFE then
 			HALFLIFE = true
+			if not HALFLIFEMUTE then 
+				RunConsoleCommand("stopsound")
+				timer.Simple(0.5, LoopHalflife)
+			end
+			surface.PlaySound("npc/fast_zombie/fz_alert_far1.wav")
 			GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontAA>Half-Life</font></color>", "<color=ltred><font=HUDFontSmallAA>Horde locked above 50%</font></color>")
 			GAMEMODE:SetHalflifeText()
 		elseif usesound then
@@ -648,9 +666,14 @@ local function SetInfInit(infliction)
 	if INFLICTION >= 0.75 then
 		UNLIFE = true
 		HALFLIFE = true
-		LoopUnlife()
+		if not UNLIFEMUTE then 
+			LoopUnlife()
+		end
 	elseif INFLICTION >= 0.5 then
 		HALFLIFE = true
+		if not HALFLIFEMUTE then 
+			LoopHalflife()
+		end
 	end
 end
 net.Receive("SetInfInit", function() SetInf(net.ReadFloat()) end)

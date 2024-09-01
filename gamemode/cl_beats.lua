@@ -1,45 +1,5 @@
 local matHealthBar = surface.GetTextureID("zombiesurvival/healthbar_fill")
 
--- Replace beats with cuts of hl2_song2.mp3 here:
-local Beats = {}
-Beats[0] = {}
-Beats[1] = {"beat1.wav"}
-Beats[2] = {"beat1.wav", "beat2.wav"}
-Beats[3] = {"beat1.wav", "beat2.wav", "beat3.wav"}
-Beats[4] = {"beat2.wav", "beat3.wav", "beat4.wav"}
-Beats[5] = {"beat2.wav", "beat3.wav", "beat5.wav"}
-Beats[6] = {"beat2.wav", "beat3.wav", "beat5.wav", "beat6.wav"}
-Beats[7] = {"beat2.wav", "beat3.wav", "beat5.wav", "beat7.wav", "beat8.wav"}
-Beats[8] = {"beat2.wav", "beat3.wav", "beat5.wav", "beat6.wav", "beat7.wav"}
-Beats[9] = {"beat3.wav", "beat5.wav", "beat8.wav", "beat9.wav", "beat7.wav"}
-Beats[10] = {"ecky.wav"}
-
-local ZBeats = {}
-ZBeats[0] = {}
-ZBeats[1] = {"zbeat1.wav"}
-ZBeats[2] = {"zbeat2.wav"}
-ZBeats[3] = {"zbeat3.wav"}
-ZBeats[4] = {"zbeat4.wav"}
-ZBeats[5] = {"zbeat5.wav"}
-ZBeats[6] = {"zbeat6.wav"}
-ZBeats[7] = {"zbeat7.wav"}
-ZBeats[8] = {"zbeat8.wav"}
-ZBeats[9] = {"zbeat8.wav"}
-ZBeats[10] = {"zbeat8.wav"}
-
-local ZBeatLength = {}
-ZBeatLength[0] = 1
-ZBeatLength[1] = 2.4
-ZBeatLength[2] = 3.3
-ZBeatLength[3] = 4.5
-ZBeatLength[4] = 9.9
-ZBeatLength[5] = 9.95
-ZBeatLength[6] = 7.4
-ZBeatLength[7] = 5.1
-ZBeatLength[8] = 10.3
-ZBeatLength[9] = 10.3
-ZBeatLength[10] = 10.2
-
 util.PrecacheSound("beat1.wav")
 util.PrecacheSound("beat2.wav")
 util.PrecacheSound("beat3.wav")
@@ -57,20 +17,84 @@ util.PrecacheSound("zbeat5.wav")
 util.PrecacheSound("zbeat6.wav")
 util.PrecacheSound("zbeat7.wav")
 util.PrecacheSound("zbeat8.wav")
+util.PrecacheSound("zbeat9.wav")
+util.PrecacheSound("zicky.wav")
 util.PrecacheSound("ecky.wav")
+
+-- Replace beats with cuts of hl2_song2.mp3 here:
+local Beats = {}
+Beats[0] = {}
+Beats[1] = {"beat1.wav"}
+Beats[2] = {"beat2.wav"}
+Beats[3] = {"beat3.wav"}
+Beats[4] = {"beat4.wav"}
+Beats[5] = {"beat5.wav"}
+Beats[6] = {"beat6.wav"}
+Beats[7] = {"beat7.wav"}
+Beats[8] = {"beat8.wav"}
+Beats[9] = {"beat9.wav"}
+Beats[10] = {"ecky.wav"}
+
+local BeatLength1 = SoundDuration("beat1.wav")
+local BeatLength2 = SoundDuration("beat2.wav")
+local BeatLength3 = SoundDuration("beat3.wav")
+local BeatLength4 = SoundDuration("beat4.wav")
+local BeatLength5 = SoundDuration("beat5.wav")
+local BeatLength6 = SoundDuration("beat6.wav")
+local BeatLength7 = SoundDuration("beat7.wav")
+local BeatLength8 = SoundDuration("beat8.wav")
+local BeatLength9 = SoundDuration("beat9.wav")
+local BeatLength10 = SoundDuration("ecky.wav")
 
 local BeatLength = {}
 BeatLength[0] = 1.0
-BeatLength[1] = 1.7
-BeatLength[2] = 1.7
-BeatLength[3] = 1.7
-BeatLength[4] = 1.7
-BeatLength[5] = 1.7
-BeatLength[6] = 1.7
-BeatLength[7] = 1.65
-BeatLength[8] = 1.7
-BeatLength[9] = 1.7
-BeatLength[10] = 21.8
+BeatLength[1] = BeatLength1
+BeatLength[2] = BeatLength2
+BeatLength[3] = BeatLength3
+BeatLength[4] = BeatLength4
+BeatLength[5] = BeatLength5
+BeatLength[6] = BeatLength6
+BeatLength[7] = BeatLength7
+BeatLength[8] = BeatLength8
+BeatLength[9] = BeatLength9
+BeatLength[10] = BeatLength10
+
+local ZBeats = {}
+ZBeats[0] = {}
+ZBeats[1] = {"zbeat1.wav"}
+ZBeats[2] = {"zbeat2.wav"}
+ZBeats[3] = {"zbeat3.wav"}
+ZBeats[4] = {"zbeat4.wav"}
+ZBeats[5] = {"zbeat5.wav"}
+ZBeats[6] = {"zbeat6.wav"}
+ZBeats[7] = {"zbeat7.wav"}
+ZBeats[8] = {"zbeat8.wav"}
+ZBeats[9] = {"zbeat9.wav"}
+ZBeats[10] = {"zbeat10.wav"}
+
+local ZBeatLength1 = SoundDuration("zbeat1.wav")
+local ZBeatLength2 = SoundDuration("zbeat2.wav")
+local ZBeatLength3 = SoundDuration("zbeat3.wav")
+local ZBeatLength4 = SoundDuration("zbeat4.wav")
+local ZBeatLength5 = SoundDuration("zbeat5.wav")
+local ZBeatLength6 = SoundDuration("zbeat6.wav")
+local ZBeatLength7 = SoundDuration("zbeat7.wav")
+local ZBeatLength8 = SoundDuration("zbeat8.wav")
+local ZBeatLength9 = SoundDuration("zbeat9.wav")
+local ZBeatLength10 = SoundDuration("zicky.wav")
+
+local ZBeatLength = {}
+ZBeatLength[0] = 1
+ZBeatLength[1] = ZBeatLength1
+ZBeatLength[2] = ZBeatLength2
+ZBeatLength[3] = ZBeatLength3
+ZBeatLength[4] = ZBeatLength4
+ZBeatLength[5] = ZBeatLength5
+ZBeatLength[6] = ZBeatLength6
+ZBeatLength[7] = ZBeatLength7
+ZBeatLength[8] = ZBeatLength8
+ZBeatLength[9] = ZBeatLength9
+ZBeatLength[10] = ZBeatLength10
 
 local BeatText = {}
 BeatText[0] = "Perfectly Safe"
@@ -132,14 +156,7 @@ function GM:ResetWaterAndCramps()
 	CRAMP_METER_TIME = 0
 end
 
-local cvar_zs_ammo_regenerate_rate = GetConVar("zs_ammo_regenerate_rate")
-local cvar_zs_anti_vent_camp = GetConVar("zs_anti_vent_camp")
-local cvar_zs_allow_redeeming = GetConVar("zs_allow_redeeming")
-local cvar_zs_redeem_kills = GetConVar("zs_redeem_kills")
-local cvar_zs_autoredeem = GetConVar("zs_autoredeem")
-local cvar_zs_roundtime = GetConVar("zs_roundtime")
-
-local NextAmmoDropOff = cvar_zs_ammo_regenerate_rate:GetInt()
+local NextAmmoDropOff = cvars.Number("zs_ammo_regenerate_rate")
 
 local COLOR_HUD_OK = Color(0, 150, 0, 255)
 local COLOR_HUD_SCRATCHED = Color(35, 130, 0, 255)
@@ -147,7 +164,7 @@ local COLOR_HUD_HURT = Color(160, 160, 0, 255)
 local COLOR_HUD_CRITICAL = Color(220, 0, 0, 255)
 
 local function GetNextAmmoRegenerate()
-	return math.ceil(CurTime() / cvar_zs_ammo_regenerate_rate:GetInt()) * cvar_zs_ammo_regenerate_rate:GetInt()
+	return math.ceil(CurTime() / cvars.Number("zs_ammo_regenerate_rate")) * cvars.Number("zs_ammo_regenerate_rate")
 end
 
 function GM:InitPostEntity()
@@ -220,7 +237,7 @@ function GM:Think()
 			ActualHorde = math.min((GetZombieFocus2(ply:GetPos(), 300, 0.001, 0) - 0.0001) * 10, 10)
 			local rounded = math.Round(DisplayHorde)
 			NextHordeCalculate = curtime + ZBeatLength[rounded]
-			if ENABLE_BEATS:GetBool() and not UNLIFE then
+			if ENABLE_BEATS:GetBool() and not UNLIFEMUTE and not UNLIFE and not HALFLIFE or ENABLE_BEATS:GetBool() and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE then
 				for i, beat in pairs(ZBeats[rounded]) do
 					surface.PlaySound(beat)
 				end
@@ -240,14 +257,14 @@ function GM:Think()
 			ActualNearZombies = math.min(GetZombieFocus2(ply:GetPos(), 300, 0.001, 0) * 10, 10)
 			local rounded = math.Round(NearZombies)
 			NextThump = realtime + BeatLength[rounded]
-			if ENABLE_BEATS:GetBool() and not UNLIFE then
+			if ENABLE_BEATS:GetBool() and not UNLIFEMUTE and not UNLIFE or ENABLE_BEATS:GetBool() and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE then
 				for i, beat in pairs(Beats[rounded]) do
 					surface.PlaySound(beat)
 				end
 			end
 		end
 
-		if cvar_zs_anti_vent_camp:GetBool() then
+		if cvars.Bool("zs_anti_vent_camp") then
 			local cramped = util.TraceLine({start = mypos, endpos = mypos + Vector(0,0,64), filter = ply, mask=COLLISION_GROUP_DEBRIS}).HitWorld
 			if cramped then
 				CRAMP_METER_TIME = math.min(CRAMP_METER_TIME + FrameTime(), 60)
@@ -396,11 +413,11 @@ function GM:ZombieHUD(ply, actionposx, actionposy, killedposx, killedposy)
 	draw.SimpleText(ZombieHordeText[rounded], "HUDFontTinyAA", 128, h - 42, COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 	local killz = ply:Frags()
-	local allow_redeeming = cvar_zs_allow_redeeming:GetBool()
-	local redeem_kills = cvar_zs_redeem_kills:GetInt()
-	local autoredeem = cvar_zs_autoredeem:GetBool()
+	local allow_redeeming = cvars.Bool("zs_allow_redeeming")
+	local redeem_kills = cvars.Number("zs_redeem_kills")
+	local autoredeem = cvars.Bool("zs_autoredeem")
 	if SMALL_HUD then
-		draw.DrawText("Feed: "..ToMinutesSeconds(cvar_zs_roundtime:GetInt() - CurTime()), "HUDFontSmall", actionposx, actionposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
+		draw.DrawText("Feed: "..ToMinutesSeconds(cvars.Number("zs_roundtime") - CurTime()), "HUDFontSmall", actionposx, actionposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
 
 		if allow_redeeming then
 			if autoredeem then
@@ -416,7 +433,7 @@ function GM:ZombieHUD(ply, actionposx, actionposy, killedposx, killedposy)
 			draw.DrawText("Brains: "..killz, "HUDFontSmall", killedposx, killedposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
 		end
 	else
-		draw.DrawText("Feed: "..ToMinutesSeconds(cvar_zs_roundtime:GetInt() - CurTime()), "HUDFontSmall", actionposx, actionposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
+		draw.DrawText("Feed: "..ToMinutesSeconds(cvars.Number("zs_roundtime") - CurTime()), "HUDFontSmall", actionposx, actionposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
 
 		if allow_redeeming then
 			if autoredeem then

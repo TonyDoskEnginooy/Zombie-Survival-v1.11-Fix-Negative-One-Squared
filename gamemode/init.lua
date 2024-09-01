@@ -83,6 +83,7 @@ local cvar_zs_allow_admin_noclip = GetConVar("zs_allow_admin_noclip")
 local cvar_zs_human_deadline = GetConVar("zs_human_deadline")
 local cvar_zs_intermission_time = GetConVar("zs_intermission_time")
 local cvar_zs_allow_shove = GetConVar("zs_allow_shove")
+local stuckCollision = CreateConVar("zs_stuckcollision", "1", {FCVAR_ARCHIVE}, "If you want to not experience any knockback", 0 , 1)
 
 local LastHumanSpawnPoint = NULL
 local LastZombieSpawnPoint = NULL
@@ -92,6 +93,57 @@ local NextAmmoDropOff = cvar_zs_ammo_regenerate_rate:GetInt()
 if file.Exists("gamemodes/zombiesurvival/gamemode/maps/"..game.GetMap()..".lua", "GAME") then
 	include("maps/"..game.GetMap()..".lua")
 end
+
+/*
+	Created by Heox (STEAM_0:1:8901195)
+*/
+
+--
+
+if !SERVER then return end
+
+local function CheckIfPlayerStuck()
+	if stuckCollision:GetInt() >= 1 then 
+		for k,v in pairs(player.GetBots()) do
+			if IsValid(v) and v:IsPlayer() and v:Alive() then
+				if !v:InVehicle() then
+					local Offset = Vector(5, 5, 5)
+					local Stuck = false
+					
+					if v.Stuck == nil then
+						v.Stuck = false
+					end
+					
+					if v.Stuck then
+						Offset = Vector(2, 2, 2) //This is because we don't want the script to enable when the players touch, only when they are inside eachother. So, we make the box a little smaller when they aren't stuck.
+					end
+
+					for _,ent in pairs(ents.FindInBox(v:GetPos() + v:OBBMins() + Offset, v:GetPos() + v:OBBMaxs() - Offset)) do
+						if IsValid(ent) and ent != v and ent:IsPlayer() and ent:Alive() and ent:IsBot() then
+						
+							v:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+							v:SetVelocity(Vector(-10, -10, 0) * 20)
+							
+							ent:SetVelocity(Vector(10, 10, 0) * 20)
+							
+							Stuck = true
+						end
+					end
+				   
+					if !Stuck then
+						v.Stuck = false
+						v:SetCollisionGroup(COLLISION_GROUP_PLAYER)
+					end
+				else
+					v:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
+				end	
+			end
+		end
+	end
+end
+timer.Create("CheckIfPlayerStuck", 0.1, 0, CheckIfPlayerStuck)
+
+--
 
 -- HACK: force init the cvars when the gamemode is not installed in the client befored he joined the server
 local function FixCLCvars(ply)
@@ -159,6 +211,12 @@ function GM:Initialize()
 	resource.AddSingleFile("sound/"..HUMANWINSOUND)
 	resource.AddSingleFile("sound/"..DEATHSOUND)
 	resource.AddSingleFile("sound/unlife1.mp3")
+	resource.AddSingleFile("sound/unlifegreen.mp3")
+	resource.AddSingleFile("sound/unlifezinco.mp3")
+	resource.AddSingleFile("sound/halflife1.mp3")
+	resource.AddSingleFile("sound/lasthuman.mp3")
+	resource.AddSingleFile("sound/lasthumanclassic.mp3")
+	resource.AddSingleFile("sound/lasthuman_test.mp3")
 	//resource.AddFile("sound/unlife2.mp3")
 	//resource.AddFile("sound/unlife3.mp3")
 
@@ -734,13 +792,13 @@ function GM:PlayerInitialSpawn(ply)
 	ply.DamageDealt[TEAM_UNDEAD] = 0
 	ply.DamageDealt[TEAM_HUMAN] = 0
 
-	if DeadSteamIDs[ply:SteamID()] then
+	if DeadSteamIDs[ply:SteamID64()] then
 		ply:SetTeam(TEAM_UNDEAD)
 	elseif team.NumPlayers(TEAM_UNDEAD) < 1 and team.NumPlayers(TEAM_HUMAN) >= 3 then
-		local plays = player.GetAll()
+		local plays = player.GetBots()
 		local newply = plays[math.random(1, #plays)]
 		newply:SetTeam(TEAM_UNDEAD)
-		DeadSteamIDs[newply:SteamID()] = true
+		DeadSteamIDs[newply:SteamID64()] = true
 		newply:PrintMessage(4, "You've been randomly selected\nto lead the Undead army.")
 		newply:StripWeapons()
 		newply:Spawn()
@@ -749,7 +807,7 @@ function GM:PlayerInitialSpawn(ply)
 		end
 	elseif INFLICTION >= 0.5 or (CurTime() > cvar_zs_roundtime:GetInt()*0.5 and cvar_zs_human_deadline:GetBool()) or LASTHUMAN then
 		ply:SetTeam(TEAM_UNDEAD)
-		DeadSteamIDs[ply:SteamID()] = true
+		DeadSteamIDs[ply:SteamID64()] = true
 	else
 		ply:SetTeam(TEAM_HUMAN)
 		ply.SpawnedTime = CurTime()
@@ -792,7 +850,7 @@ function GM:OnPhysgunReload(weapon, ply)
 end
 
 function GM:PlayerDisconnected(ply)
-	DeadSteamIDs[ply:SteamID()] = true
+	DeadSteamIDs[ply:SteamID64()] = true
 	timer.Simple(2, function()
 		if IsValid(self) then
 			self:CalculateInfliction()
@@ -984,7 +1042,7 @@ end
 
 local function BanIdiot(ply)
 	if ply:IsValid() then
-		game.KickID(ply:SteamID(), "Attempt to use spectate exploit.")
+		game.KickID(ply:SteamID64(), "Attempt to use spectate exploit.")
 	end
 end
 
@@ -1134,7 +1192,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 			ply:PrintMessage(HUD_PRINTTALK, "There are not enough people playing for you to change to the Undead. Set zs_warmup_mode in zs_options.lua to false to change this.")
 		else
 			ply:SetTeam(TEAM_UNDEAD)
-			DeadSteamIDs[ply:SteamID()] = true
+			DeadSteamIDs[ply:SteamID64()] = true
 		end
 		ply:SendLua("Died()")
 		ply:SetFrags(0)
@@ -1191,6 +1249,10 @@ function GM:PlayerCanPickupWeapon(ply, entity)
 
 	return true
 end
+
+hook.Add( "AllowPlayerPickup", "AllowSurvivorsPickUp", function( ply, ent )
+    return ply:Team() == TEAM_HUMAN
+end )
 
 function SpawnProtection(ply, tim)
 	GAMEMODE:SetPlayerSpeed(ply, ZombieClasses[ply:GetZombieClass()].Speed * 1.5)
@@ -1274,9 +1336,7 @@ function GM:PlayerSpawn(ply)
 		ply:SetNoTarget(true)
 		ply:SendLua("ZomC()")
 		ply:SetMaxHealth(1) -- To prevent picking up health packs
-		if INFLICTION < 0.5 then
-			SpawnProtection(ply, 5 - INFLICTION * 5) -- Less infliction, more spawn protection.
-		end
+		SpawnProtection(ply, 5 - INFLICTION * 5) -- Less infliction, more spawn protection.
 	elseif plyteam == TEAM_HUMAN then
 		//ply.PlayerFootstep = nil
 		local modelname = string.lower(player_manager.TranslatePlayerModel(ply:GetInfo("cl_playermodel")))

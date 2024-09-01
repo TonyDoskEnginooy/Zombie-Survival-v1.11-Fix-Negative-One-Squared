@@ -11,7 +11,7 @@
 ]]
 
 -- Don't change this. If you change this then you're an IDIOT.
-GM.Version  = "v1.11 Fix 5"
+GM.Version  = "v1.11 Fix 3"
 -- Change this if you're not going to use the default install and/or settings. If you edit this file then it will automatically set it to Unofficial.
 GM.SubVersion = "Unofficial"
 
@@ -38,13 +38,13 @@ GM.STARTLOADOUTS = {
 -- Changing these means you're most likely an idiot.
 
 GM.Rewards = {} -- Leave this.
-GM.Rewards[GetConVar("zs_rewards_1", 2):GetInt()] = {"weapon_zs_deagle", "weapon_zs_deagle", "weapon_zs_glock3", "weapon_zs_glock3", "weapon_zs_magnum"}
-GM.Rewards[GetConVar("zs_rewards_2", 4):GetInt()] = {"_Heal", "_Heal", "_Shell"}
-GM.Rewards[GetConVar("zs_rewards_3", 6):GetInt()] = {"weapon_zs_uzi", "weapon_zs_uzi", "weapon_zs_crossbow", "weapon_zs_smg"}
-GM.Rewards[GetConVar("zs_rewards_4", 8):GetInt()] = {"weapon_zs_sweepershotgun", "weapon_zs_slugrifle"}
-GM.Rewards[GetConVar("zs_rewards_5", 10):GetInt()] = {"weapon_zs_barricadekit"}
-GM.Rewards[GetConVar("zs_rewards_6", 12):GetInt()] = {"_Regeneration", "_Heal"}
-GM.Rewards[GetConVar("zs_rewards_7", 14):GetInt()] = {"weapon_slam"}
+GM.Rewards[cvars.Number("zs_rewards_1", 2)] = {"weapon_zs_deagle", "weapon_zs_deagle", "weapon_zs_glock3", "weapon_zs_glock3", "weapon_zs_magnum"}
+GM.Rewards[cvars.Number("zs_rewards_2", 4)] = {"_Heal", "_Heal", "_Shell"}
+GM.Rewards[cvars.Number("zs_rewards_3", 6)] = {"weapon_zs_uzi", "weapon_zs_uzi", "weapon_zs_crossbow", "weapon_zs_smg"}
+GM.Rewards[cvars.Number("zs_rewards_4", 8)] = {"weapon_zs_sweepershotgun", "weapon_zs_slugrifle"}
+GM.Rewards[cvars.Number("zs_rewards_5", 10)] = {"weapon_zs_barricadekit"}
+GM.Rewards[cvars.Number("zs_rewards_6", 12)] = {"_Regeneration", "_Heal"}
+GM.Rewards[cvars.Number("zs_rewards_7", 14)] = {"weapon_slam"}
 
 ----------------------------------
 --		AMMO REGENERATION		--
@@ -113,7 +113,7 @@ local function InitConfigs()
 	--		zs_roundtime (def. 720) -- 12 minutes
 
 	-- Time in seconds between end round and next map.
-	-- 		zs_intermission_time (def. 35)
+	-- 		zs_intermission_time (def. 25)
 
 	-- New joining players will be put on the Undead team if the round is half over.
 	-- 		zs_human_deadline (def. true)
@@ -140,14 +140,40 @@ local function InitConfigs()
 	--		zs_allow_admin_noclip (def. true)
 
 	-- Sound to play for last human.
-	LASTHUMANSOUND = "lasthuman.mp3"
+	LASTHUMANSOUND = "lasthuman_test.mp3"
 
 	-- In seconds, the length of the above file. It's important to have this correct or you may get delayed or overlapping music.
-	LASTHUMANSOUNDLENGTH = 119
+	--[[if LASTHUMANSOUND == "lasthuman.mp3" then
+		LASTHUMANSOUNDLENGTH = 119
+	end
+	if LASTHUMANSOUND == "lasthumanclassic.mp3" then
+		LASTHUMANSOUNDLENGTH = 242
+	end
+	if LASTHUMANSOUND == "lasthuman_test.mp3" then
+		LASTHUMANSOUNDLENGTH = 185
+	end]]
 
 	-- Sound to play for ambient Un-Life music.
 	UNLIFESOUND = "unlife1.mp3"
-	UNLIFESOUNDLENGTH = 210
+	--[[if UNLIFESOUND == "unlife1.mp3" then 
+		UNLIFESOUNDLENGTH = 210
+	end
+	if UNLIFESOUND == "unlifegreen.mp3" then
+		UNLIFESOUNDLENGTH = 280
+	end
+	if UNLIFESOUND == "unlifezinco.mp3" then
+		UNLIFESOUNDLENGTH = 147
+	end]]
+
+	-- Toggles music for Un-Life and Half-Life
+	UNLIFEMUTE = false
+	HALFLIFEMUTE = true
+
+	-- Sound to play for ambient Half-Life music.
+	HALFLIFESOUND = "halflife1.mp3"
+	--[[if HALFLIFESOUND == "halflife1.mp3" then
+		HALFLIFESOUNDLENGTH = 201
+	end]]
 
 	-- Sound played to a person when they lose.
 	ALLLOSESOUND = "lose_test.mp3"
@@ -176,7 +202,7 @@ local function InitConfigs()
 	SURVIVALMODE = false
 
 	-- Do not allow players to suicide until 10% of the round time has passed - Xala
-	SUPPRESS_SUICIDE = true
+	SUPPRESS_SUICIDE = false
 end
 
 InitConfigs()
@@ -196,9 +222,9 @@ if CLIENT then
 end
 
 local shit = ""
-if GetConVar("zs_allow_redeeming"):GetBool() then
+if cvars.Bool("zs_allow_redeeming") then
 	shit = [[You must hurry and redeem yourself before the round ends!]] ..
-	[[@To redeem yourself, kill ]]..GetConVar("zs_redeem_kills"):GetInt()..[[ humans and you will respawn as a human.]]
+	[[@To redeem yourself, kill ]]..cvars.Number("zs_redeem_kills")..[[ humans and you will respawn as a human.]]
 end
 
 if CLIENT then
@@ -237,7 +263,7 @@ if CLIENT then
 
 	HELP_TEXT =
 		[[^gWelcome to Zombie Survival v1.11 Fix @^gBy JetBoom (2008). Adapted to GMod March 2024 Update+ by Xalalau.@ @^b          -- HUMANS --@^bSurvive for ]] ..
-		ToMinutesSeconds(GetConVar("zs_roundtime"):GetInt()) ..
+		ToMinutesSeconds(cvars.Number("zs_roundtime")) ..
 		[[ to win the match.@If you get killed by a zombie, you become one! ]] ..
 		shit .. 
 		[[@ @Watch the infliction bar. The bigger it is, the more humans are dead!@The bar at the bottom ]] ..
@@ -255,7 +281,7 @@ if CLIENT then
 
 	HELP_TEXT_SURVIVALMODE =
 		[[^rWelcome to Zombie Survival v1.11 Fix @^rBy JetBoom (2008). Adapted to GMod March 2024 Update+ by Xalalau.@ @^b          -- HUMANS --@^bSurvive for ]] ..
-		ToMinutesSeconds(GetConVar("zs_roundtime"):GetInt()) ..
+		ToMinutesSeconds(cvars.Number("zs_roundtime")) ..
 		[[ to win the match.@If you get killed by a zombie, you become one! ]] ..
 		shit ..
 		[[@ @Watch the infliction bar. The bigger it is, the more humans are dead!@The bar at the bottom of the screen ]] ..
