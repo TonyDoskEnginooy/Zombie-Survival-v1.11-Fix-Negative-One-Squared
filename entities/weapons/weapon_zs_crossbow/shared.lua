@@ -1,6 +1,5 @@
 if SERVER then
 	AddCSLuaFile("shared.lua")
-	SWEP.HoldType = "crossbow"
 	SWEP.Weight = 5
 	SWEP.AutoSwitchTo = false
 	SWEP.AutoSwitchFrom = false
@@ -24,6 +23,7 @@ if CLIENT then
 end
 
 SWEP.Base = "weapon_zs_base"
+SWEP.HoldType = "crossbow"
 
 SWEP.ViewModel = "models/weapons/v_crossbow.mdl"
 SWEP.WorldModel = "models/weapons/w_crossbow.mdl"
@@ -37,6 +37,10 @@ SWEP.Primary.Delay = 2.0
 SWEP.Secondary.Delay = 0.5
 
 SWEP.WalkSpeed = 150
+
+function SWEP:Initialize()
+	self:SetWeaponHoldType( self.HoldType )
+end
 
 function SWEP:PrimaryAttack()
 	self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)

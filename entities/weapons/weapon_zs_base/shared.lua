@@ -118,6 +118,16 @@ function SWEP:PrimaryAttack()
 	end
 end
 
+local function SurvivorsFunc()
+	local survivors = {}
+	for k , v in pairs(player.GetAll()) do
+		if v:Team() == TEAM_SURVIVORS then 
+			table.insert(survivors, v) 
+		end
+	end
+	return survivors
+end
+
 function SWEP:ZSShootBullet(dmg, numbul, cone)
 	local owner = self:GetOwner()
 
@@ -132,8 +142,9 @@ function SWEP:ZSShootBullet(dmg, numbul, cone)
 	if owner.ZSAwesomeTracer then
 		bullet.TracerName = "ToolTracer"
 	else
-		bullet.TracerName = "AR2Tracer"
+		bullet.TracerName = "Tracer"
 	end
+	bullet.IgnoreEntity = SurvivorsFunc()
 
 	owner:FireBullets(bullet)
 	self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
