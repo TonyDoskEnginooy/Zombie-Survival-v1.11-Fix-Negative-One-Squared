@@ -1,5 +1,9 @@
 # Welcome to Zombie Survival v1.11 Fix!
 
+This is just to put my little fixes into one place. Weapon animations are fixed and music is now customizable if you know how to make a replace sound addon!
+
+UNDERNEATH UIS ORIGINAL DESCRI{TIPN!!!
+
 Hey! I was there, in 2008, playing on the classic ZS servers, and I saw the day when simplicity was replaced by overkill! [JetBoom](https://steamcommunity.com/id/jetboom) evolved his awesome creation, GMod's Zombie Survival, into a very tumultuous and complex gamemode, full of anime girl skins, hats, particles, UI elements and timers - my simian brain simply couldn't keep up! That said, I always really missed that raw feeling of the old ZS, where I had nowhere to run, almost nothing to protect myself, all the models were the default ones and I didn't have to think about the game's progress, I just had to kill to be automatically rewarded! I confess that this gameplay is a little too raw, but it's really fun and easy to understand!
 
 So here we are! I want to give my HUGE appreciation and thanks to [Yushe](http://steamcommunity.com/profiles/76561198360846296) and [Soldier](http://steamcommunity.com/profiles/76561198325469923), who have kept a lot of original files **to this day** and still maintain a classic ZS server with a proprietary fixed version. Thanks to their kindness in granting my request to reopen the original ZS to the public, I was able to begin my effort on this repository! After that, all I needed was free time, and over the weekends the work gradually got done.
