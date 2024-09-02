@@ -31,14 +31,13 @@ local Touching = Vector(50, 50, 50)
 
 function SWEP:Think()
 	for _,surv in pairs(ents.FindInBox(self:GetOwner():GetPos() + self:GetOwner():OBBMins() + Touching, self:GetOwner():GetPos() + self:GetOwner():OBBMaxs() - Touching)) do
-		if self.Invis == 1 then 
+		if self:GetOwner():GetColor() == Color(255, 255, 255, 50) then 
 			if IsValid(surv) and surv ~= self:GetOwner() and surv:IsPlayer() and surv:Alive() then
 				self:GetOwner():SetColor(Color(255, 255, 255, 255))
-			else
-				self:GetOwner():SetColor(Color(255, 255, 255, 50))
+				timer.Simple(0.5, function() 
+					self:GetOwner():SetColor(Color(255, 255, 255, 50))
+				end )
 			end
-		else
-			self:GetOwner():SetColor(Color(255, 255, 255, 255))
 		end
 	end
 	if not self.NextHit then return end
@@ -127,11 +126,13 @@ function SWEP:Reload()
 		timer.Simple(2, function() 
 			if self.Alive then 
 				self.Invis = 1
+				self:GetOwner():SetColor(Color(255, 255, 255, 50))
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
 				self:GetOwner():EmitSound("ambient/voices/squeal1.wav")
 			end
 		end )
 	else
+		self:GetOwner():SetColor(Color(255, 255, 255, 255))
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
 		self.InvisAction = CurTime() + 2.1
 		self:GetOwner():EmitSound("ambient/voices/f_scream1.wav")
@@ -144,6 +145,11 @@ function SWEP:Reload()
 	end
 end
 
-hook.Add("PlayerHurt", "ZombieHurt", function() 
-
+hook.Add("PlayerHurt", "ZombieHurt", function(victim, attacker) 
+	if ( attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN and victim:IsPlayer() and victim:Team() == TEAM_UNDEAD and victim:GetColor() == Color(255, 255, 255, 50) ) then
+        victim:SetColor(Color(255, 255, 255, 255))
+        timer.Simple(0.5, function() 
+        	victim:SetColor(Color(255, 255, 255, 50))
+    	end )
+    end
 end )
