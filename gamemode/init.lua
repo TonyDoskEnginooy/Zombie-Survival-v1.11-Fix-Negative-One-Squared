@@ -959,10 +959,12 @@ function GM:PlayerUse(ply, entity)
 	return true
 end
 
+local posoffset = Vector(0, 0, -20)
+
 function SecondWind(ply)
 	if ply and ply:IsValid() and ply:IsPlayer() then
 		if ply.Gibbed or ply:Alive() or ply:Team() ~= TEAM_UNDEAD then return end
-		local pos = ply:GetPos() + Vector(0, 0, -20)
+		local pos = ply:GetPos() + posoffset
 		local angles = ply:EyeAngles()
 		local lastattacker = ply.LastAttacker
 		local dclass = ply.DeathClass
@@ -1298,7 +1300,7 @@ VoiceSetTranslate["models/player/male_08.mdl"] = "male"
 
 function GM:PlayerSpawn(ply)
 	local plyteam = ply:Team()
-	local spawnProtectionTime = team.NumPlayers(TEAM_UNDEAD) * 0.01
+	local spawnProtectionTime = team.NumPlayers(TEAM_UNDEAD) * 0.05
 
 	if plyteam == TEAM_SPECTATOR then
 		ply:SetTeam(TEAM_UNDEAD)
