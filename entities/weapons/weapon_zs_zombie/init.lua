@@ -35,7 +35,9 @@ function SWEP:Think()
 			if IsValid(surv) and surv ~= self:GetOwner() and surv:IsPlayer() and surv:Alive() then
 				self:GetOwner():SetColor(Color(255, 255, 255, 255))
 				timer.Simple(0.5, function() 
-					self:GetOwner():SetColor(Color(255, 255, 255, 50))
+					if self.Alive and self.Invis == 1 then 
+						self:GetOwner():SetColor(Color(255, 255, 255, 50))
+					end
 				end )
 			end
 		end
