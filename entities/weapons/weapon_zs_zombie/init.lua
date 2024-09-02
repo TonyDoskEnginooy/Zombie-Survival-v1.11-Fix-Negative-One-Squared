@@ -13,8 +13,13 @@ end
 function SWEP:Deploy()
 	self:GetOwner():DrawViewModel(true)
 	self:GetOwner():DrawWorldModel(false)
+	self:GetOwner():SetRenderMode(RENDERMODE_TRANSCOLOR)
 	self:GetOwner().ZomAnim = math.random(1, 3)
 	self:SetNextYell(0)
+	self.Invis = 0
+	self.InvisAction = 0
+	self:GetOwner():SetMaterial("")
+	GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 end
 
 -- This is kind of unique. It does a trace on the pre swing to see if it hits anything
@@ -66,17 +71,20 @@ function SWEP:Think()
 end
 
 SWEP.NextSwing = 0
+
 function SWEP:PrimaryAttack()
-	if CurTime() < self.NextSwing then return end
-	if self.SwapAnims then self:SendWeaponAnim(ACT_VM_HITCENTER) else self:SendWeaponAnim(ACT_VM_SECONDARYATTACK) end
-	self.SwapAnims = not self.SwapAnims
-	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
-	self:GetOwner():EmitSound("npc/zombie/zo_attack"..math.random(1, 2)..".wav")
-	self.NextSwing = CurTime() + self.Primary.Delay
-	self.NextHit = CurTime() + 0.6
-	local trace, ent = self:GetOwner():CalcMeleeHit(self.MeleeHitDetection)
-	if ent:IsValid() then
-		self.PreHit = ent
+	if self.Invis == 0 then 
+		if CurTime() < self.NextSwing then return end
+		if self.SwapAnims then self:SendWeaponAnim(ACT_VM_HITCENTER) else self:SendWeaponAnim(ACT_VM_SECONDARYATTACK) end
+		self.SwapAnims = not self.SwapAnims
+		self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+		self:GetOwner():EmitSound("npc/zombie/zo_attack"..math.random(1, 2)..".wav")
+		self.NextSwing = CurTime() + self.Primary.Delay
+		self.NextHit = CurTime() + 0.6
+		local trace, ent = self:GetOwner():CalcMeleeHit(self.MeleeHitDetection)
+		if ent:IsValid() then
+			self.PreHit = ent
+		end
 	end
 end
 
@@ -86,4 +94,30 @@ function SWEP:SecondaryAttack()
 
 	self:GetOwner():EmitSound("npc/zombie/zombie_voice_idle"..math.random(1, 14)..".wav")
 	self:SetNextYell(CurTime() + self.YellTime)
+end
+
+SWEP.Invis = 0
+SWEP.InvisAction = 0
+
+function SWEP:Reload()
+	if CurTime() < self.InvisAction or self:GetOwner():HasGodMode() then return end
+	if self.Invis == 0 then 
+		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
+		self.InvisAction = CurTime() + 10
+		timer.Simple(2, function() 
+			self:GetOwner():SetColor(Color(20, 20, 20, 50))
+			GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
+			self:GetOwner():EmitSound("ambient/voices/squeal1.wav")
+		end )
+		self.Invis = 1
+	else
+		self:GetOwner():SetColor(Color(20, 20, 20, 255))
+		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
+		self.InvisAction = CurTime() + 10
+		self:GetOwner():EmitSound("ambient/voices/f_scream1.wav")
+		timer.Simple(2, function() 
+			GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
+			self.Invis = 0
+		end )
+	end
 end
