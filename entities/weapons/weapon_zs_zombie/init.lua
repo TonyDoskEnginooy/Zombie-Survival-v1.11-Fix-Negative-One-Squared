@@ -103,7 +103,7 @@ function SWEP:Reload()
 	if CurTime() < self.InvisAction or self:GetOwner():HasGodMode() then return end
 	if self.Invis == 0 then 
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
-		self.InvisAction = CurTime() + 10
+		self.InvisAction = CurTime() + 4
 		timer.Simple(2, function() 
 			self:GetOwner():SetColor(Color(20, 20, 20, 50))
 			GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
@@ -113,7 +113,7 @@ function SWEP:Reload()
 	else
 		self:GetOwner():SetColor(Color(20, 20, 20, 255))
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
-		self.InvisAction = CurTime() + 10
+		self.InvisAction = CurTime() + 4
 		self:GetOwner():EmitSound("ambient/voices/f_scream1.wav")
 		timer.Simple(2, function() 
 			GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
