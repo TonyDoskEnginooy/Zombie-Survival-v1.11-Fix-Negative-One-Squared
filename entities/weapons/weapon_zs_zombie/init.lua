@@ -35,7 +35,7 @@ local Touching = Vector(50, 50, 50)
 function SWEP:Think()
 	for _,surv in pairs(ents.FindInBox(self:GetOwner():GetPos() + self:GetOwner():OBBMins() + Touching, self:GetOwner():GetPos() + self:GetOwner():OBBMaxs() - Touching)) do
 		if self:GetOwner():GetColor() == Cloaked then 
-			if IsValid(surv) and surv ~= self:GetOwner() and surv:IsPlayer() and surv:Alive() then
+			if IsValid(surv) and surv ~= self:GetOwner() and surv:IsPlayer() and surv:Alive() and surv:Team() ~= self:GetOwner():Team() then
 				self:GetOwner():SetColor(DeCloaked)
 				timer.Simple(0.5, function() 
 					if self.Alive and self.Invis == 1 then 
