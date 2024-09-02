@@ -10,6 +10,9 @@ function SWEP:SetNextYell(time)
 	self:SetDTFloat(0, time)
 end
 
+local Cloaked = Color(255, 255, 255, 50)
+local DeCloaked = Color(255, 255, 255, 255)
+
 function SWEP:Deploy()
 	self:GetOwner():DrawViewModel(true)
 	self:GetOwner():DrawWorldModel(false)
@@ -18,7 +21,7 @@ function SWEP:Deploy()
 	self:SetNextYell(0)
 	self.Invis = 0
 	self.InvisAction = 0
-	self:GetOwner():SetMaterial("")
+	self:GetOwner():SetColor(DeCloaked)
 	GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 end
 
@@ -31,12 +34,12 @@ local Touching = Vector(50, 50, 50)
 
 function SWEP:Think()
 	for _,surv in pairs(ents.FindInBox(self:GetOwner():GetPos() + self:GetOwner():OBBMins() + Touching, self:GetOwner():GetPos() + self:GetOwner():OBBMaxs() - Touching)) do
-		if self:GetOwner():GetColor() == Color(255, 255, 255, 50) then 
+		if self:GetOwner():GetColor() == Cloaked then 
 			if IsValid(surv) and surv ~= self:GetOwner() and surv:IsPlayer() and surv:Alive() then
-				self:GetOwner():SetColor(Color(255, 255, 255, 255))
+				self:GetOwner():SetColor(DeCloaked)
 				timer.Simple(0.5, function() 
 					if self.Alive and self.Invis == 1 then 
-						self:GetOwner():SetColor(Color(255, 255, 255, 50))
+						self:GetOwner():SetColor(Cloaked)
 					end
 				end )
 			end
@@ -128,13 +131,13 @@ function SWEP:Reload()
 		timer.Simple(2, function() 
 			if self.Alive then 
 				self.Invis = 1
-				self:GetOwner():SetColor(Color(255, 255, 255, 50))
+				self:GetOwner():SetColor(Cloaked)
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
 				self:GetOwner():EmitSound("ambient/voices/squeal1.wav")
 			end
 		end )
 	else
-		self:GetOwner():SetColor(Color(255, 255, 255, 255))
+		self:GetOwner():SetColor(DeCloaked)
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
 		self.InvisAction = CurTime() + 2.1
 		self:GetOwner():EmitSound("ambient/voices/f_scream1.wav")
@@ -143,23 +146,23 @@ function SWEP:Reload()
 			if self.Alive then 
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 				self.Invis = 0
-				self:GetOwner():SetColor(Color(255, 255, 255, 255))
+				self:GetOwner():SetColor(DeCloaked)
 			end
 		end )
 		timer.Simple(2.6, function() 
 			if self.Alive then
 				self.Invis = 0
-				self:GetOwner():SetColor(Color(255, 255, 255, 255))
+				self:GetOwner():SetColor(DeCloaked)
 			end
 		end )
 	end
 end
 
 hook.Add("PlayerHurt", "ZombieHurt", function(victim, attacker) 
-	if ( attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN and victim:IsPlayer() and victim:Team() == TEAM_UNDEAD and victim:GetColor() == Color(255, 255, 255, 50) ) then
-        victim:SetColor(Color(255, 255, 255, 255))
+	if ( attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN and victim:IsPlayer() and victim:Team() == TEAM_UNDEAD and victim:GetColor() == Cloaked ) then
+        victim:SetColor(DeCloaked)
         timer.Simple(0.5, function() 
-        	victim:SetColor(Color(255, 255, 255, 50))
+        	victim:SetColor(Cloaked)
     	end )
     end
 end )

@@ -14,13 +14,26 @@ function SWEP:Holster()
 	end)
 end
 
-function SWEP:Think()
-	local ply = LocalPlayer()
-	local vm = ply:GetViewModel()
-	if vm and vm:IsValid() and ply:Health() > 0 then
-		if vm:GetRenderMode() == RENDERMODE_NORMAL then
-			vm:SetRenderMode(RENDERMODE_TRANSCOLOR) -- Hacky solution to keep the rendermode 1. Idk why it keeps resting - Xala
+function SWEP:PreDrawViewModel(vm, weapon, ply)
+	vm:SetRenderMode(RENDERMODE_TRANSCOLOR)
+	vm:SetColor(Color(20, 20, 20))
+	if IsValid(ply) and not ply:HasGodMode() then
+		if ply:GetMaxSpeed() ~= 1 then 
+			render.SetBlend( ( ( math.max(15, math.min(ply:GetVelocity():Length(), 200)) ) * 0.01 ) / 2 )
+		else
+			render.SetBlend(1)
 		end
-		vm:SetColor(Color(20, 20, 20, math.max(15, math.min(ply:GetVelocity():Length(), 200))))
+	end
+end
+
+function SWEP:PostDrawViewModel(vm, weapon, ply)
+	vm:SetRenderMode(RENDERMODE_TRANSCOLOR)
+	vm:SetColor(Color(20, 20, 20))
+	if IsValid(ply) and not ply:HasGodMode() then
+		if ply:GetMaxSpeed() ~= 1 then 
+			render.SetBlend( ( ( math.max(15, math.min(ply:GetVelocity():Length(), 200)) ) * 0.01 ) / 2 )
+		else
+			render.SetBlend(1)
+		end
 	end
 end

@@ -57,7 +57,6 @@ function SWEP:Think()
 						vel.z = 150
 						ent:SetVelocity(vel)
 						ent:ViewPunch(Angle(math.random(0, 80), math.random(0, 80), math.random(0, 80)))
-						ent:TakeDamage(5 + 5 * math.min(GetZombieFocus(owner:GetPos(), 300, 0.0005, 0) - 0.15, 1), owner)
 					elseif phys:IsValid() and not ent:IsNPC() and phys:IsMoveable() then
 						local vel = owner:GetAimVector() * 1000
 

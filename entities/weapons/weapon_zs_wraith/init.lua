@@ -3,6 +3,8 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
+SWEP.CloakFail = 0
+
 function SWEP:Deploy()
 	self.CloakFail = 0
 
@@ -35,7 +37,11 @@ function SWEP:Think()
 	local owner = self:GetOwner()
 
 	if self.NextHit then
-		owner:SetColor(Color(20, 20, 20, 200))
+		if owner:HasGodMode() then 
+
+		else
+			owner:SetColor(Color(20, 20, 20, 200))
+		end
 	else
 		local vel = owner:GetVelocity():Length()
 		local min
@@ -46,7 +52,11 @@ function SWEP:Think()
 			min = math.random(1 + (self.CloakFail ~= 0 and 60 or 0), 22 + self.CloakFail)
 		end
 
-		owner:SetColor(Color(20, 20, 20, math.min(min, 200)))
+		if owner:HasGodMode() then 
+
+		else
+			owner:SetColor(Color(20, 20, 20, math.min(min, 200)))
+		end
 		return
 	end
 
