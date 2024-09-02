@@ -98,7 +98,13 @@ function SWEP:Think()
 
 	self.PreHit = nil
 
-	GAMEMODE:SetPlayerSpeed(owner, ZombieClasses[owner:GetZombieClass()].Speed)
+	if owner:HasGodMode() then
+		GAMEMODE:SetPlayerSpeed(owner, ZombieClasses[owner:GetZombieClass()].Speed * 1.5)
+		owner:SetMaxSpeed(ZombieClasses[owner:GetZombieClass()].Speed * 1.5)
+	else
+		GAMEMODE:SetPlayerSpeed(owner, ZombieClasses[owner:GetZombieClass()].Speed)
+		owner:SetMaxSpeed(ZombieClasses[owner:GetZombieClass()].Speed)
+	end
 end
 
 SWEP.NextSwing = 0
@@ -114,6 +120,7 @@ function SWEP:PrimaryAttack()
 		self.PreHit = ent
 	end
 	GAMEMODE:SetPlayerSpeed(self:GetOwner(), 1)
+	self:GetOwner():SetMaxSpeed(1)
 end
 
 SWEP.NextYell = 0
@@ -121,4 +128,17 @@ function SWEP:SecondaryAttack()
 	if CurTime() < self.NextYell then return end
 	self.NextYell = CurTime() + 6
 	self:GetOwner():EmitSound("wraithdeath"..math.random(1, 4)..".wav")
+end
+
+function GAMEMODE:PlayerButtonDown(ply, button)
+	if button == KEY_LSHIFT and not ply:HasGodMode() and ply:GetMaxSpeed() == ZombieClasses[ply:GetZombieClass()].Speed then
+		GAMEMODE:SetPlayerSpeed(ply, 100)
+		ply:SetMaxSpeed(100)
+	end
+end
+
+function GAMEMODE:PlayerButtonUp(ply, button)
+	if button == KEY_LSHIFT and not ply:HasGodMode() and ply:GetMaxSpeed() == 100 then
+		GAMEMODE:SetPlayerSpeed(ply, ZombieClasses[ply:GetZombieClass()].Speed)
+	end
 end
