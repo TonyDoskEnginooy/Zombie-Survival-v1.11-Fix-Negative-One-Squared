@@ -964,7 +964,7 @@ end
 function SecondWind(ply)
 	if ply and ply:IsValid() and ply:IsPlayer() then
 		if ply.Gibbed or ply:Alive() or ply:Team() ~= TEAM_UNDEAD then return end
-		local pos = ply:GetPos()
+		local pos = ply:GetPos() + Vector(0, 0, -20)
 		local angles = ply:EyeAngles()
 		local lastattacker = ply.LastAttacker
 		local dclass = ply.DeathClass
@@ -1300,6 +1300,8 @@ VoiceSetTranslate["models/player/male_08.mdl"] = "male"
 
 function GM:PlayerSpawn(ply)
 	local plyteam = ply:Team()
+	local spawnProtectionTime = team.NumPlayers(TEAM_UNDEAD) * 0.01
+	print(5 - spawnProtectionTime * 5)
 
 	if plyteam == TEAM_SPECTATOR then
 		ply:SetTeam(TEAM_UNDEAD)
@@ -1336,7 +1338,7 @@ function GM:PlayerSpawn(ply)
 		ply:SetNoTarget(true)
 		ply:SendLua("ZomC()")
 		ply:SetMaxHealth(1) -- To prevent picking up health packs
-		SpawnProtection(ply, 5 - INFLICTION * 5) -- Less infliction, more spawn protection.
+		SpawnProtection(ply, 5 - spawnProtectionTime * 5) -- Less infliction, more spawn protection.
 	elseif plyteam == TEAM_HUMAN then
 		//ply.PlayerFootstep = nil
 		local modelname = string.lower(player_manager.TranslatePlayerModel(ply:GetInfo("cl_playermodel")))

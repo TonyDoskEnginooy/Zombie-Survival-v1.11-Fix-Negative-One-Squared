@@ -229,9 +229,9 @@ local function DelayedLH()
 		local ply = LocalPlayer()
 
 		if ply:Team() == TEAM_UNDEAD or not ply:Alive() then
-			GAMEMODE:SplitMessage(h * 0.7, "<color=red><font=HUDFontAA>Kill the Last Human!</font></color>")
+			GAMEMODE:SplitMessage(h * 0.7, "<color=red><font=HUDFontBig>Kill the Last Human!</font></color>")
 		else
-			GAMEMODE:SplitMessage(h * 0.7, "<color=ltred><font=HUDFontAA>You are the Last Human!</font></color>", "<color=red><font=HUDFontAA>RUN!</font></color>")
+			GAMEMODE:SplitMessage(h * 0.7, "<color=ltred><font=HUDFontBig>You are the Last Human!</font></color>", "<color=red><font=HUDFontAA>RUN!</font></color>")
 		end
 	end
 end
@@ -398,12 +398,8 @@ end
 
 util.PrecacheSound("npc/stalker/breathing3.wav")
 util.PrecacheSound("npc/zombie/zombie_pain6.wav")
-function GM:PlayerBindPress(ply, bind)
-	if bind == "+walk" then
-		return true
-	--[[elseif bind == "impulse 100" then
-		return ply:Team() == TEAM_UNDEAD]]--
-	elseif bind == "+speed" and ply:Team() == TEAM_UNDEAD then
+function GM:PlayerButtonDown(ply, button)
+	if button == KEY_F and ply:Team() == TEAM_UNDEAD then
 		if DLV then
 			ply:EmitSound("npc/zombie/zombie_pain6.wav", 100, 110)
 			DoZomC()
