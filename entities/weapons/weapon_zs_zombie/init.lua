@@ -140,7 +140,7 @@ function SWEP:Reload()
 		self:GetOwner():SetColor(DeCloaked)
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
 		self.InvisAction = CurTime() + 2.1
-		self:GetOwner():EmitSound("ambient/voices/f_scream1.wav")
+		self:GetOwner():EmitSound("npc/zombie/zombie_alert1.wav")
 		self.Invis = 0
 		timer.Simple(2, function() 
 			if self.Alive then 
