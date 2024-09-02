@@ -139,14 +139,14 @@ function SWEP:SecondaryAttack()
 end
 
 function GAMEMODE:PlayerButtonDown(ply, button)
-	if button == KEY_LSHIFT and not ply:HasGodMode() and ply:GetMaxSpeed() == ZombieClasses[ply:GetZombieClass()].Speed then
+	if button == KEY_LSHIFT and not ply:HasGodMode() and ply:GetMaxSpeed() == ZombieClasses[ply:GetZombieClass()].Speed and ply:Team() == TEAM_UNDEAD and ply:GetZombieClass() == 5 then
 		GAMEMODE:SetPlayerSpeed(ply, 100)
 		ply:SetMaxSpeed(100)
 	end
 end
 
 function GAMEMODE:PlayerButtonUp(ply, button)
-	if button == KEY_LSHIFT and not ply:HasGodMode() and ply:GetMaxSpeed() == 100 then
+	if button == KEY_LSHIFT and not ply:HasGodMode() and ply:GetMaxSpeed() == 100 and ply:Team() == TEAM_UNDEAD and ply:GetZombieClass() == 5 then
 		GAMEMODE:SetPlayerSpeed(ply, ZombieClasses[ply:GetZombieClass()].Speed)
 	end
 end
