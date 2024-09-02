@@ -26,10 +26,18 @@ end
 -- and then if the after-swing doesn't hit anything, it hits whatever it hit in
 -- the pre-swing, as long as the distance is low enough.
 
+SWEP.Alive = true
+
 function SWEP:Think()
 	if not self.NextHit then return end
 	if CurTime() < self.NextHit then return end
 	self.NextHit = nil
+
+	if IsValid(self:GetOwner()) then 
+		self.Alive = true
+	else
+		self.Alive = false
+	end
 
 	local ply = self:GetOwner()
 
@@ -105,9 +113,11 @@ function SWEP:Reload()
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
 		self.InvisAction = CurTime() + 4
 		timer.Simple(2, function() 
-			self:GetOwner():SetColor(Color(20, 20, 20, 50))
-			GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
-			self:GetOwner():EmitSound("ambient/voices/squeal1.wav")
+			if self.Alive then 
+				self:GetOwner():SetColor(Color(20, 20, 20, 50))
+				GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
+				self:GetOwner():EmitSound("ambient/voices/squeal1.wav")
+			end
 		end )
 		self.Invis = 1
 	else
@@ -116,8 +126,10 @@ function SWEP:Reload()
 		self.InvisAction = CurTime() + 4
 		self:GetOwner():EmitSound("ambient/voices/f_scream1.wav")
 		timer.Simple(2, function() 
-			GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
-			self.Invis = 0
+			if self.Alive then 
+				GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
+				self.Invis = 0
+			end
 		end )
 	end
 end
