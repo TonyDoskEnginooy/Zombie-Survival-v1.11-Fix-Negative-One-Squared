@@ -329,7 +329,7 @@ ZombieClasses[1] =						-- The number should not be the same as any other class.
 	SWEP = "weapon_zs_zombie",			-- The SWEP to give them.
 	ANIM = "zombie",                    -- The animation file in gamemode/zombieanims -- Xala Fix 1.11
 	Model = Model("models/player/zombie_classic_hbfix.mdl"), -- The world model to use. If you make your own class, you must set up it's own animations or use the default HL2MP ones.
-	Speed = 150,						-- Speed moving on the ground.
+	Speed = 200,						-- Speed moving on the ground.
 	Description="The slow, sulking bag of flesh. This is your basic zombie.@Unique abilities: Can claw at objects to send them flying.", -- Description to display at class selection. Seperate lines by the @ character.
 	PainSounds = {
 		Sound("npc/zombie/zombie_pain1.wav"),
@@ -356,7 +356,7 @@ ZombieClasses[2] =
 	SWEP = "weapon_zs_fastzombie",
 	ANIM = "fastzombie",
 	Model = Model("models/player/zombie_fast.mdl"),
-	Speed = 245,
+	Speed = 260,
 	Description = "The faster, more decomposed, boney zombie. This is your fast attack zombie.@Unique abilities: Can climb walls and leap long distances.",
 	PainSounds = {
 		Sound("npc/fast_zombie/leap1.wav"),
@@ -376,7 +376,7 @@ ZombieClasses[3] =
 	SWEP = "weapon_zs_poisonzombie",
 	ANIM = "poisonzombie",
 	Model = Model("models/Zombie/Poison.mdl"),
-	Speed = 135,
+	Speed = 150,
 	Description="A giant mass of decaying flesh.@Unique abilities: Massive melee damage and can throw headcrabs.",
 	PainSounds = {
 		Sound("npc/zombie_poison/pz_pain1.wav"),
@@ -419,7 +419,7 @@ ZombieClasses[5] =
 	SWEP = "weapon_zs_wraith",
 	ANIM = "wraith",
 	Model = Model("models/stalker.mdl"),
-	Speed = 205,
+	Speed = 210,
 	Description="An apparition that does large amounts of damage.@Unique abilities: Heavy damage. Completely invisible while standing still.",
 	PainSounds = {
 		Sound("npc/barnacle/barnacle_pull1.wav"),
