@@ -1,6 +1,6 @@
 # Welcome to Zombie Survival v1.11 Fix!
 
-This is just to put my little fixes into one place. Weapon animations are fixed and music is now customizable if you know how to make a replace sound addon!
+This is just to put my little fixes into one place. Weapon animations are fixed, music is now customizable if you know how to make a replace sound addon, classic zombies have been buffed, wraiths can slow down, and fonts have been changed as well as some message changes!
 
 UNDERNEATH UIS ORIGINAL DESCRI{TIPN!!!
 
