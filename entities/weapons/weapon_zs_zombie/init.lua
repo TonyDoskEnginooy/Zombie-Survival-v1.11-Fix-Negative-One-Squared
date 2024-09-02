@@ -142,6 +142,14 @@ function SWEP:Reload()
 		timer.Simple(2, function() 
 			if self.Alive then 
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
+				self.Invis = 0
+				self:GetOwner():SetColor(Color(255, 255, 255, 255))
+			end
+		end )
+		timer.Simple(2.6, function() 
+			if self.Alive then
+				self.Invis = 0
+				self:GetOwner():SetColor(Color(255, 255, 255, 255))
 			end
 		end )
 	end
