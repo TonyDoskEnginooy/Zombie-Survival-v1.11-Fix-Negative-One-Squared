@@ -3,8 +3,6 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
-SWEP.CloakFail = 0
-
 function SWEP:Deploy()
 	self.CloakFail = 0
 
