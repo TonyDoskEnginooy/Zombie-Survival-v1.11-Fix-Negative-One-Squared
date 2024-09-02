@@ -1301,7 +1301,6 @@ VoiceSetTranslate["models/player/male_08.mdl"] = "male"
 function GM:PlayerSpawn(ply)
 	local plyteam = ply:Team()
 	local spawnProtectionTime = team.NumPlayers(TEAM_UNDEAD) * 0.01
-	print(5 - spawnProtectionTime * 5)
 
 	if plyteam == TEAM_SPECTATOR then
 		ply:SetTeam(TEAM_UNDEAD)
