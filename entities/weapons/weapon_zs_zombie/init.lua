@@ -34,10 +34,11 @@ function SWEP:Think()
 		if self.Invis == 1 then 
 			if IsValid(surv) and surv ~= self:GetOwner() and surv:IsPlayer() and surv:Alive() then
 				self:GetOwner():SetColor(Color(255, 255, 255, 255))
-				print(surv)
 			else
 				self:GetOwner():SetColor(Color(255, 255, 255, 50))
 			end
+		else
+			self:GetOwner():SetColor(Color(255, 255, 255, 255))
 		end
 	end
 	if not self.NextHit then return end
@@ -131,7 +132,6 @@ function SWEP:Reload()
 			end
 		end )
 	else
-		self:GetOwner():SetColor(Color(255, 255, 255, 255))
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
 		self.InvisAction = CurTime() + 2.1
 		self:GetOwner():EmitSound("ambient/voices/f_scream1.wav")
@@ -143,3 +143,7 @@ function SWEP:Reload()
 		end )
 	end
 end
+
+hook.Add("PlayerHurt", "ZombieHurt", function() 
+
+end )
