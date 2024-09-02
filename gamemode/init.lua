@@ -100,8 +100,6 @@ end
 
 --
 
-if !SERVER then return end
-
 local function CheckIfPlayerStuck()
 	if stuckCollision:GetInt() >= 1 then 
 		for k,v in pairs(player.GetBots()) do
