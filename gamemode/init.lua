@@ -1298,15 +1298,9 @@ VoiceSetTranslate["models/player/male_02.mdl"] = "male"
 VoiceSetTranslate["models/player/male_03.mdl"] = "male"
 VoiceSetTranslate["models/player/male_08.mdl"] = "male"
 
-local spawnProtectionTime
-
 function GM:PlayerSpawn(ply)
 	local plyteam = ply:Team()
-	if team.NumPlayers(TEAM_ZOMBIE) <= 1 then 
-		spawnProtectionTime = ( ( team.NumPlayers(TEAM_SURVIVORS) + 1 ) / player.GetCount() ) * 5
-	else
-		spawnProtectionTime = ( team.NumPlayers(TEAM_SURVIVORS) / player.GetCount() ) * 5
-	end
+	local spawnProtectionTime = ( team.NumPlayers(TEAM_SURVIVORS) / player.GetCount() ) * 5
 
 	if plyteam == TEAM_SPECTATOR then
 		ply:SetTeam(TEAM_UNDEAD)
