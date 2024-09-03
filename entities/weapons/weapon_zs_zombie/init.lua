@@ -65,7 +65,7 @@ function SWEP:Think()
 		trace.Hit = true
 	end
 
-	local damage = 10 + 10 * math.min(GetZombieFocus(ply:GetPos(), 300, 0.001, 0) - 0.3, 1)
+	local damage = 20 + 20 * math.min(GetZombieFocus(ply:GetPos(), 300, 0.001, 0) - 0.3, 1)
 
 	if not ent:IsValid() then
 		for _, fin in ipairs(ents.FindInSphere(ply:GetShootPos() + ply:GetAimVector() * 50, 20)) do
