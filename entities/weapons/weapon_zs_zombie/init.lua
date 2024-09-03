@@ -35,8 +35,8 @@ local Touching = Vector(50, 50, 50)
 SWEP.survHit = false
 
 function SWEP:Think()
-	for _,surv in pairs(ents.FindInBox(self:GetOwner():GetPos() + self:GetOwner():OBBMins() + Touching, self:GetOwner():GetPos() + self:GetOwner():OBBMaxs() - Touching)) do
-		if self:GetOwner():GetColor() == Cloaked then 
+	if self:GetOwner():GetColor() == Cloaked then 
+		for _,surv in pairs(ents.FindInBox(self:GetOwner():GetPos() + self:GetOwner():OBBMins() + Touching, self:GetOwner():GetPos() + self:GetOwner():OBBMaxs() - Touching)) do
 			if IsValid(surv) and surv ~= self:GetOwner() and surv:IsPlayer() and surv:Alive() and surv:Team() ~= self:GetOwner():Team() then
 				self:GetOwner():SetColor(DeCloaked)
 				timer.Simple(0.5, function() 
@@ -172,7 +172,7 @@ function SWEP:Reload()
 				self:GetOwner():SetColor(Cloaked)
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
 				self:GetOwner():SetMaxSpeed(300)
-				self:GetOwner():EmitSound("ambient/voices/squeal1.wav", 100, 50)
+				self:GetOwner():EmitSound("ambient/creatures/town_scared_sob2.wav")
 			end
 		end )
 	else
@@ -182,7 +182,7 @@ function SWEP:Reload()
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
 		self:GetOwner():SetMaxSpeed(100)
 		self.InvisAction = CurTime() + 2.1
-		self:GetOwner():EmitSound("npc/zombie/zombie_alert1.wav")
+		self:GetOwner():EmitSound("npc/zombie/zombie_alert"..math.random(1, 3)..".wav")
 		self.Invis = 0
 		timer.Simple(2, function() 
 			if self.Alive then 
