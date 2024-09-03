@@ -1298,9 +1298,15 @@ VoiceSetTranslate["models/player/male_02.mdl"] = "male"
 VoiceSetTranslate["models/player/male_03.mdl"] = "male"
 VoiceSetTranslate["models/player/male_08.mdl"] = "male"
 
+local spawnProtectionTime
+
 function GM:PlayerSpawn(ply)
 	local plyteam = ply:Team()
-	local spawnProtectionTime = team.NumPlayers(TEAM_UNDEAD) * 0.05
+	if team.NumPlayers(TEAM_ZOMBIE) <= 1 then 
+		spawnProtectionTime = ( ( team.NumPlayers(TEAM_SURVIVORS) + 1 ) / player.GetCount() ) * 5
+	else
+		spawnProtectionTime = ( team.NumPlayers(TEAM_SURVIVORS) / player.GetCount() ) * 5
+	end
 
 	if plyteam == TEAM_SPECTATOR then
 		ply:SetTeam(TEAM_UNDEAD)
@@ -1337,7 +1343,7 @@ function GM:PlayerSpawn(ply)
 		ply:SetNoTarget(true)
 		ply:SendLua("ZomC()")
 		ply:SetMaxHealth(1) -- To prevent picking up health packs
-		SpawnProtection(ply, math.max( (5 - spawnProtectionTime * 5), 0 ) ) -- Less infliction, more spawn protection.
+		SpawnProtection(ply, math.max( spawnProtectionTime, 0 ) ) -- Less infliction, more spawn protection.
 	elseif plyteam == TEAM_HUMAN then
 		//ply.PlayerFootstep = nil
 		local modelname = string.lower(player_manager.TranslatePlayerModel(ply:GetInfo("cl_playermodel")))
