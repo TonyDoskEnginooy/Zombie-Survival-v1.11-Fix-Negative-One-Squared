@@ -632,11 +632,11 @@ local function SetInf(infliction)
 				RunConsoleCommand("stopsound")
 				timer.Simple(0.5, LoopHalflife)
 			end
-			surface.PlaySound("npc/fast_zombie/fz_alert_far1.wav")
+			surface.PlaySound("ambient/creatures/town_zombie_call1.wav")
 			GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontBig>Half-Life</font></color>", "<color=ltred><font=HUDFontSmallAA>Horde locked above 50%</font></color>")
 			GAMEMODE:SetHalflifeText()
 		elseif usesound then
-			surface.PlaySound("npc/fast_zombie/fz_alert_far1.wav")
+			surface.PlaySound("ambient/creatures/town_zombie_call1.wav")
 			/*if amount > 1 then
 				UnlockedClass =  -- So you can have more than one class with the same infliction without getting spammed.
 			end
