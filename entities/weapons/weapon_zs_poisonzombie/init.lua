@@ -39,7 +39,7 @@ function SWEP:Think()
 
 	local damage = 45 + 45 * math.min(GetZombieFocus(owner:GetPos(), 300, 0.001, 0) - 0.3, 1)
 
-	if not ent:IsValid() then
+	if not ent:IsValid() and not trace.Hit then
 		for _, fin in ipairs(ents.FindInSphere(owner:GetShootPos() + owner:GetAimVector() * 50, 20)) do
 			if fin ~= owner then
 				if fin:GetClass() == "func_breakable_surf" then
@@ -89,7 +89,7 @@ function SWEP:Think()
 		end
 	end
 
- 	if ent:IsValid() or self.survHit then
+ 	if trace.Hit or ent:IsValid() or self.survHit then
 		owner:EmitSound("npc/zombie/claw_strike"..math.random(1, 3)..".wav", 90, 80)
 	end
 
