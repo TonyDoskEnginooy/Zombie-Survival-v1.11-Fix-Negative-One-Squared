@@ -31,6 +31,8 @@ function SWEP:Deploy()
 	end)
 end
 
+SWEP.survHit = false
+
 function SWEP:Think()
 	local owner = self:GetOwner()
 
@@ -76,6 +78,35 @@ function SWEP:Think()
 
 	local damage = 45 + 45 * math.min(GetZombieFocus(owner:GetPos(), 300, 0.001, 0) - 0.3, 1)
 
+	if not ent:IsValid() then
+		for _, fin in ipairs(ents.FindInSphere(owner:GetShootPos() + owner:GetAimVector() * 50, 20)) do
+			if fin ~= owner then
+				if fin:GetClass() == "func_breakable_surf" then
+					fin:Fire("break", "", 0)
+				else
+					local phys = fin:GetPhysicsObject()
+					if fin:IsPlayer() then
+						if fin:Team() == TEAM_UNDEAD then
+							local vel = owner:GetAimVector() * 400
+							vel.z = 100
+							fin:SetVelocity(vel)
+						end
+					elseif phys:IsValid() and not fin:IsNPC() and phys:IsMoveable() then
+						local vel = damage * 650 * owner:GetAimVector()
+
+						phys:ApplyForceOffset(vel, (fin:NearestPoint(owner:GetShootPos()) + fin:GetPos() * 2) / 3)
+						fin:SetPhysicsAttacker(owner)
+					end
+					fin:TakeDamage(damage, owner)
+				end
+				self.survHit = true
+				if fin:IsPlayer() then
+					break
+				end
+			end
+		end
+	end
+
 	if ent and ent:IsValid() then
 		if ent:GetClass() == "func_breakable_surf" then
 			ent:Fire("break", "", 0)
@@ -97,14 +128,14 @@ function SWEP:Think()
 		end
 	end
 
-	if trace.Hit then
+	if ent:IsValid() or self.survHit then
 		owner:EmitSound("ambient/machines/slicer"..math.random(1,4)..".wav", 90, 80)
-		// util.Decal("Blood", trace.HitPos + trace.HitNormal*10, trace.HitPos - trace.HitNormal*10)
 	end
 
 	owner:EmitSound("npc/zombie/claw_miss"..math.random(1, 2)..".wav", 90, 80)
 
 	self.PreHit = nil
+	self.survHit = false
 
 	if owner:HasGodMode() then
 		GAMEMODE:SetPlayerSpeed(owner, ZombieClasses[owner:GetZombieClass()].Speed * 1.5)

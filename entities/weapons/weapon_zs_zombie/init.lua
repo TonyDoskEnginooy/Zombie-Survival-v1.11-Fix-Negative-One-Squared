@@ -31,6 +31,7 @@ end
 
 SWEP.Alive = true
 local Touching = Vector(50, 50, 50)
+SWEP.survHit = false
 
 function SWEP:Think()
 	for _,surv in pairs(ents.FindInBox(self:GetOwner():GetPos() + self:GetOwner():OBBMins() + Touching, self:GetOwner():GetPos() + self:GetOwner():OBBMaxs() - Touching)) do
@@ -63,7 +64,39 @@ function SWEP:Think()
 		trace.Hit = true
 	end
 
-	local damage = 30 + 30 * math.min(GetZombieFocus(ply:GetPos(), 300, 0.001, 0) - 0.3, 1)
+	local damage = 10 + 10 * math.min(GetZombieFocus(ply:GetPos(), 300, 0.001, 0) - 0.3, 1)
+
+	if not ent:IsValid() then
+		for _, fin in ipairs(ents.FindInSphere(ply:GetShootPos() + ply:GetAimVector() * 50, 20)) do
+			if fin ~= ply then
+				if fin:GetClass() == "func_breakable_surf" then
+					fin:Fire("break", "", 0)
+				else
+					local phys = fin:GetPhysicsObject()
+					if fin:IsPlayer() then
+						local vel 
+						if fin:IsOnGround() then 
+							vel = ply:GetAimVector() * 800
+						else
+							vel = ply:GetAimVector() * 300
+						end
+						vel.z = 100
+						fin:SetVelocity(vel)
+					elseif phys:IsValid() and not fin:IsNPC() and phys:IsMoveable() then
+						local vel = damage * 650 * ply:GetAimVector()
+
+						phys:ApplyForceOffset(vel, (fin:NearestPoint(ply:GetShootPos()) + fin:GetPos() * 2) / 3)
+						fin:SetPhysicsAttacker(ply)
+					end
+					fin:TakeDamage(damage, ply)
+				end
+				self.survHit = true
+				if fin:IsPlayer() then
+					break
+				end
+			end
+		end
+	end
 
 	if ent and ent:IsValid() then
 		if ent:GetClass() == "func_breakable_surf" then
@@ -71,11 +104,13 @@ function SWEP:Think()
 		else
 			local phys = ent:GetPhysicsObject()
 			if ent:IsPlayer() then
-				if ent:Team() == TEAM_UNDEAD then
-					local vel = ply:GetAimVector() * 400
-					vel.z = 100
-					ent:SetVelocity(vel)
+				if ent:IsOnGround() then 
+					vel = ply:GetAimVector() * 800
+				else
+					vel = ply:GetAimVector() * 300
 				end
+				vel.z = 100
+				ent:SetVelocity(vel)
 			elseif phys:IsValid() and not ent:IsNPC() and phys:IsMoveable() then
 				local vel = damage * 650 * ply:GetAimVector()
 
@@ -86,12 +121,13 @@ function SWEP:Think()
 		end
 	end
 
-	if trace.Hit then
+	if ent:IsValid() or self.survHit then
 		ply:EmitSound("npc/zombie/claw_strike"..math.random(1, 3)..".wav")
 	end
 
 	ply:EmitSound("npc/zombie/claw_miss"..math.random(1, 2)..".wav")
 	self.PreHit = nil
+	self.survHit = false
 end
 
 SWEP.NextSwing = 0
