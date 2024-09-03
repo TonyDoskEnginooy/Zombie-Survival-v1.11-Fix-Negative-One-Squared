@@ -262,7 +262,7 @@ function GM:UnlockAllClasses(sender)
 	if sender.IsAdmin and sender:IsAdmin() then
 		print("All zombie classes are unlocked")
 		for _,class in ipairs(ZombieClasses) do class.Unlocked=true end
-			BroadcastLua("for _,class in ipairs(ZombieClasses) do class['Threshold']=0 print('Unlocked ' .. class['Name']) end GAMEMODE:SplitMessage(h * 0.7, '<color=red><font=HUDFontAA>All zombies unlocked!</font></color>')")
+		BroadcastLua("for _,class in ipairs(ZombieClasses) do class['Threshold']=0 print('Unlocked ' .. class['Name']) end GAMEMODE:SplitMessage(h * 0.7, '<color=red><font=HUDFontAA>All zombies unlocked!</font></color>')")
 	end
 end
 concommand.Add("zs_unlock_all_classes", function(sender, command, arguments) GAMEMODE:UnlockAllClasses(sender) end)
@@ -1337,7 +1337,7 @@ function GM:PlayerSpawn(ply)
 		ply:SetNoTarget(true)
 		ply:SendLua("ZomC()")
 		ply:SetMaxHealth(1) -- To prevent picking up health packs
-		SpawnProtection(ply, 5 - spawnProtectionTime * 5) -- Less infliction, more spawn protection.
+		SpawnProtection(ply, math.max( (5 - spawnProtectionTime * 5), 0 ) ) -- Less infliction, more spawn protection.
 	elseif plyteam == TEAM_HUMAN then
 		//ply.PlayerFootstep = nil
 		local modelname = string.lower(player_manager.TranslatePlayerModel(ply:GetInfo("cl_playermodel")))
