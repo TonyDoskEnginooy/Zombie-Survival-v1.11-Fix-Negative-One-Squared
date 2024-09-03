@@ -23,6 +23,7 @@ function SWEP:Deploy()
 	self.InvisAction = 0
 	self:GetOwner():SetColor(DeCloaked)
 	GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
+	self:GetOwner():SetMaxSpeed(ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 end
 
 -- This is kind of unique. It does a trace on the pre swing to see if it hits anything
@@ -163,12 +164,14 @@ function SWEP:Reload()
 	if CurTime() < self.InvisAction or self:GetOwner():HasGodMode() then return end
 	if self.Invis == 0 then 
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
+		self:GetOwner():SetMaxSpeed(100)
 		self.InvisAction = CurTime() + 4
 		timer.Simple(2, function() 
 			if self.Alive then 
 				self.Invis = 1
 				self:GetOwner():SetColor(Cloaked)
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
+				self:GetOwner():SetMaxSpeed(300)
 				self:GetOwner():EmitSound("ambient/voices/squeal1.wav", 100, 50)
 			end
 		end )
@@ -177,12 +180,14 @@ function SWEP:Reload()
 		self:GetOwner():SetAnimation(PLAYER_SUPERJUMP)
 		self:GetOwner():SetColor(DeCloaked)
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
+		self:GetOwner():SetMaxSpeed(100)
 		self.InvisAction = CurTime() + 2.1
 		self:GetOwner():EmitSound("npc/zombie/zombie_alert1.wav")
 		self.Invis = 0
 		timer.Simple(2, function() 
 			if self.Alive then 
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
+				self:GetOwner():SetMaxSpeed(ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 				self.Invis = 0
 				self:GetOwner():SetColor(DeCloaked)
 			end
@@ -197,10 +202,20 @@ function SWEP:Reload()
 end
 
 hook.Add("PlayerHurt", "ZombieHurt", function(victim, attacker) 
-	if ( attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN and victim:IsPlayer() and victim:Team() == TEAM_UNDEAD and victim:GetColor() == Cloaked ) then
-        victim:SetColor(DeCloaked)
-        timer.Simple(0.5, function() 
-        	victim:SetColor(Cloaked)
-    	end )
+	if ( attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN and victim:IsPlayer() and victim:Team() == TEAM_UNDEAD and victim:GetZombieClass() == 1 ) then
+		if victim:GetColor() == Cloaked then 
+	        victim:SetColor(DeCloaked)
+	        timer.Simple(0.5, function() 
+	        	victim:SetColor(Cloaked)
+	    	end )
+	    end
+	    if victim:GetMaxSpeed() == ZombieClasses[victim:GetZombieClass()].Speed then 
+		    GAMEMODE:SetPlayerSpeed(victim, 175)
+			victim:SetMaxSpeed(175)
+		    timer.Simple(2, function() 
+		        GAMEMODE:SetPlayerSpeed(victim, ZombieClasses[victim:GetZombieClass()].Speed)
+		        victim:SetMaxSpeed(ZombieClasses[victim:GetZombieClass()].Speed)
+		    end )
+		end
     end
 end )
