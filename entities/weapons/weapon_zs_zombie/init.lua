@@ -113,7 +113,7 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	if CurTime() < self:GetNextYell() then return end
+	if CurTime() < self:GetNextYell() or CurTime() < self.InvisAction then return end
 	self:GetOwner():SetAnimation(PLAYER_SUPERJUMP)
 
 	self:GetOwner():EmitSound("npc/zombie/zombie_voice_idle"..math.random(1, 14)..".wav")
@@ -133,10 +133,12 @@ function SWEP:Reload()
 				self.Invis = 1
 				self:GetOwner():SetColor(Cloaked)
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
-				self:GetOwner():EmitSound("ambient/voices/squeal1.wav")
+				self:GetOwner():EmitSound("ambient/voices/squeal1.wav", 100, 50)
 			end
 		end )
 	else
+		self:SetNextYell(CurTime() + self.YellTime)
+		self:GetOwner():SetAnimation(PLAYER_SUPERJUMP)
 		self:GetOwner():SetColor(DeCloaked)
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
 		self.InvisAction = CurTime() + 2.1
