@@ -140,7 +140,7 @@ local function InitConfigs()
 	--		zs_allow_admin_noclip (def. true)
 
 	-- Sound to play for last human.
-	LASTHUMANSOUND = "lasthuman_test.mp3"
+	LASTHUMANSOUND = "lasthuman.mp3"
 
 	-- In seconds, the length of the above file. It's important to have this correct or you may get delayed or overlapping music.
 	--[[if LASTHUMANSOUND == "lasthuman.mp3" then
