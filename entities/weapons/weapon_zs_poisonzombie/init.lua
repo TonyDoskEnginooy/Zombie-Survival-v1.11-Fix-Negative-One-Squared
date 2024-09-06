@@ -124,8 +124,10 @@ function SWEP:PrimaryAttack()
 		self.PreHit = ent
 	end
 	timer.Simple(2, function() 
-		if CurTime() < self.NextSwing then return end
-		self:SendWeaponAnim(ACT_VM_IDLE)
+		if self.NextSwing and CurTime() < self.NextSwing then return end
+		if self.Alive then  
+			self:SendWeaponAnim(ACT_VM_IDLE)
+		end
 	end )
 end
 
