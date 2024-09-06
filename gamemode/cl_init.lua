@@ -855,6 +855,8 @@ hook.Add( "PlayerFootstep", "ZombieFootsteps", function( ply, pos, foot, sound, 
 			end
 		elseif ply:GetZombieClass() > 5 and ply:GetZombieClass() < 9 then
 			ply:EmitSound("npc/headcrab_poison/ph_step"..math.random(1,4)..".wav")
+		elseif ply:GetZombieClass() == 10 then
+			ply:EmitSound("npc/zombine/gear"..math.random(1,3)..".wav")
 		end
 
 		return true

@@ -333,6 +333,9 @@ util.PrecacheSound("npc/headcrab_poison/ph_step1.wav")
 util.PrecacheSound("npc/headcrab_poison/ph_step2.wav")
 util.PrecacheSound("npc/headcrab_poison/ph_step3.wav")
 util.PrecacheSound("npc/headcrab_poison/ph_step4.wav")
+util.PrecacheSound("npc/zombine/gear1.wav")
+util.PrecacheSound("npc/zombine/gear2.wav")
+util.PrecacheSound("npc/zombine/gear3.wav")
 
 ZombieClasses[1] =						-- The number should not be the same as any other class. You can't skip numbers.
 {
@@ -344,7 +347,7 @@ ZombieClasses[1] =						-- The number should not be the same as any other class.
 	ANIM = "zombie",                    -- The animation file in gamemode/zombieanims -- Xala Fix 1.11
 	Model = Model("models/player/zombie_classic_hbfix.mdl"), -- The world model to use. If you make your own class, you must set up it's own animations or use the default HL2MP ones.
 	Speed = 200,						-- Speed moving on the ground.
-	Description="The slow, sulking bag of flesh. This is your basic zombie.@Unique abilities: Can claw at objects to send them flying.", -- Description to display at class selection. Seperate lines by the @ character.
+	Description="The slow, but deadly assassin whose great at ambushing other players. This is your basic zombie.@Unique abilities: Can turn invisible.", -- Description to display at class selection. Seperate lines by the @ character.
 	PainSounds = {
 		Sound("npc/zombie/zombie_pain1.wav"),
 		Sound("npc/zombie/zombie_pain2.wav"),
@@ -535,6 +538,28 @@ ZombieClasses[9] =
 	},
 	Unlocked = true,
 	Hidden = true -- The class won't show up in any menus and can't be switched to unless the script is told to switch to it.
+}
+
+ZombieClasses[10] =						
+{
+	Name = "Zombine",
+	Health = 175,
+	Threshold = 0.0,
+	SWEP = "weapon_zs_zombine",
+	ANIM = "zombine",
+	Model = Model("models/zombie/zombie_soldier.mdl"),
+	Speed = 150,		
+	Description="The slow, sulking bag of flesh and combine technology. This is your barricade destroyer.@Unique abilities: Can go faster when damaged enough.",
+	PainSounds = {
+		Sound("npc/zombine/zombine_pain1.wav"),
+		Sound("npc/zombine/zombine_pain2.wav"),
+		Sound("npc/zombine/zombine_pain3.wav"),
+		Sound("npc/zombine/zombine_pain4.wav")
+	},
+	DeathSounds = {
+		Sound("npc/zombine/zombine_die1.wav"),
+		Sound("npc/zombine/zombine_die2.wav")
+	},
 }
 
 -- Add models to this table to prevent human players from using them (Zombie skins and such).
