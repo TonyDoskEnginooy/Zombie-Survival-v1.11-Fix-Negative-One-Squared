@@ -233,13 +233,15 @@ function GM:Think()
 			end
 		end
 
-		if not LASTHUMAN and NextHordeCalculate < curtime then
+		if not LASTHUMAN then
 			ActualHorde = math.min((GetZombieFocus2(ply:GetPos(), 300, 0.001, 0) - 0.0001) * 10, 10)
 			local rounded = math.Round(DisplayHorde)
-			NextHordeCalculate = curtime + ZBeatLength[rounded]
-			if ENABLE_BEATS:GetBool() and not UNLIFEMUTE and not UNLIFE and not HALFLIFE or ENABLE_BEATS:GetBool() and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE then
-				for i, beat in pairs(ZBeats[rounded]) do
-					surface.PlaySound(beat)
+			if NextHordeCalculate < curtime then 
+				NextHordeCalculate = curtime + ZBeatLength[rounded]
+				if ENABLE_BEATS:GetBool() and not UNLIFEMUTE and not UNLIFE and not HALFLIFE or ENABLE_BEATS:GetBool() and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE then
+					for i, beat in pairs(ZBeats[rounded]) do
+						surface.PlaySound(beat)
+					end
 				end
 			end
 		end
@@ -253,13 +255,15 @@ function GM:Think()
 			end
 		end
 
-		if not LASTHUMAN and NextThump <= realtime then
+		if not LASTHUMAN then
 			ActualNearZombies = math.min(GetZombieFocus2(ply:GetPos(), 300, 0.001, 0) * 10, 10)
 			local rounded = math.Round(NearZombies)
-			NextThump = realtime + BeatLength[rounded]
-			if ENABLE_BEATS:GetBool() and not UNLIFEMUTE and not UNLIFE or ENABLE_BEATS:GetBool() and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE then
-				for i, beat in pairs(Beats[rounded]) do
-					surface.PlaySound(beat)
+			if NextThump <= realtime then 
+				NextThump = realtime + BeatLength[rounded]
+				if ENABLE_BEATS:GetBool() and not UNLIFEMUTE and not UNLIFE or ENABLE_BEATS:GetBool() and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE then
+					for i, beat in pairs(Beats[rounded]) do
+						surface.PlaySound(beat)
+					end
 				end
 			end
 		end
