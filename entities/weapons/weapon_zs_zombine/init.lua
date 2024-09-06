@@ -8,10 +8,6 @@ include("shared.lua")
 -- This is to get around that dumb thing where the view anims don't play right.
 SWEP.SwapAnims = false
 
-function SWEP:SetNextYell(time)
-	self:SetDTFloat(0, time)
-end
-
 function SWEP:SetNextSwing(time)
 	self:SetDTFloat(0, time)
 end
@@ -21,9 +17,7 @@ function SWEP:Deploy()
 	self:GetOwner():DrawWorldModel(false)
 	self:GetOwner().ZomAnim = math.random(1, 3)
 	self:SetNextSwing(0)
-	self:SetNextYell(0)
 	self.GrenadeOut = 0
-	self.GrenadeDuration = 0
 	GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 	self:SendWeaponAnim(ACT_VM_DRAW)
 	timer.Simple(1, function() 
