@@ -347,7 +347,7 @@ ZombieClasses[1] =						-- The number should not be the same as any other class.
 	ANIM = "zombie",                    -- The animation file in gamemode/zombieanims -- Xala Fix 1.11
 	Model = Model("models/player/zombie_classic_hbfix.mdl"), -- The world model to use. If you make your own class, you must set up it's own animations or use the default HL2MP ones.
 	Speed = 200,						-- Speed moving on the ground.
-	Description="The slow, but deadly assassin whose great at ambushing other players. This is your basic zombie.@Unique abilities: Can turn invisible.", -- Description to display at class selection. Seperate lines by the @ character.
+	Description="The deadly assassin whose great at ambushing other survivors. This is your basic zombie.@Unique abilities: Can turn invisible.", -- Description to display at class selection. Seperate lines by the @ character.
 	PainSounds = {
 		Sound("npc/zombie/zombie_pain1.wav"),
 		Sound("npc/zombie/zombie_pain2.wav"),
