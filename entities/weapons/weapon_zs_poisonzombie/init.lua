@@ -149,7 +149,10 @@ function SWEP:SecondaryAttack()
 			ThrowHeadcrab(self:GetOwner(), self)
 		end
 	end)
-	timer.Simple(2.5, function() 
-		self:SendWeaponAnim(ACT_VM_IDLE)
+	timer.Simple(4, function() 
+		if self.NextYell and CurTime() < self.NextYell then return end
+		if self.Alive then  
+			self:SendWeaponAnim(ACT_VM_IDLE)
+		end
 	end )
 end
