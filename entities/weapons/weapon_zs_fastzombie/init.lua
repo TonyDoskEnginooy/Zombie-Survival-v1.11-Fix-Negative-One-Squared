@@ -80,6 +80,7 @@ function SWEP:Think()
 
 	if not self:GetSwinging() then return end
 	if CurTime() < self:GetNextSwing() then return end
+	self:SendWeaponAnim(ACT_VM_IDLE)
 	if not owner:KeyDown(IN_ATTACK) then
 		self:SetSwinging(false)
 		//GAMEMODE:SetPlayerSpeed(owner, ZombieClasses[owner:GetZombieClass()].Speed)
@@ -106,15 +107,18 @@ function SWEP:Think()
 		end
 	end
 
- 	if trace.HitWorld then
+ 	if trace.HitWorld or ent:IsValid() then
 		owner:EmitSound("npc/zombie/claw_strike"..math.random(1, 3)..".wav", 80, math.random(105, 145))
-		// util.Decal("Blood", trace.HitPos + trace.HitNormal*10, trace.HitPos - trace.HitNormal*10)
 	else
 		owner:EmitSound("npc/zombie/claw_miss"..math.random(1, 2)..".wav", 80, math.random(105, 145))
 	end
 
 	owner:SetAnimation(PLAYER_ATTACK1)
-	if self.SwapAnims then self:SendWeaponAnim(ACT_VM_HITCENTER) else self:SendWeaponAnim(ACT_VM_SECONDARYATTACK) end
+	if self.SwapAnims then 
+		self:SendWeaponAnim(ACT_VM_HITCENTER) 
+	else 
+		self:SendWeaponAnim(ACT_VM_SECONDARYATTACK) 
+	end
 	self.SwapAnims = not self.SwapAnims
 	self:SetNextSwing(CurTime() + self.Primary.Delay)
 	owner:Fire("IgnoreFallDamage", "", 0)
@@ -131,6 +135,12 @@ SWEP.NextClimb = 0
 function SWEP:SecondaryAttack()
 	if self.Leaping or self:GetSwinging() then return end
 	local onground = self:GetOwner():OnGround()
+	if onground and not self:GetClimbing() and CurTime() >= self:GetPounceTime() then 
+		self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
+		timer.Simple(0.5, function() 
+			self:SendWeaponAnim(ACT_VM_IDLE) 
+		end )
+	end
 	if CurTime() >= self.NextClimb and not onground then
 		local vStart = self:GetOwner():GetShootPos()
 		local aimvec = self:GetOwner():GetAimVector() aimvec.z = 0
@@ -149,6 +159,10 @@ function SWEP:SecondaryAttack()
 			self:SetClimbing(true)
 			self:GetOwner():EmitSound("player/footsteps/metalgrate"..math.random(1,4)..".wav")
 			self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
+			timer.Simple(0.5, function() 
+				if self:GetClimbing() then return end
+				self:SendWeaponAnim(ACT_VM_IDLE) 
+			end )
 			return
 		end
 	end
