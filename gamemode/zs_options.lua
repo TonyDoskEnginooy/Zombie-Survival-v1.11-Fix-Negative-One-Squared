@@ -324,7 +324,7 @@ ZombieClasses[1] =						-- The number should not be the same as any other class.
 {
 	Name = "Zombie",					-- Display name.
 	Revives = false,						-- Zombie will revive if not shot in the head.
-	Health = 175,						-- Obviously enough, health
+	Health = 125,						-- Obviously enough, health
 	Threshold = 0.0,					-- Infliction <a number between 0.0 and 1.0, 0 being anytime and 1 being when there's 100% zombies> needed in order to change to this class.
 	SWEP = "weapon_zs_zombie",			-- The SWEP to give them.
 	ANIM = "zombie",                    -- The animation file in gamemode/zombieanims -- Xala Fix 1.11
