@@ -50,6 +50,10 @@ function SWEP:Precache()
 	util.PrecacheSound("npc/zombie/zombie_die1.wav")
 	util.PrecacheSound("npc/zombie/zombie_die2.wav")
 	util.PrecacheSound("npc/zombie/zombie_die3.wav")
+	util.PrecacheSound("npc/zombie/zombie_alert1.wav")
+	util.PrecacheSound("npc/zombie/zombie_alert2.wav")
+	util.PrecacheSound("npc/zombie/zombie_alert3.wav")
+	util.PrecacheSound("ambient/creatures/town_scared_sob2.wav")
 end
 
 function SWEP:GetNextYell()
