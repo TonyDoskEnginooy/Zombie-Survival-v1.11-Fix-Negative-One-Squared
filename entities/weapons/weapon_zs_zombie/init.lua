@@ -24,6 +24,12 @@ function SWEP:Deploy()
 	self:GetOwner():SetColor(DeCloaked)
 	GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 	self:GetOwner():SetMaxSpeed(ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
+	self:SendWeaponAnim(ACT_VM_DRAW)
+	timer.Simple(1, function() 
+		if self.Alive then 
+			self:SendWeaponAnim(ACT_VM_IDLE)
+		end
+	end )
 end
 
 -- This is kind of unique. It does a trace on the pre swing to see if it hits anything
@@ -35,6 +41,12 @@ local Touching = Vector(50, 50, 50)
 SWEP.survHit = false
 
 function SWEP:Think()
+	if IsValid(self:GetOwner()) then 
+		self.Alive = true
+	else
+		self.Alive = false
+	end
+	
 	if self:GetOwner():GetColor() == Cloaked then 
 		for _,surv in pairs(ents.FindInBox(self:GetOwner():GetPos() + self:GetOwner():OBBMins() + Touching, self:GetOwner():GetPos() + self:GetOwner():OBBMaxs() - Touching)) do
 			if IsValid(surv) and surv ~= self:GetOwner() and surv:IsPlayer() and surv:Alive() and surv:Team() ~= self:GetOwner():Team() then
@@ -50,12 +62,6 @@ function SWEP:Think()
 	if not self.NextHit then return end
 	if CurTime() < self.NextHit then return end
 	self.NextHit = nil
-
-	if IsValid(self:GetOwner()) then 
-		self.Alive = true
-	else
-		self.Alive = false
-	end
 
 	local ply = self:GetOwner()
 
@@ -146,6 +152,10 @@ function SWEP:PrimaryAttack()
 		if ent:IsValid() then
 			self.PreHit = ent
 		end
+		timer.Simple(1.5, function() 
+			if CurTime() < self.NextSwing then return end
+			self:SendWeaponAnim(ACT_VM_IDLE)
+		end )
 	end
 end
 

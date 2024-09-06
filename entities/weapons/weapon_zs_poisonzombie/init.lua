@@ -12,11 +12,24 @@ end
 function SWEP:Deploy()
 	self:GetOwner():DrawViewModel(true)
 	self:GetOwner():DrawWorldModel(false)
+	self:SendWeaponAnim(ACT_VM_DRAW)
+	timer.Simple(1, function() 
+		if self.Alive then 
+			self:SendWeaponAnim(ACT_VM_IDLE)
+		end
+	end )
 end
 
 SWEP.survHit = false
+SWEP.Alive = true
 
 function SWEP:Think()
+	if IsValid(self:GetOwner()) then 
+		self.Alive = true
+	else
+		self.Alive = false
+	end
+
 	if not self.NextHit then return end
 
 	if self.NextSwingAnim and CurTime() > self.NextSwingAnim then
@@ -110,6 +123,10 @@ function SWEP:PrimaryAttack()
 	if ent:IsValid() then
 		self.PreHit = ent
 	end
+	timer.Simple(2, function() 
+		if CurTime() < self.NextSwing then return end
+		self:SendWeaponAnim(ACT_VM_IDLE)
+	end )
 end
 
 SWEP.NextYell = 0
@@ -130,4 +147,7 @@ function SWEP:SecondaryAttack()
 			ThrowHeadcrab(self:GetOwner(), self)
 		end
 	end)
+	timer.Simple(2.5, function() 
+		self:SendWeaponAnim(ACT_VM_IDLE)
+	end )
 end

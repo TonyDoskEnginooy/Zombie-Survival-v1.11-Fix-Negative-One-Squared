@@ -26,7 +26,15 @@ function SWEP:Deploy()
 	self:GetOwner():DrawWorldModel(false)
 	self:SetPounceTime(0)
 	self:SetNextSwing(0)
+	self:SendWeaponAnim(ACT_VM_DRAW)
+	timer.Simple(0.5, function()
+		if self.Alive then 
+			self:SendWeaponAnim(ACT_VM_IDLE)
+		end 
+	end )
 end
+
+SWEP.Alive = true
 
 function SWEP:Think()
 	local owner = self:GetOwner()
@@ -37,6 +45,12 @@ function SWEP:Think()
 
 	if self:GetPounceTime() > 0 and CurTime() >= self:GetPounceTime() then
 		self:SetPounceTime(0)
+	end
+
+	if IsValid(self:GetOwner()) then 
+		self.Alive = true
+	else
+		self.Alive = false
 	end
 
 	if self.Leaping then
@@ -115,9 +129,9 @@ function SWEP:Think()
 
 	owner:SetAnimation(PLAYER_ATTACK1)
 	if self.SwapAnims then 
-		self:SendWeaponAnim(ACT_VM_HITCENTER) 
+		self:SendWeaponAnim(ACT_VM_HITLEFT) 
 	else 
-		self:SendWeaponAnim(ACT_VM_SECONDARYATTACK) 
+		self:SendWeaponAnim(ACT_VM_HITRIGHT) 
 	end
 	self.SwapAnims = not self.SwapAnims
 	self:SetNextSwing(CurTime() + self.Primary.Delay)
@@ -136,9 +150,11 @@ function SWEP:SecondaryAttack()
 	if self.Leaping or self:GetSwinging() then return end
 	local onground = self:GetOwner():OnGround()
 	if onground and not self:GetClimbing() and CurTime() >= self:GetPounceTime() then 
-		self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
-		timer.Simple(0.5, function() 
-			self:SendWeaponAnim(ACT_VM_IDLE) 
+		self:SendWeaponAnim(ACT_VM_THROW)
+		timer.Simple(0.5, function()
+			if self.Alive then 
+				self:SendWeaponAnim(ACT_VM_IDLE)
+			end 
 		end )
 	end
 	if CurTime() >= self.NextClimb and not onground then
@@ -161,7 +177,9 @@ function SWEP:SecondaryAttack()
 			self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
 			timer.Simple(0.5, function() 
 				if self:GetClimbing() then return end
-				self:SendWeaponAnim(ACT_VM_IDLE) 
+				if self.Alive then 
+					self:SendWeaponAnim(ACT_VM_IDLE)
+				end 
 			end )
 			return
 		end
