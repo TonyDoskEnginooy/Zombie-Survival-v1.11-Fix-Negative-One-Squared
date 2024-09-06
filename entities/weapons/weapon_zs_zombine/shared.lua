@@ -26,10 +26,10 @@ SWEP.MeleeHitDetection = {
 }
 
 function SWEP:Precache()
-	util.PrecacheSound("zombine/zombine_idle1.wav")
-	util.PrecacheSound("zombine/zombine_idle2.wav")
-	util.PrecacheSound("zombine/zombine_idle3.wav")
-	util.PrecacheSound("zombine/zombine_idle4.wav")
+	util.PrecacheSound("npc/zombine/zombine_idle1.wav")
+	util.PrecacheSound("npc/zombine/zombine_idle2.wav")
+	util.PrecacheSound("npc/zombine/zombine_idle3.wav")
+	util.PrecacheSound("npc/zombine/zombine_idle4.wav")
 	util.PrecacheSound("npc/zombie/claw_strike1.wav")
 	util.PrecacheSound("npc/zombie/claw_strike2.wav")
 	util.PrecacheSound("npc/zombie/claw_strike3.wav")
@@ -38,6 +38,13 @@ function SWEP:Precache()
 	util.PrecacheSound("npc/zombine/zombine_charge1.wav")
 	util.PrecacheSound("npc/zombine/zombine_die1.wav")
 	util.PrecacheSound("npc/zombine/zombine_die2.wav")
+	util.PrecacheSound("npc/zombine/zombine_alert1.wav")
+	util.PrecacheSound("npc/zombine/zombine_alert2.wav")
+	util.PrecacheSound("npc/zombine/zombine_alert3.wav")
+	util.PrecacheSound("npc/zombine/zombine_alert4.wav")
+	util.PrecacheSound("npc/zombine/zombine_alert5.wav")
+	util.PrecacheSound("npc/zombine/zombine_alert6.wav")
+	util.PrecacheSound("npc/zombine/zombine_alert7.wav")
 end
 
 function SWEP:GetNextSwing()
