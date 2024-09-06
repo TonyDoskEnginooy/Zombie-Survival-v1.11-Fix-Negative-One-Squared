@@ -1092,7 +1092,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 
 	ply.NextSpawnTime = CurTime() + 4
 	ply:AddDeaths(1)
-	if ZombieClasses[ply.Class].Name == "Chem-Zombie" and ply:Team() == TEAM_UNDEAD and attacker ~= ply and not suicide or ZombieClasses[ply.Class].Name == "Zombine" and ply:Team() == TEAM_UNDEAD and attacker == ply and ply:GetMaxSpeed() == 300 then
+	if ZombieClasses[ply.Class].Name == "Chem-Zombie" and ply:Team() == TEAM_UNDEAD and attacker ~= ply and not suicide or ZombieClasses[ply.Class].Name == "Zombine" and ply:Team() == TEAM_UNDEAD and ply:GetMaxSpeed() == 300 then
 		ply:Gib(dmginfo)
 		ply.Gibbed = true
 		if LASTHUMAN then
