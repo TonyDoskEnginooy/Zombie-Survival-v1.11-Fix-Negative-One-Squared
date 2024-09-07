@@ -50,3 +50,7 @@ end
 function SWEP:GetNextSwing()
 	return self:GetDTFloat(0)
 end
+
+function SWEP:GetGrenading()
+	return self:GetDTBool(1)
+end

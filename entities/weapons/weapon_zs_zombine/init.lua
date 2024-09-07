@@ -12,12 +12,16 @@ function SWEP:SetNextSwing(time)
 	self:SetDTFloat(0, time)
 end
 
+function SWEP:IsGrenading(bool)
+	self:SetDTBool(1, bool)
+end
+
 function SWEP:Deploy()
 	self:GetOwner():DrawViewModel(true)
 	self:GetOwner():DrawWorldModel(false)
 	self:GetOwner().ZomAnim = math.random(1, 3)
 	self:SetNextSwing(0)
-	self.GrenadeOut = 0
+	self:IsGrenading(false)
 	GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 	self:SendWeaponAnim(ACT_VM_DRAW)
 	timer.Simple(1, function() 
@@ -37,7 +41,7 @@ function SWEP:Think()
 		self.Alive = false
 	end
 
-	if self:GetOwner():Health() <= ZombieClasses[self:GetOwner():GetZombieClass()].Health / 2 and self.GrenadeOut == 0 then 
+	if self:GetOwner():Health() <= ZombieClasses[self:GetOwner():GetZombieClass()].Health / 2 and self:GetGrenading() == false then 
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 200)
 	end
 
@@ -112,7 +116,7 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	if CurTime() < self:GetNextSwing() or self.GrenadeOut == 1 then return end
+	if CurTime() < self:GetNextSwing() or self:GetGrenading() == true then return end
 	if self.SwapAnims then self:SendWeaponAnim(ACT_VM_HITCENTER) else self:SendWeaponAnim(ACT_VM_SECONDARYATTACK) end
 	self.SwapAnims = not self.SwapAnims
 	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
@@ -142,9 +146,9 @@ end
 
 SWEP.GrenadeOut = 0
 function SWEP:Reload()
-	if self:GetOwner():HasGodMode() or self.GrenadeOut == 1 then return end
-	if self.GrenadeOut == 0 then 
-		self.GrenadeOut = 1
+	if self:GetOwner():HasGodMode() or self:GetGrenading() == true or CurTime() < self:GetNextSwing() then return end
+	if self:GetGrenading() == false then 
+		self:IsGrenading(true)
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 1)
 		self:GetOwner():EmitSound("npc/zombine/zombine_alert"..math.random(1, 7)..".wav")
 		timer.Simple(1, function()
@@ -155,7 +159,7 @@ function SWEP:Reload()
 			end
 			timer.Simple(3.99, function() 
 				if self.Alive then
-					self.GrenadeOut = 0
+					self:IsGrenading(false)
 					GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
 				end
 			end )
