@@ -70,7 +70,7 @@ ZBeats[6] = {"zbeat6.wav"}
 ZBeats[7] = {"zbeat7.wav"}
 ZBeats[8] = {"zbeat8.wav"}
 ZBeats[9] = {"zbeat9.wav"}
-ZBeats[10] = {"zbeat10.wav"}
+ZBeats[10] = {"zicky.wav"}
 
 local ZBeatLength1 = SoundDuration("zbeat1.wav")
 local ZBeatLength2 = SoundDuration("zbeat2.wav")
