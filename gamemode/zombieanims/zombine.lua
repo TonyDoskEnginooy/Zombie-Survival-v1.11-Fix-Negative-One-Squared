@@ -2,9 +2,9 @@
 
 function CLASS.CalcMainActivity(ply, velocity)
 	local wep = ply:GetActiveWeapon()
-	if wep.GetNextSwing and CurTime() < wep:GetNextSwing() - 0.1 then
+	--[[if wep.GetNextSwing and CurTime() < wep:GetNextSwing() - 0.1 then
 		return 1, ply:LookupSequence("FastAttack")
-	end
+	end]]
 
 	if ply:HasGodMode() then 
 		if velocity:Length2DSqr() <= 1 then
@@ -22,7 +22,7 @@ function CLASS.CalcMainActivity(ply, velocity)
 		return 1, ply:LookupSequence("pullGrenade")
 	end
 
-	if ply:GetMaxSpeed() == 150 then 
+	if ply:GetMaxSpeed() == 150 or wep:GetGrenading() == false then 
 		if velocity:Length2DSqr() <= 1 then
 			return ACT_IDLE, -1
 		else
@@ -32,7 +32,7 @@ function CLASS.CalcMainActivity(ply, velocity)
 				return ACT_RUN, -1
 			end
 		end
-	elseif ply:GetMaxSpeed() == 200 then 
+	elseif ply:GetMaxSpeed() == 200 or wep:GetGrenading() == true then 
 		if velocity:Length2DSqr() <= 1 then
 			return 1, ply:LookupSequence("Idle_Grenade")
 		else
@@ -48,15 +48,18 @@ end
 function CLASS.UpdateAnimation(ply, velocity, maxseqgroundspeed)
 	local len2d = velocity:Length()
 	local wep = ply:GetActiveWeapon()
-	if wep.GetNextSwing and CurTime() < wep:GetNextSwing() or ply:GetMaxSpeed() == 1 then
-		ply:SetPlaybackRate(1)
+	if len2d > 1 then
+		ply:SetPlaybackRate(math.min(len2d / maxseqgroundspeed, 1.5))
 	else
-		if len2d > 1 then
-			ply:SetPlaybackRate(math.min(len2d / maxseqgroundspeed, 1.5))
-		else
-			ply:SetPlaybackRate(1)
-		end
+		ply:SetPlaybackRate(1)
 	end
 
 	return true
+end
+
+function CLASS.DoAnimationEvent(ply, event, data)
+    if event == PLAYERANIMEVENT_ATTACK_PRIMARY then
+		ply:AnimRestartGesture(GESTURE_SLOT_ATTACK_AND_RELOAD, ACT_MELEE_ATTACK2, true)
+		return ACT_INVALID
+	end
 end
