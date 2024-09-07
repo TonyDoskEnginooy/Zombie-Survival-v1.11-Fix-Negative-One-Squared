@@ -113,7 +113,7 @@ local function CheckIfPlayerStuck()
 					end
 					
 					if v.Stuck then
-						Offset = Vector(2, 2, 2) //This is because we don't want the script to enable when the players touch, only when they are inside eachother. So, we make the box a little smaller when they aren't stuck.
+						Offset = Vector(2, 2, 2)
 					end
 
 					for _,ent in pairs(ents.FindInBox(v:GetPos() + v:OBBMins() + Offset, v:GetPos() + v:OBBMaxs() - Offset)) do
@@ -1321,27 +1321,21 @@ function GM:PlayerSpawn(ply)
 		local class = ply:GetZombieClass()
 		local classtab = ZombieClasses[class]
 		ply:SetModel(classtab.Model)
-		--if team.NumPlayers(TEAM_UNDEAD) <= 1 then
-			--ply:SetHealth(classtab.Health * 2)
-		--else
-			ply:SetHealth(classtab.Health)
-		--end
+		ply:SetHealth(classtab.Health)
 		ply:Give(classtab.SWEP)
 		self:SetPlayerSpeed(ply, classtab.Speed)
-		//ply.PlayerFootstep = classtab.PlayerFootstep ~= nil
 		ply:SetNoTarget(true)
 		ply:SendLua("ZomC()")
 		ply:SetMaxHealth(1) -- To prevent picking up health packs
 		SpawnProtection(ply, math.max( spawnProtectionTime, 0 ) ) -- Less infliction, more spawn protection.
 	elseif plyteam == TEAM_HUMAN then
-		//ply.PlayerFootstep = nil
 		local modelname = string.lower(player_manager.TranslatePlayerModel(ply:GetInfo("cl_playermodel")))
 		if self.RestrictedModels[modelname] then
 			modelname = "models/player/alyx.mdl"
 		end
 		ply:SetModel(modelname)
 		ply.VoiceSet = VoiceSetTranslate[modelname] or "male"
-		self:SetPlayerSpeed(ply, 200)//170)
+		self:SetPlayerSpeed(ply, 200)
 		for _, wep in pairs(self.STARTLOADOUTS[math.random(1, #self.STARTLOADOUTS)]) do
 			ply:Give(wep)
 		end
