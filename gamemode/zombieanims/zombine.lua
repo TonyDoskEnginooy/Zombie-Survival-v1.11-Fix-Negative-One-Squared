@@ -2,10 +2,7 @@
 
 function CLASS.CalcMainActivity(ply, velocity)
 	local wep = ply:GetActiveWeapon()
-	--[[if wep.GetNextSwing and CurTime() < wep:GetNextSwing() - 0.1 then
-		return 1, ply:LookupSequence("FastAttack")
-	end]]
-
+	
 	if ply:HasGodMode() then 
 		if velocity:Length2DSqr() <= 1 then
 			return ACT_IDLE, -1
