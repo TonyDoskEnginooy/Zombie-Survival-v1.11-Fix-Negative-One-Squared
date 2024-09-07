@@ -544,7 +544,7 @@ ZombieClasses[10] =
 {
 	Name = "Zombine",
 	Health = 175,
-	Threshold = 0.0,
+	Threshold = 0.8,
 	SWEP = "weapon_zs_zombine",
 	ANIM = "zombine",
 	Model = Model("models/zombie/zombie_soldier.mdl"),
