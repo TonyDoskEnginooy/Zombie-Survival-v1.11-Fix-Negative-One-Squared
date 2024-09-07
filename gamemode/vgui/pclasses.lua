@@ -45,9 +45,6 @@ function MakepClasses()
 
 	local y = 95
 
-	print(w)
-	print(h)
-
 	for i, class in ipairs(ZombieClasses) do
 		if not class.Hidden then
 			local button = vgui.Create("SpawnIcon", DScrollPanel)
