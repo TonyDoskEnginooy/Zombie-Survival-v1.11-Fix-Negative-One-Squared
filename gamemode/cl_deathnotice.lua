@@ -72,7 +72,7 @@ local function RecvPlayerRedeemed(somePly)
 	if somePly:IsValid() then
 		GAMEMODE:AddDeathNotice(nil, 0, "redeem", somePly:Name(), TEAM_HUMAN)
 		if somePly == LocalPlayer() then
-			GAMEMODE:SplitMessage(h * 0.7, "<color=cyan><font=HUDFont>You redeemed!</font></color>")
+			GAMEMODE:SplitMessage(h * 0.7, "<color=cyan><font=HUDFontFix>You redeemed!</font></color>")
 		end
 	end
 end

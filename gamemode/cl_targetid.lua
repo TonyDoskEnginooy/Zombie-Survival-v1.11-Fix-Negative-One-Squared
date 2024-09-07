@@ -23,9 +23,9 @@ function GM:HUDDrawTargetID(ply, team)
 	local x, y = w * 0.5, h * 0.54 + 30
 	local otherteam = entity:Team() or 1
 	if team == otherteam then
-		draw.SimpleText(text, "HUDFontSmallAA", x + XNameBlur, y + YNameBlur, color_blur1, TEXT_ALIGN_CENTER)
-		draw.SimpleText(text, "HUDFontSmallAA", x + XNameBlur2, y + YNameBlur2, color_blur2, TEXT_ALIGN_CENTER)
-		draw.SimpleText(text, "HUDFontSmallAA", x, y, COLOR_FRIENDLY, TEXT_ALIGN_CENTER)
+		draw.SimpleText(text, "HUDFontSmallAAFix", x + XNameBlur, y + YNameBlur, color_blur1, TEXT_ALIGN_CENTER)
+		draw.SimpleText(text, "HUDFontSmallAAFix", x + XNameBlur2, y + YNameBlur2, color_blur2, TEXT_ALIGN_CENTER)
+		draw.SimpleText(text, "HUDFontSmallAAFix", x, y, COLOR_FRIENDLY, TEXT_ALIGN_CENTER)
 
 		y = y + h * 0.06
 
@@ -43,13 +43,13 @@ function GM:HUDDrawTargetID(ply, team)
 		draw.SimpleText("F", "Signs", x, y, colortouse, TEXT_ALIGN_RIGHT)
 		draw.SimpleText("F", "Signs", x + XNameBlur2, y + YNameBlur, color_blur1, TEXT_ALIGN_RIGHT)
 		draw.SimpleText("F", "Signs", x + XNameBlur, y + YNameBlur2, color_blur2, TEXT_ALIGN_RIGHT)
-		draw.SimpleText(entityhealth, "HUDFontAA", x, y - h*0.01, colortouse, TEXT_ALIGN_LEFT)
-		draw.SimpleText(entityhealth, "HUDFontAA", x + XNameBlur, y + YNameBlur2 - h*0.01, color_blur1, TEXT_ALIGN_LEFT)
-		draw.SimpleText(entityhealth, "HUDFontAA", x + XNameBlur2, y + YNameBlur - h*0.01, color_blur2, TEXT_ALIGN_LEFT)
+		draw.SimpleText(entityhealth, "HUDFontAAFix", x, y - h*0.01, colortouse, TEXT_ALIGN_LEFT)
+		draw.SimpleText(entityhealth, "HUDFontAAFix", x + XNameBlur, y + YNameBlur2 - h*0.01, color_blur1, TEXT_ALIGN_LEFT)
+		draw.SimpleText(entityhealth, "HUDFontAAFix", x + XNameBlur2, y + YNameBlur - h*0.01, color_blur2, TEXT_ALIGN_LEFT)
 	/*else
-		draw.SimpleText( text, "HUDFontSmallAA", x + XNameBlur, y + YNameBlur, color_blur1, TEXT_ALIGN_CENTER )
-		draw.SimpleText( text, "HUDFontSmallAA", x + XNameBlur2, y + YNameBlur2, color_blur2, TEXT_ALIGN_CENTER )
-		draw.SimpleText( text, "HUDFontSmallAA", x, y, COLOR_RED, TEXT_ALIGN_CENTER )*/
+		draw.SimpleText( text, "HUDFontSmallAAFix", x + XNameBlur, y + YNameBlur, color_blur1, TEXT_ALIGN_CENTER )
+		draw.SimpleText( text, "HUDFontSmallAAFix", x + XNameBlur2, y + YNameBlur2, color_blur2, TEXT_ALIGN_CENTER )
+		draw.SimpleText( text, "HUDFontSmallAAFix", x, y, COLOR_RED, TEXT_ALIGN_CENTER )*/
 	end
 end
 

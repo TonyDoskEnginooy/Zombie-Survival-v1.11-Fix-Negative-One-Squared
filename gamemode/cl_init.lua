@@ -20,6 +20,7 @@ include("vgui/pclasses.lua")
 include("cl_dermaskin.lua")
 include("zs_options.lua")
 
+color_transparent = Color(255, 255, 255, 0)
 color_white = Color(255, 255, 255, 220)
 color_black = Color(50, 50, 50, 255)
 color_black_alpha180 = Color(0, 0, 0, 180)
@@ -124,6 +125,13 @@ function GM:Initialize()
 		antialias = false,
 		shadow = true
 	})
+	surface.CreateFont("HUDFontSmallFix", { 
+		font = "akbar",
+		size = ScrW() * 0.02,
+		weight = 400,
+		antialias = false,
+		shadow = true
+	})
 	surface.CreateFont("HUDFont", { 
 		font = "akbar",
 		size = 42,
@@ -131,9 +139,23 @@ function GM:Initialize()
 		antialias = false,
 		shadow = true
 	})
+	surface.CreateFont("HUDFontFix", { 
+		font = "akbar",
+		size = ScrW() * 0.03,
+		weight = 400,
+		antialias = false,
+		shadow = true
+	})
 	surface.CreateFont("HUDFontBig", { 
 		font = "akbar",
 		size = 72,
+		weight = 400,
+		antialias = false,
+		shadow = true
+	})
+	surface.CreateFont("HUDFontBigFix", { 
+		font = "akbar",
+		size = ScrW() * 0.05,
 		weight = 400,
 		antialias = false,
 		shadow = true
@@ -153,6 +175,18 @@ function GM:Initialize()
 	surface.CreateFont("HUDFontAA", { 
 		font = "akbar",
 		size = 42,
+		weight = 400,
+		shadow = true
+	})
+	surface.CreateFont("HUDFontSmallAAFix", { 
+		font = "akbar",
+		size = ScrW() * 0.02,
+		weight = 400,
+		shadow = true
+	})
+	surface.CreateFont("HUDFontAAFix", { 
+		font = "akbar",
+		size = ScrW() * 0.03,
 		weight = 400,
 		shadow = true
 	})
@@ -229,9 +263,9 @@ local function DelayedLH()
 		local ply = LocalPlayer()
 
 		if ply:Team() == TEAM_UNDEAD or not ply:Alive() then
-			GAMEMODE:SplitMessage(h * 0.7, "<color=red><font=HUDFontBig>Kill the Last Human!</font></color>")
+			GAMEMODE:SplitMessage(h * 0.7, "<color=red><font=HUDFontBigFix>Kill the Last Human!</font></color>")
 		else
-			GAMEMODE:SplitMessage(h * 0.7, "<color=ltred><font=HUDFontBig>You are the Last Human!</font></color>", "<color=red><font=HUDFontAA>RUN!</font></color>")
+			GAMEMODE:SplitMessage(h * 0.7, "<color=ltred><font=HUDFontBigFix>You are the Last Human!</font></color>", "<color=red><font=HUDFontAAFix>RUN!</font></color>")
 		end
 	end
 end
@@ -243,8 +277,9 @@ function GM:LastHuman()
 	RunConsoleCommand("stopsound")
 	timer.Simple(0.5, LoopLastHuman)
 	DrawingDanger = 1
-	timer.Simple(0.5, DelayedLH)
+	--timer.Simple(0.5, DelayedLH)
 	GAMEMODE:SetLastHumanText()
+	hook.Add("HUDPaint", "DrawLastHuman", DrawLastHuman)
 end
 
 function GM:PlayerShouldTakeDamage(ply, attacker)
@@ -356,10 +391,10 @@ function GM:HUDPaint()
 		end
 	end
 
-	local hunit = 84 --h*0.11
+	local hunit = h*0.11
 	local windowwidth = hunit*3.1
 
-	draw.RoundedBox(16, 0, 0, windowwidth, hunit, color_black_alpha90)
+	draw.RoundedBox(16, 0, 0, windowwidth, hunit, color_black_alpha180)
 	local w05 = hunit/2.2
 	local h05 = w05
 	surface.SetDrawColor(235, 235, 235, 255)
@@ -367,16 +402,16 @@ function GM:HUDPaint()
 	surface.DrawTexturedRect(0, 4, w05, h05)
 	surface.SetTexture(matHumanHeadID)
 	surface.DrawTexturedRect(0, h05 + 4, w05, h05)
-	draw.DrawText(zombies, "HUDFontAA", w05, 0, COLOR_DARKGREEN, TEXT_ALIGN_LEFT)
-	draw.DrawText(zombies, "HUDFontAA", w05, 0, COLOR_DARKGREEN, TEXT_ALIGN_LEFT)
-	draw.DrawText(humans, "HUDFontAA", w05, h05, COLOR_DARKBLUE, TEXT_ALIGN_LEFT)
-	draw.DrawText(humans, "HUDFontAA", w05, h05, COLOR_DARKBLUE, TEXT_ALIGN_LEFT)
+	draw.DrawText(zombies, "HUDFontAAFix", w05, 0, COLOR_DARKGREEN, TEXT_ALIGN_LEFT)
+	draw.DrawText(zombies, "HUDFontAAFix", w05, 0, COLOR_DARKGREEN, TEXT_ALIGN_LEFT)
+	draw.DrawText(humans, "HUDFontAAFix", w05, h05, COLOR_DARKBLUE, TEXT_ALIGN_LEFT)
+	draw.DrawText(humans, "HUDFontAAFix", w05, h05, COLOR_DARKBLUE, TEXT_ALIGN_LEFT)
 
 	-- Death Notice
 	self:DrawDeathNotice(0.8, 0.04)
 
 	local actionposx = w05 * 2.4
-	local actionposy = hunit/2 - draw.GetFontHeight("HUDFontSmallAA")
+	local actionposy = hunit/2 - draw.GetFontHeight("HUDFontSmallAAFix")
 	local killedposx = actionposx
 	local killedposy = hunit/2 
 
@@ -389,7 +424,7 @@ function GM:HUDPaint()
 			self:HumanHUD(ply, killedposx, killedposy)
 		end
 		
-		draw.DrawText("Survive: "..ToMinutesSeconds(cvar_zs_roundtime:GetInt() - CurTime()), "HUDFontSmallAA", actionposx, actionposy, COLOR_CYAN, TEXT_ALIGN_LEFT)
+		draw.DrawText("Survive: "..ToMinutesSeconds(cvar_zs_roundtime:GetInt() - CurTime()), "HUDFontSmallAAFix", actionposx, actionposy, COLOR_CYAN, TEXT_ALIGN_LEFT)
 	end
 
 	-- Infliction
@@ -516,41 +551,41 @@ function Intermission(nextmap, winner)
 			LastLineY = h*0.14
 		end
 		if #Top > 0 then
-			draw.DrawText("Survival Times", "HUDFont", w*0.1, h*0.15, COLOR_CYAN, TEXT_ALIGN_LEFT)
+			draw.DrawText("Survival Times", "HUDFontFix", w*0.1, h*0.15, COLOR_CYAN, TEXT_ALIGN_LEFT)
 			for i=1, 5 do
 				if Top[i] and CurTime() > ENDTIME + i * 0.7 then
-					draw.DrawText(Top[i], "HUDFontSmall", w*0.13, h*0.15 + h*0.05*i, Color(285 - i*30, 0, i*65 - 65, 255), TEXT_ALIGN_LEFT)
+					draw.DrawText(Top[i], "HUDFontSmallFix", w*0.13, h*0.15 + h*0.05*i, Color(285 - i*30, 0, i*65 - 65, 255), TEXT_ALIGN_LEFT)
 				end
 			end
 		end
 		if #TopHD > 0 then
-			draw.DrawText("Damage to undead", "HUDFont", w*0.1, h*0.45, COLOR_CYAN, TEXT_ALIGN_LEFT)
+			draw.DrawText("Damage to undead", "HUDFontFix", w*0.1, h*0.45, COLOR_CYAN, TEXT_ALIGN_LEFT)
 			for i=1, 5 do
 				if TopHD[i] and CurTime() > ENDTIME + i * 0.7 then
-					draw.DrawText(TopHD[i], "HUDFontSmall", w*0.13, h*0.45 + h*0.05*i, Color(285 - i*30, 0, i*65 - 65, 255), TEXT_ALIGN_LEFT)
+					draw.DrawText(TopHD[i], "HUDFontSmallFix", w*0.13, h*0.45 + h*0.05*i, Color(285 - i*30, 0, i*65 - 65, 255), TEXT_ALIGN_LEFT)
 				end
 			end
 		end
 
 		if #TopZ > 0 then
-			draw.DrawText("Brains Eaten", "HUDFont", w*0.65, h*0.15, COLOR_GREEN, TEXT_ALIGN_LEFT)
+			draw.DrawText("Brains Eaten", "HUDFontFix", w*0.65, h*0.15, COLOR_GREEN, TEXT_ALIGN_LEFT)
 			for i=1, 5 do
 				if TopZ[i] and CurTime() > ENDTIME + i * 0.7 then
-					draw.DrawText(TopZ[i], "HUDFontSmall", w*0.68, h*0.15 + h*0.05*i, Color(285 - i*30, 0, i*65 - 65, 255), TEXT_ALIGN_LEFT)
+					draw.DrawText(TopZ[i], "HUDFontSmallFix", w*0.68, h*0.15 + h*0.05*i, Color(285 - i*30, 0, i*65 - 65, 255), TEXT_ALIGN_LEFT)
 				end
 			end
 		end
 		if #TopZD > 0 then
-			draw.DrawText("Damage to humans", "HUDFont", w*0.65, h*0.45, COLOR_GREEN, TEXT_ALIGN_LEFT)
+			draw.DrawText("Damage to humans", "HUDFontFix", w*0.65, h*0.45, COLOR_GREEN, TEXT_ALIGN_LEFT)
 			for i=1, 5 do
 				if TopZD[i] and CurTime() > ENDTIME + i * 0.7 then
-					draw.DrawText(TopZD[i], "HUDFontSmall", w*0.68, h*0.45 + h*0.05*i, Color(285 - i*30, 0, i*65 - 65, 255), TEXT_ALIGN_LEFT)
+					draw.DrawText(TopZD[i], "HUDFontSmallFix", w*0.68, h*0.45 + h*0.05*i, Color(285 - i*30, 0, i*65 - 65, 255), TEXT_ALIGN_LEFT)
 				end
 			end
 		end
 
 		local time = ENDTIME + cvar_zs_intermission_time:GetInt() - CurTime()
-		draw.DrawText("Next: "..ToMinutesSeconds(time >= 0 and time or 0), "HUDFontSmall", w*0.5, h*0.7, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.DrawText("Next: "..ToMinutesSeconds(time >= 0 and time or 0), "HUDFontSmallFix", w*0.5, h*0.7, COLOR_WHITE, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	end
 	if winner == TEAM_UNDEAD then
 		hook.Add("HUDPaint", "DrawLose", DrawLose)
@@ -576,9 +611,9 @@ end
 		return
 	end
 	DrawUnlockTime = DrawUnlockTime or RealTime() + 3
-	draw.RoundedBox(16, w * 0.375, h * 0.07, w * 0.25, h * 0.06, color_black_alpha90)
-	draw.DrawText(UnlockedClass.." unlocked!", "HUDFontSmall", w*0.5 + XNameBlur2, h*0.085 + YNameBlur, Color(200, 0, 0, 180), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	draw.DrawText(UnlockedClass.." unlocked!", "HUDFontSmall", w*0.5, h*0.085, COLOR_RED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.RoundedBox(16, w * 0.375, h * 0.07, w * 0.25, h * 0.06, color_black_alpha180)
+	draw.DrawText(UnlockedClass.." unlocked!", "HUDFontSmallFix", w*0.5 + XNameBlur2, h*0.085 + YNameBlur, Color(200, 0, 0, 180), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.DrawText(UnlockedClass.." unlocked!", "HUDFontSmallFix", w*0.5, h*0.085, COLOR_RED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	if RealTime() > DrawUnlockTime then
 		hook.Remove("HUDPaint", "DrawUnlock")
 		DrawUnlockTime = nil
@@ -624,7 +659,7 @@ local function SetInf(infliction)
 				RunConsoleCommand("stopsound")
 				timer.Simple(0.5, LoopUnlife)
 			end
-			GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontBig>Un-Life</font></color>", "<color=ltred><font=HUDFontSmallAA>Horde locked at 75%</font></color>")
+			GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontBigFix>Un-Life</font></color>", "<color=ltred><font=HUDFontSmallAAFix>Horde locked at 75%</font></color>")
 			GAMEMODE:SetUnlifeText()
 		elseif INFLICTION >= 0.5 and not HALFLIFE then
 			HALFLIFE = true
@@ -633,18 +668,22 @@ local function SetInf(infliction)
 				timer.Simple(0.5, LoopHalflife)
 			end
 			surface.PlaySound("ambient/creatures/town_zombie_call1.wav")
-			GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontBig>Half-Life</font></color>", "<color=ltred><font=HUDFontSmallAA>Horde locked above 50%</font></color>")
+			GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontBigFix>Half-Life</font></color>", "<color=ltred><font=HUDFontSmallAAFix>Horde locked above 50%</font></color>")
 			GAMEMODE:SetHalflifeText()
 		elseif usesound then
-			surface.PlaySound("ambient/creatures/town_zombie_call1.wav")
+			if INFLICTION < 0.75 then 
+				surface.PlaySound("ambient/creatures/town_zombie_call1.wav")
+			else
+				surface.PlaySound("npc/zombie_poison/pz_alert2.wav")
+			end
 			/*if amount > 1 then
 				UnlockedClass =  -- So you can have more than one class with the same infliction without getting spammed.
 			end
 			hook.Add("HUDPaint", "DrawUnlock", DrawUnlock)*/
 			if amount == 1 then
-				GAMEMODE:SplitMessage(h * 0.12, "<color=green><font=HUDFontAA>"..UnlockedClass.." unlocked!</font></color>")
+				GAMEMODE:SplitMessage(h * 0.12, "<color=green><font=HUDFontAAFix>"..UnlockedClass.." unlocked!</font></color>")
 			else
-				GAMEMODE:SplitMessage(h * 0.12, "<color=green><font=HUDFontAA>"..amount.." classes unlocked!</font></color>")
+				GAMEMODE:SplitMessage(h * 0.12, "<color=green><font=HUDFontAAFix>"..amount.." classes unlocked!</font></color>")
 			end
 		end
 	end
@@ -673,7 +712,7 @@ local function SetInfInit(infliction)
 	end
 end
 net.Receive("SetInfInit", function() SetInf(net.ReadFloat()) end)
-/*
+
 function DrawLastHuman()
 	if ENDROUND then return end
 	LASTHUMAN = true
@@ -689,7 +728,11 @@ function DrawLastHuman()
 		end
 	else
 		for i=1, 5 do
-			draw.DrawText("Last Human", "HUDFontBig", w*0.5, LastHumanY - i*h*0.02, Color(255, 0, 0, 200 - i*25), TEXT_ALIGN_CENTER)
+			if LocalPlayer():Team() == TEAM_SURVIVORS then 
+				draw.DrawText("You Are The Last Human", "HUDFontBigFix", w*0.5, LastHumanY - i*h*0.02, Color(255, 0, 0, 200 - i*25), TEXT_ALIGN_CENTER)
+			else
+				draw.DrawText("Kill The Last Human", "HUDFontBigFix", w*0.5, LastHumanY - i*h*0.02, Color(255, 0, 0, 200 - i*25), TEXT_ALIGN_CENTER)
+			end
 		end
 		LastHumanY = LastHumanY + h*0.0075
 	end
@@ -699,21 +742,28 @@ function DrawLastHuman()
 			surface.PlaySound("physics/metal/sawblade_stick"..math.random(1,3)..".wav")
 			DrawLastHumanHoldSound = true
 		end
-		draw.RoundedBox(16, w*0.35, h*0.67, w*0.3, h*0.15, color_black_alpha90)
-		draw.DrawText("Last Human", "HUDFontBig", w*0.5 + XNameBlur2, YNameBlur + LastHumanY, color_blur1, TEXT_ALIGN_CENTER)
-		draw.DrawText("Last Human", "HUDFontBig", w*0.5 + XNameBlur, YNameBlur + LastHumanY, color_blur1, TEXT_ALIGN_CENTER)
-		draw.DrawText("Last Human", "HUDFontBig", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
+		if LocalPlayer():Team() == TEAM_SURVIVORS then 
+			draw.DrawText("You Are The Last Human", "HUDFontBigFix", w*0.5 + XNameBlur2, YNameBlur + LastHumanY, Color(255, 0, 0, 90), TEXT_ALIGN_CENTER)
+			draw.DrawText("You Are The Last Human", "HUDFontBigFix", w*0.5 + XNameBlur, YNameBlur + LastHumanY, Color(255, 0, 0, 180), TEXT_ALIGN_CENTER)
+			draw.DrawText("You Are The Last Human", "HUDFontBigFix", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
+		else
+			draw.DrawText("Kill The Last Human", "HUDFontBigFix", w*0.5 + XNameBlur2, YNameBlur + LastHumanY, Color(255, 0, 0, 90), TEXT_ALIGN_CENTER)
+			draw.DrawText("Kill The Last Human", "HUDFontBigFix", w*0.5 + XNameBlur, YNameBlur + LastHumanY, Color(255, 0, 0, 180), TEXT_ALIGN_CENTER)
+			draw.DrawText("Kill The Last Human", "HUDFontBigFix", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
+		end
 	else
-		draw.DrawText("Last Human", "HUDFontBig", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
+		if LocalPlayer():Team() == TEAM_SURVIVORS then 
+			draw.DrawText("You Are The Last Human", "HUDFontBigFix", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
+		else
+			draw.DrawText("Kill The Last Human", "HUDFontBigFix", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
+		end
 	end
 end
-*/
 
 function Died()
 	LASTDEATH = RealTime()
-	//hook.Add("HUDPaint", "DrawDeath", DrawDeath)
+	hook.Add("HUDPaint", "DrawDeath", DrawDeath)
 	surface.PlaySound(DEATHSOUND)
-	GAMEMODE:SplitMessage(h * 0.725, "<color=red><font=HUDFontBig>You are dead.</font></color>")
 end
 
 function GM:KeyPress(ply, key)
@@ -726,39 +776,37 @@ function GM:KeyPress(ply, key)
 	end
 end
 
-/*function DrawDeath()
-	local ply = LocalPlayer()
-
-	if ply:Alive() then
-		LASTRESPAWN = LASTRESPAWN or RealTime()
-		local alpha = 1 - (RealTime() - LASTRESPAWN + 0.5) * 2
-		if alpha > 0 then
-			surface.SetDrawColor(255, 255, 255, 255 * alpha)
-			surface.DrawRect(0, 0, w, h)
-		else
-			LASTDEATH = nil
-			LASTRESPAWN = nil
+function DrawDeath()
+	if LastHumanY or ENDROUND then return end -- This kind of gives priority to things
+	DrawDeathY = DrawDeathY or 0
+	if DrawDeathY > h*0.67 then
+		DrawDeathHoldTime = DrawDeathHoldTime or RealTime()
+		if RealTime() > DrawDeathHoldTime + 3 then
+			DrawDeathY = nil
+			DrawDeathHoldTime = nil
+			DrawDeathHoldSound = nil
 			hook.Remove("HUDPaint", "DrawDeath")
+			return
 		end
-		return
+	else
+		for i=1, 5 do
+			draw.SimpleText("You are dead", "HUDFontBigFix", w*0.5, DrawDeathY - i*h*0.02, Color(0, 255, 0, 200 - i*25), TEXT_ALIGN_CENTER)
+		end
+		DrawDeathY = DrawDeathY + h*0.0075
 	end
-
-	if not ply:GetRagdollEntity() then
-		LASTDEATH = nil
-		LASTRESPAWN = nil
-		hook.Remove("HUDPaint", "DrawDeath")
-		return
+	if DrawDeathHoldTime then
+		if not DrawDeathHoldSound then
+			surface.PlaySound("weapons/physcannon/energy_disintegrate"..math.random(4,5)..".wav")
+			surface.PlaySound("physics/metal/sawblade_stick"..math.random(1,3)..".wav")
+			DrawDeathHoldSound = true
+		end
+		draw.SimpleText("You are dead", "HUDFontBigFix", w*0.5 + XNameBlur2, YNameBlur + DrawDeathY, Color(0, 255, 0, 90), TEXT_ALIGN_CENTER)
+		draw.SimpleText("You are dead", "HUDFontBigFix", w*0.5 + XNameBlur, YNameBlur + DrawDeathY, Color(0, 255, 0, 180), TEXT_ALIGN_CENTER)
+		draw.SimpleText("You are dead", "HUDFontBigFix", w*0.5, DrawDeathY, COLOR_GREEN, TEXT_ALIGN_CENTER)
+	else
+		draw.SimpleText("You are dead", "HUDFontBigFix", w*0.5, DrawDeathY, COLOR_GREEN, TEXT_ALIGN_CENTER)
 	end
-
-	local timepassed = RealTime() - LASTDEATH
-	local w, h = ScrW(), ScrH()
-	local height = h * math.min(0.5, timepassed * 0.14)
-	surface.SetDrawColor(0, 0, 0, math.min(255, timepassed * 80))
-	surface.DrawRect(0, 0, w, h)
-	surface.SetDrawColor(0, 0, 0, 255)
-	surface.DrawRect(0, 0, w, height)
-	surface.DrawRect(0, h - height, w, height)
-end*/
+end
 
 function DrawLose()
 	DrawLoseY = DrawLoseY or 0
@@ -766,7 +814,7 @@ function DrawLose()
 		DrawLoseHoldTime = true
 	else
 		for i=1, 5 do
-			draw.DrawText("You have lost.", "HUDFontBig", w*0.5, DrawLoseY - i*h*0.02, Color(255, 0, 0, 200 - i*25), TEXT_ALIGN_CENTER)
+			draw.DrawText("You have lost.", "HUDFontBigFix", w*0.5, DrawLoseY - i*h*0.02, Color(255, 0, 0, 200 - i*25), TEXT_ALIGN_CENTER)
 		end
 		DrawLoseY = DrawLoseY + h * 0.495 * FrameTime()
 	end
@@ -780,11 +828,11 @@ function DrawLose()
 			ColorModify["$pp_colour_contrast"] = math.Approach(ColorModify["$pp_colour_contrast"], 0.4, FrameTime()*0.5)
 			DrawColorModify(ColorModify)
 		end
-		draw.DrawText("You have lost.", "HUDFontBig", w*0.5 + XNameBlur2, YNameBlur + DrawLoseY, color_blur1, TEXT_ALIGN_CENTER)
-		draw.DrawText("You have lost.", "HUDFontBig", w*0.5 + XNameBlur, YNameBlur + DrawLoseY, color_blur1, TEXT_ALIGN_CENTER)
-		draw.DrawText("You have lost.", "HUDFontBig", w*0.5, DrawLoseY, COLOR_RED, TEXT_ALIGN_CENTER)
+		draw.DrawText("You have lost.", "HUDFontBigFix", w*0.5 + XNameBlur2, YNameBlur + DrawLoseY, Color(255, 0, 0, 90), TEXT_ALIGN_CENTER)
+		draw.DrawText("You have lost.", "HUDFontBigFix", w*0.5 + XNameBlur, YNameBlur + DrawLoseY, Color(255, 0, 0, 180), TEXT_ALIGN_CENTER)
+		draw.DrawText("You have lost.", "HUDFontBigFix", w*0.5, DrawLoseY, COLOR_RED, TEXT_ALIGN_CENTER)
 	else
-		draw.DrawText("You have lost.", "HUDFontBig", w*0.5, DrawLoseY, COLOR_RED, TEXT_ALIGN_CENTER)
+		draw.DrawText("You have lost.", "HUDFontBigFix", w*0.5, DrawLoseY, COLOR_RED, TEXT_ALIGN_CENTER)
 	end
 end
 
@@ -795,7 +843,7 @@ function DrawWin()
 		DrawWinHoldTime = true
 	else
 		for i=1, 5 do
-			draw.DrawText("You have survived!", "HUDFontBig", w*0.5, DrawWinY - i*h*0.02, Color(0, 0, 255, 200 - i*25), TEXT_ALIGN_CENTER)
+			draw.DrawText("You have survived!", "HUDFontBigFix", w*0.5, DrawWinY - i*h*0.02, Color(0, 0, 255, 200 - i*25), TEXT_ALIGN_CENTER)
 		end
 		DrawWinY = DrawWinY + h * 0.495 * FrameTime() 
 	end
@@ -812,17 +860,17 @@ function DrawWin()
 			DrawColorModify(ColorModify)
 		end
 
-		draw.DrawText("You have survived!", "HUDFontBig", w*0.5 + XNameBlur2, YNameBlur + DrawWinY, Color(0, 0, 255, 90), TEXT_ALIGN_CENTER)
-		draw.DrawText("You have survived!", "HUDFontBig", w*0.5 + XNameBlur, YNameBlur + DrawWinY, Color(0, 0, 255, 180), TEXT_ALIGN_CENTER)
-		draw.DrawText("You have survived!", "HUDFontBig", w*0.5, DrawWinY, COLOR_BLUE, TEXT_ALIGN_CENTER)
+		draw.DrawText("You have survived!", "HUDFontBigFix", w*0.5 + XNameBlur2, YNameBlur + DrawWinY, Color(0, 0, 255, 90), TEXT_ALIGN_CENTER)
+		draw.DrawText("You have survived!", "HUDFontBigFix", w*0.5 + XNameBlur, YNameBlur + DrawWinY, Color(0, 0, 255, 180), TEXT_ALIGN_CENTER)
+		draw.DrawText("You have survived!", "HUDFontBigFix", w*0.5, DrawWinY, COLOR_BLUE, TEXT_ALIGN_CENTER)
 	else
-		draw.DrawText("You have survived!", "HUDFontBig", w*0.5, DrawWinY, COLOR_BLUE, TEXT_ALIGN_CENTER)
+		draw.DrawText("You have survived!", "HUDFontBigFix", w*0.5, DrawWinY, COLOR_BLUE, TEXT_ALIGN_CENTER)
 	end
 end
 
 function Rewarded()
 	surface.PlaySound("weapons/physcannon/physcannon_charge.wav")
-	GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontSmallAA>Arsenal Upgraded</font></color>", "<color=ltred><font=HL2MPTypeDeath>0</font></color>")
+	GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontSmallAAFix>Arsenal Upgraded</font></color>", "<color=ltred><font=HL2MPTypeDeath>0</font></color>")
 end
 rW = Rewarded
 
