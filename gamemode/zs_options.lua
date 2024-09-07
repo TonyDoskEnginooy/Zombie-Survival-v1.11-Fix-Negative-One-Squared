@@ -142,38 +142,15 @@ local function InitConfigs()
 	-- Sound to play for last human.
 	LASTHUMANSOUND = "lasthuman.mp3"
 
-	-- In seconds, the length of the above file. It's important to have this correct or you may get delayed or overlapping music.
-	--[[if LASTHUMANSOUND == "lasthuman.mp3" then
-		LASTHUMANSOUNDLENGTH = 119
-	end
-	if LASTHUMANSOUND == "lasthumanclassic.mp3" then
-		LASTHUMANSOUNDLENGTH = 242
-	end
-	if LASTHUMANSOUND == "lasthuman_test.mp3" then
-		LASTHUMANSOUNDLENGTH = 185
-	end]]
-
 	-- Sound to play for ambient Un-Life music.
 	UNLIFESOUND = "unlife1.mp3"
-	--[[if UNLIFESOUND == "unlife1.mp3" then 
-		UNLIFESOUNDLENGTH = 210
-	end
-	if UNLIFESOUND == "unlifegreen.mp3" then
-		UNLIFESOUNDLENGTH = 280
-	end
-	if UNLIFESOUND == "unlifezinco.mp3" then
-		UNLIFESOUNDLENGTH = 147
-	end]]
+
+	-- Sound to play for ambient Half-Life music.
+	HALFLIFESOUND = "halflife1.mp3"
 
 	-- Toggles music for Un-Life and Half-Life
 	UNLIFEMUTE = false
 	HALFLIFEMUTE = true
-
-	-- Sound to play for ambient Half-Life music.
-	HALFLIFESOUND = "halflife1.mp3"
-	--[[if HALFLIFESOUND == "halflife1.mp3" then
-		HALFLIFESOUNDLENGTH = 201
-	end]]
 
 	-- Sound played to a person when they lose.
 	ALLLOSESOUND = "lose_test.mp3"

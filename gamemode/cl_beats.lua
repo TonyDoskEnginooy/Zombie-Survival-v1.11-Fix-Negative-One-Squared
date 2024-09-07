@@ -238,7 +238,12 @@ function GM:Think()
 			local rounded = math.Round(DisplayHorde)
 			if NextHordeCalculate < curtime and NextThump <= realtime then 
 				NextHordeCalculate = curtime + ZBeatLength[rounded]
-				if ENABLE_BEATS:GetBool() and not UNLIFEMUTE and not UNLIFE and not HALFLIFE or ENABLE_BEATS:GetBool() and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE then
+				if ENABLE_BEATS:GetBool() then 
+					NextHordeCalculate = curtime + ZBeatLength[rounded]
+				else
+					NextHordeCalculate = 0
+				end
+				if ENABLE_BEATS:GetBool() and ( not UNLIFEMUTE and not UNLIFE and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE ) or UNLIFE and not UNLIFEMUTE or HALFLIFE and not HALFLIFEMUTE and not UNLIFE then
 					for i, beat in pairs(ZBeats[rounded]) do
 						surface.PlaySound(beat)
 					end
@@ -259,8 +264,12 @@ function GM:Think()
 			ActualNearZombies = math.min(GetZombieFocus2(ply:GetPos(), 300, 0.001, 0) * 10, 10)
 			local rounded = math.Round(NearZombies)
 			if NextThump <= realtime and NextHordeCalculate < curtime then 
-				NextThump = realtime + BeatLength[rounded]
-				if ENABLE_BEATS:GetBool() and not UNLIFEMUTE and not UNLIFE or ENABLE_BEATS:GetBool() and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE then
+				if ENABLE_BEATS:GetBool() then 
+					NextThump = realtime + BeatLength[rounded]
+				else
+					NextThump = 0
+				end
+				if ENABLE_BEATS:GetBool() and ( not UNLIFEMUTE and not UNLIFE and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE ) or UNLIFE and not UNLIFEMUTE or HALFLIFE and not HALFLIFEMUTE and not UNLIFE then
 					for i, beat in pairs(Beats[rounded]) do
 						surface.PlaySound(beat)
 					end
