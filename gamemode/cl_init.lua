@@ -166,6 +166,12 @@ function GM:Initialize()
 		weight = 250,
 		shadow = true
 	})
+	surface.CreateFont("HUDFontTinyAAFix", { 
+		font = "akbar",
+		size = ScrW() * 0.015,
+		weight = 250,
+		shadow = true
+	})
 	surface.CreateFont("HUDFontSmallAA", { 
 		font = "akbar",
 		size = 28,
@@ -361,7 +367,7 @@ function GM:HUDPaint()
 
 	surface.SetDrawColor(255, 255, 255, 180)
 	surface.SetTexture(matUIBottomLeft)
-	surface.DrawTexturedRect(0, h - 72, 256, 64)
+	surface.DrawTexturedRect(0, h * 0.915, w * 0.2, h * 0.09)
 
 	local myteam = ply:Team()
 
@@ -416,7 +422,7 @@ function GM:HUDPaint()
 	end
 
 	-- Infliction
-	draw.DrawText("Infliction: " .. math.floor(INFLICTION * 100) .. "%", "HUDFontSmallAA", 8, h - 112, COLOR_INFLICTION, TEXT_ALIGN_LEFT)
+	draw.DrawText("Infliction: " .. math.floor(INFLICTION * 100) .. "%", "HUDFontSmallAAFix", 8, h * 0.85, COLOR_INFLICTION, TEXT_ALIGN_LEFT)
 end
 
 util.PrecacheSound("npc/stalker/breathing3.wav")

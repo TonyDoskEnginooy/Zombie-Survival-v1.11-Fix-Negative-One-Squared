@@ -300,8 +300,7 @@ function GM:HumanHUD(ply, killedposx, killedposy)
 		colortouse = COLOR_HUD_CRITICAL
 	end
 
-	draw.SimpleText("HP", "HUDFontSmallAA", 16, h - 56, colortouse, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	//draw.SimpleText(entityhealth, "DefaultBold", 16, h - 56, colortouse, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText("HP", "HUDFontSmallAAFix", w * 0.0125, h * 0.935, colortouse, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 	if 30 < entityhealth then
 		surface.SetDrawColor(colortouse.r, colortouse.g, colortouse.b, 255)
@@ -310,14 +309,13 @@ function GM:HumanHUD(ply, killedposx, killedposy)
 	end
 
 	surface.SetTexture(matHealthBar)
-	surface.DrawTexturedRect(35, h - 62, (entityhealth / 100) * 213, 14)
+	surface.DrawTexturedRect(w * 0.03, h * 0.93, (entityhealth / 100) * ( w * 0.165 ), h * 0.015)
 
 	local col = BeatColors[rounded]
 	surface.SetDrawColor(col.r, col.g, col.b, 180)
 	surface.SetTexture(matHealthBar)
-	surface.DrawTexturedRect(10, h - 36, NearZombies * 23.6, 24)
-	//draw.SimpleText(BeatText[rounded], "HUDFontSmallAA", 128, h - 24, COLOR_GRAY_HUD, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	draw.SimpleText(BeatText[rounded], "HUDFontTinyAA", 128, h - 42, COLOR_GRAY_HUD, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	surface.DrawTexturedRect(w * 0.0074, h * 0.965, NearZombies * ( w * 0.0186 ), h * 0.0375)
+	draw.SimpleText(BeatText[rounded], "HUDFontTinyAAFix", w * 0.1, h * 0.98, COLOR_GRAY_HUD, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 	// Kill display
 	draw.DrawText("Kills: "..ply:Frags(), "HUDFontSmallAAFix", killedposx, killedposy, COLOR_DARKRED_HUD, TEXT_ALIGN_LEFT)
@@ -332,7 +330,7 @@ function GM:HumanHUD(ply, killedposx, killedposy)
 			if TimeLeft < 0 then
 				NextAmmoDropOff = GetNextAmmoRegenerate()
 			end
-			draw.DrawText("Ammo Regeneration: "..ToMinutesSeconds(TimeLeft), "HUDFontTinyAA", 8, h - 90, COLOR_GRAY, TEXT_ALIGN_LEFT)
+			draw.DrawText("Ammo Regeneration: "..ToMinutesSeconds(TimeLeft), "HUDFontTinyAAFix", 8, h * 0.88, COLOR_GRAY, TEXT_ALIGN_LEFT)
 		end
 
 		if 2 < ply:WaterLevel() then
@@ -396,7 +394,7 @@ function GM:ZombieHUD(ply, actionposx, actionposy, killedposx, killedposy)
 		colortouse = COLOR_HUD_CRITICAL
 	end
 
-	draw.SimpleText(entityhealth, "HUDFontSmall", 16, h - 56, colortouse, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText(entityhealth, "HUDFontSmallAAFix", w * 0.0125, h * 0.935, colortouse, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 	local realtime = RealTime()
 
@@ -407,14 +405,14 @@ function GM:ZombieHUD(ply, actionposx, actionposy, killedposx, killedposy)
 	end
 
 	surface.SetTexture(matHealthBar)
-	surface.DrawTexturedRect(35, h - 62, (entityhealth / maxhealth) * 213, 14)
+	surface.DrawTexturedRect(w * 0.03, h * 0.93, percenthealth * ( w * 0.165 ), h * 0.015)
 
 	local rounded = math.Round(DisplayHorde)
 	local col = ZombieHordeColors[rounded]
 	surface.SetDrawColor(col.r, col.g, col.b, 255)
 	surface.SetTexture(matHealthBar)
-	surface.DrawTexturedRect(10, h - 36, DisplayHorde * 23.6, 24)
-	draw.SimpleText(ZombieHordeText[rounded], "HUDFontTinyAA", 128, h - 42, COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	surface.DrawTexturedRect(w * 0.0074, h * 0.965, DisplayHorde * ( w * 0.0186 ), h * 0.0375)
+	draw.SimpleText(ZombieHordeText[rounded], "HUDFontTinyAAFix", w * 0.1, h * 0.98, COLOR_GRAY, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
 	local killz = ply:Frags()
 	local allow_redeeming = cvars.Bool("zs_allow_redeeming")
