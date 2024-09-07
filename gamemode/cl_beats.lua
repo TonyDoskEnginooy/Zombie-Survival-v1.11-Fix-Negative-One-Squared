@@ -236,7 +236,7 @@ function GM:Think()
 		if not LASTHUMAN then
 			ActualHorde = math.min((GetZombieFocus2(ply:GetPos(), 300, 0.001, 0) - 0.0001) * 10, 10)
 			local rounded = math.Round(DisplayHorde)
-			if NextHordeCalculate < curtime then 
+			if NextHordeCalculate < curtime and NextThump <= realtime then 
 				NextHordeCalculate = curtime + ZBeatLength[rounded]
 				if ENABLE_BEATS:GetBool() and not UNLIFEMUTE and not UNLIFE and not HALFLIFE or ENABLE_BEATS:GetBool() and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE then
 					for i, beat in pairs(ZBeats[rounded]) do
@@ -258,7 +258,7 @@ function GM:Think()
 		if not LASTHUMAN then
 			ActualNearZombies = math.min(GetZombieFocus2(ply:GetPos(), 300, 0.001, 0) * 10, 10)
 			local rounded = math.Round(NearZombies)
-			if NextThump <= realtime then 
+			if NextThump <= realtime and NextHordeCalculate < curtime then 
 				NextThump = realtime + BeatLength[rounded]
 				if ENABLE_BEATS:GetBool() and not UNLIFEMUTE and not UNLIFE or ENABLE_BEATS:GetBool() and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE then
 					for i, beat in pairs(Beats[rounded]) do
