@@ -243,7 +243,7 @@ function GM:Think()
 				else
 					NextHordeCalculate = 0
 				end
-				if ENABLE_BEATS:GetBool() and ( not UNLIFEMUTE and not UNLIFE and not HALFLIFEMUTE and not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE ) then
+				if ENABLE_BEATS:GetBool() and ( not UNLIFE or not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE ) then
 					for i, beat in pairs(ZBeats[rounded]) do
 						surface.PlaySound(beat)
 					end
