@@ -258,18 +258,6 @@ local function LoopLastHuman()
 	end
 end
 
-local function DelayedLH()
-	if not ENDROUND then
-		local ply = LocalPlayer()
-
-		if ply:Team() == TEAM_UNDEAD or not ply:Alive() then
-			GAMEMODE:SplitMessage(h * 0.7, "<color=red><font=HUDFontBigFix>Kill the Last Human!</font></color>")
-		else
-			GAMEMODE:SplitMessage(h * 0.7, "<color=ltred><font=HUDFontBigFix>You are the Last Human!</font></color>", "<color=red><font=HUDFontAAFix>RUN!</font></color>")
-		end
-	end
-end
-
 function GM:LastHuman()
 	if LASTHUMAN then return end
 
@@ -729,7 +717,7 @@ function DrawLastHuman()
 	else
 		for i=1, 5 do
 			if LocalPlayer():Team() == TEAM_SURVIVORS then 
-				draw.DrawText("You Are The Last Human", "HUDFontBigFix", w*0.5, LastHumanY - i*h*0.02, Color(255, 0, 0, 200 - i*25), TEXT_ALIGN_CENTER)
+				draw.DrawText("Last Human", "HUDFontBigFix", w*0.5, LastHumanY - i*h*0.02, Color(255, 0, 0, 200 - i*25), TEXT_ALIGN_CENTER)
 			else
 				draw.DrawText("Kill The Last Human", "HUDFontBigFix", w*0.5, LastHumanY - i*h*0.02, Color(255, 0, 0, 200 - i*25), TEXT_ALIGN_CENTER)
 			end
@@ -743,9 +731,9 @@ function DrawLastHuman()
 			DrawLastHumanHoldSound = true
 		end
 		if LocalPlayer():Team() == TEAM_SURVIVORS then 
-			draw.DrawText("You Are The Last Human", "HUDFontBigFix", w*0.5 + XNameBlur2, YNameBlur + LastHumanY, Color(255, 0, 0, 90), TEXT_ALIGN_CENTER)
-			draw.DrawText("You Are The Last Human", "HUDFontBigFix", w*0.5 + XNameBlur, YNameBlur + LastHumanY, Color(255, 0, 0, 180), TEXT_ALIGN_CENTER)
-			draw.DrawText("You Are The Last Human", "HUDFontBigFix", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
+			draw.DrawText("Last Human", "HUDFontBigFix", w*0.5 + XNameBlur2, YNameBlur + LastHumanY, Color(255, 0, 0, 90), TEXT_ALIGN_CENTER)
+			draw.DrawText("Last Human", "HUDFontBigFix", w*0.5 + XNameBlur, YNameBlur + LastHumanY, Color(255, 0, 0, 180), TEXT_ALIGN_CENTER)
+			draw.DrawText("Last Human", "HUDFontBigFix", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
 		else
 			draw.DrawText("Kill The Last Human", "HUDFontBigFix", w*0.5 + XNameBlur2, YNameBlur + LastHumanY, Color(255, 0, 0, 90), TEXT_ALIGN_CENTER)
 			draw.DrawText("Kill The Last Human", "HUDFontBigFix", w*0.5 + XNameBlur, YNameBlur + LastHumanY, Color(255, 0, 0, 180), TEXT_ALIGN_CENTER)
@@ -753,7 +741,7 @@ function DrawLastHuman()
 		end
 	else
 		if LocalPlayer():Team() == TEAM_SURVIVORS then 
-			draw.DrawText("You Are The Last Human", "HUDFontBigFix", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
+			draw.DrawText("Last Human", "HUDFontBigFix", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
 		else
 			draw.DrawText("Kill The Last Human", "HUDFontBigFix", w*0.5, LastHumanY, COLOR_RED, TEXT_ALIGN_CENTER)
 		end
