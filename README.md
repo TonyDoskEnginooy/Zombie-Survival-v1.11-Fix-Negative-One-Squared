@@ -1,6 +1,6 @@
 # Welcome to Zombie Survival v1.11 Fix!
 
-This is just to put my little fixes into one place. Weapon animations are fixed, music is now customizable if you know how to make a replace sound addon, zombies can no longer pick up props, all zombies now have improved melee hit detection, spawn protection is based on amount of zombies in the Zteam instead of infliction, the classic zombie has been buffed, the wraith can slow down in order to become less visible while still moving, the zombine has been added, and fonts have been changed as well as some message changes!
+This is just to put my little fixes into one place. Weapon animations are fixed, music is now customizable if you know how to make a replace sound addon, zombies can no longer pick up props, all zombies now have improved melee hit detection, spawn protection is based on amount of zombies in the Zteam instead of infliction, the classic zombie has been buffed, the wraith can slow down in order to become less visible while still moving, the zombine has been added, and the entire ui has been updated to be more pleasing to navigate for ALL resolutions!
 
 UNDERNEATH UIS ORIGINAL DESCRI{TIPN!!!
 
