@@ -217,6 +217,9 @@ local function EnableBeats(sender, command, arguments)
 end
 concommand.Add("zs_enablebeats", EnableBeats)
 
+local modernRounded = 0
+local modernZRounded = 0
+
 function GM:Think()
 	local ply = LocalPlayer()
 	if not ply:IsValid() then return end
@@ -237,14 +240,31 @@ function GM:Think()
 			ActualHorde = math.min((GetZombieFocus2(ply:GetPos(), 300, 0.001, 0) - 0.0001) * 10, 10)
 			local rounded = math.Round(DisplayHorde)
 			if NextHordeCalculate < curtime and NextThump <= realtime then 
-				NextHordeCalculate = curtime + ZBeatLength[rounded]
+				local newRounded = math.Round(rounded)
+				if rounded ~= 0 then 
+					if modernZRounded < newRounded then
+						modernZRounded = math.Clamp(modernZRounded + math.Round(rounded / 2), math.Round(rounded / 2), newRounded)
+					elseif modernZRounded > newRounded then
+						modernZRounded = math.Clamp(modernZRounded - math.Round(rounded / 2), newRounded, math.Round(rounded * 2))
+					else
+						modernZRounded = newRounded
+					end
+				else
+					if modernZRounded >= 0 then 
+						modernZRounded = modernZRounded - 2
+					else
+						modernZRounded = 0
+					end
+				end
+				local modernZClamped = math.Clamp(modernZRounded, 0, 10)
 				if ENABLE_BEATS:GetBool() then 
-					NextHordeCalculate = curtime + ZBeatLength[rounded]
+					NextHordeCalculate = curtime + ZBeatLength[modernZClamped]
 				else
 					NextHordeCalculate = 0
 				end
 				if ENABLE_BEATS:GetBool() and ( not UNLIFE or not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE ) then
-					for i, beat in pairs(ZBeats[rounded]) do
+					--print(modernZRounded)
+					for i, beat in pairs(ZBeats[modernZClamped]) do
 						surface.PlaySound(beat)
 					end
 				end
@@ -264,13 +284,30 @@ function GM:Think()
 			ActualNearZombies = math.min(GetZombieFocus2(ply:GetPos(), 300, 0.001, 0) * 10, 10)
 			local rounded = math.Round(NearZombies)
 			if NextThump <= realtime and NextHordeCalculate < curtime then 
+				local newRounded = math.Round(rounded)
+				if rounded ~= 0 then 
+					if modernRounded < newRounded then
+						modernRounded = math.Clamp(modernRounded + math.Round(rounded / 2), math.Round(rounded / 2), newRounded)
+					elseif modernRounded > newRounded then
+						modernRounded = math.Clamp(modernRounded - math.Round(rounded / 2), newRounded, math.Round(rounded * 2))
+					else
+						modernRounded = newRounded
+					end
+				else
+					if modernRounded >= 0 then 
+						modernRounded = modernRounded - 2
+					else
+						modernRounded = 0
+					end
+				end
+				local modernClamped = math.Clamp(modernRounded, 0, 10)
 				if ENABLE_BEATS:GetBool() then 
-					NextThump = realtime + BeatLength[rounded]
+					NextThump = realtime + BeatLength[modernClamped]
 				else
 					NextThump = 0
 				end
 				if ENABLE_BEATS:GetBool() and ( not UNLIFE or not HALFLIFE or UNLIFE and UNLIFEMUTE or HALFLIFE and not UNLIFE and HALFLIFEMUTE ) then
-					for i, beat in pairs(Beats[rounded]) do
+					for i, beat in pairs(Beats[modernClamped]) do
 						surface.PlaySound(beat)
 					end
 				end
