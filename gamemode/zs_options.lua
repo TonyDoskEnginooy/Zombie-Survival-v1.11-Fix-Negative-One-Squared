@@ -324,7 +324,7 @@ ZombieClasses[1] =						-- The number should not be the same as any other class.
 	ANIM = "zombie",                    -- The animation file in gamemode/zombieanims -- Xala Fix 1.11
 	Model = Model("models/player/zombie_classic_hbfix.mdl"), -- The world model to use. If you make your own class, you must set up it's own animations or use the default HL2MP ones.
 	Speed = 200,						-- Speed moving on the ground.
-	Description="The deadly assassin whose great at ambushing other survivors. This is your basic zombie.@Unique abilities: Can turn invisible.", -- Description to display at class selection. Seperate lines by the @ character.
+	Description="The deadly assassin zombie whose great at ambushing survivors. This is your starter zombie.@Unique abilities: Can turn invisible.", -- Description to display at class selection. Seperate lines by the @ character.
 	PainSounds = {
 		Sound("npc/zombie/zombie_pain1.wav"),
 		Sound("npc/zombie/zombie_pain2.wav"),
@@ -351,7 +351,7 @@ ZombieClasses[2] =
 	ANIM = "fastzombie",
 	Model = Model("models/player/zombie_fast.mdl"),
 	Speed = 260,
-	Description = "The faster, more decomposed, boney zombie. This is your fast attack zombie.@Unique abilities: Can climb walls and leap long distances.",
+	Description = "The faster, more decomposed, boney zombie. This is your fast zombie.@Unique abilities: Can climb walls and leap long distances.",
 	PainSounds = {
 		Sound("npc/fast_zombie/leap1.wav"),
 		Sound("npc/fast_zombie/wake1.wav")
@@ -371,7 +371,7 @@ ZombieClasses[3] =
 	ANIM = "poisonzombie",
 	Model = Model("models/Zombie/Poison.mdl"),
 	Speed = 150,
-	Description="A giant mass of decaying flesh.@Unique abilities: Massive melee damage and can throw headcrabs.",
+	Description="A giant mass of decaying flesh.@Unique abilities: Massive melee damage. Can throw headcrabs.",
 	PainSounds = {
 		Sound("npc/zombie_poison/pz_pain1.wav"),
 		Sound("npc/zombie_poison/pz_pain2.wav"),
