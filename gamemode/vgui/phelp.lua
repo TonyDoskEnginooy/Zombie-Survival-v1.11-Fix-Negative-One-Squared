@@ -6,7 +6,7 @@ function MakepHelp()
 	end
 
 	local Window = vgui.Create("DFrame")
-	local tall = 720 --h * 0.95 -- Limit the height -- Xala
+	local tall = h * 0.95 -- Limit the height -- Xala
 	Window:SetSize(640, tall)
 	local wide = (w - 640) * 0.5
 	local tall = (h - tall) * 0.5
@@ -17,42 +17,48 @@ function MakepHelp()
 	Window:MakePopup()
 	Window:SetDeleteOnClose(false)
 	Window:SetCursor("pointer")
+	Window:SetScreenLock(true)
 	pHelp = Window
 
-	local label = vgui.Create("DLabel", Window)
+	local DScrollPanel = vgui.Create( "DScrollPanel", Window )
+	DScrollPanel:Dock( FILL )
+
+	local labelY = 1
+
+	local label = vgui.Create("DLabel", DScrollPanel)
 	label:SetTextColor(COLOR_RED)
 	label:SetFont("noxnetnormal")
 	label:SetText("F1: Help")
-	label:SetPos(16, 21)
+	label:SetPos(16, labelY)
 	surface.SetFont("noxnetnormal")
 	local texw, texh = surface.GetTextSize("F1: Help")
 	label:SetSize(texw, texh)
 
-	local label = vgui.Create("DLabel", Window)
+	local label = vgui.Create("DLabel", DScrollPanel)
 	label:SetTextColor(COLOR_RED)
 	label:SetFont("noxnetnormal")
 	label:SetText("F2: Manual Redeem")
 	surface.SetFont("noxnetnormal")
 	local texw, texh = surface.GetTextSize("F2: Manual Redeem")
-	label:SetPos(190 - texw * 0.5, 21)
+	label:SetPos(190 - texw * 0.5, labelY)
 	label:SetSize(texw, texh)
 
-	local label = vgui.Create("DLabel", Window)
+	local label = vgui.Create("DLabel", DScrollPanel)
 	label:SetTextColor(COLOR_RED)
 	label:SetFont("noxnetnormal")
 	label:SetText("F3: Change Zombie Class")
 	surface.SetFont("noxnetnormal")
 	local texw, texh = surface.GetTextSize("F3: Change Zombie Class")
-	label:SetPos(400 - texw * 0.5, 21)
+	label:SetPos(400 - texw * 0.5, labelY)
 	label:SetSize(texw, texh)
 
-	local label = vgui.Create("DLabel", Window)
+	local label = vgui.Create("DLabel", DScrollPanel)
 	label:SetTextColor(COLOR_RED)
 	label:SetFont("noxnetnormal")
 	label:SetText("F4: Options")
 	surface.SetFont("noxnetnormal")
 	local texw, texh = surface.GetTextSize("F4: Options")
-	label:SetPos(640 - texw - 16, 21)
+	label:SetPos(640 - texw - 16, labelY)
 	label:SetSize(texw, texh)
 
 	surface.SetFont("Default")
@@ -62,12 +68,12 @@ function MakepHelp()
 	if SURVIVALMODE then
 		touse = HELP_TEXT_SURVIVALMODE
 	end
-	local y = 64
+	local y = 24
 	for i, text in ipairs(touse) do
 		if string.len(text) <= 1 then
 			y = y + defh
 		else
-			local label = vgui.Create("DLabel", Window)
+			local label = vgui.Create("DLabel", DScrollPanel)
 			local pretext = string.sub(text, 1, 2)
 			if pretext == "^r" then
 				label:SetTextColor(COLOR_READABLERED)

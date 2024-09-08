@@ -254,7 +254,9 @@ if CLIENT then
 		[[ @ @^g          -- ZOMBIES --@You can change your class as a zombie by pressing F3.@Classes in red mean ]] .. 
 		[[that more humans need to be killed to get that class unlocked.@ @^rYou lose the match if all humans die ]] ..
 		[[or you're a zombie at the end of the round.@If redeeming is allowed then you can kill a certain amount of ]] .. 
-		[[humans to ressurect yourself.@ @^yVisit https://github.com/Xalalau/Zombie-Survival-v1.11-Fix for updates to the game!]]
+		[[humans to ressurect yourself.@ @^yVisit https://github.com/Xalalau/Zombie-Survival-v1.11-Fix for updates to the game!@ @]] ..
+		[[^y\/                                                                                                                                                                                        \/@ @]] ..
+		[[^y\/                                                                                                                                                                                        \/]]
 
 	HELP_TEXT_SURVIVALMODE =
 		[[^rWelcome to Zombie Survival v1.11 Fix @^rBy JetBoom (2008). Adapted to GMod March 2024 Update+ by Xalalau.@ @^b          -- HUMANS --@^bSurvive for ]] ..
