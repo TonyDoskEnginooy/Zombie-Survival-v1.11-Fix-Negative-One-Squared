@@ -41,7 +41,7 @@ function PANEL:Paint()
 	surface.SetFont("HUDFontBigFix")
 	local gmw, gmh = surface.GetTextSize("Zombie Survival")
 	draw.DrawText("("..GAMEMODE.Version.." "..GAMEMODE.SubVersion..")", "DefaultSmall", gmw * 0.65, gmh * 0.75, COLOR_GRAY, TEXT_ALIGN_LEFT)
-	draw.DrawText(--[[TruncateText(GetGlobalString("servername"), 36)]]"poopy butt", "HUDFont2", wide * 0.5, gmh * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
+	draw.DrawText(TruncateText(GetGlobalString("servername"), 36), "HUDFont2", wide * 0.5, gmh * 0.75, COLOR_GRAY, TEXT_ALIGN_CENTER)
 
 	local colHuman = team.GetColor(TEAM_HUMAN)
 	local colUndead = team.GetColor(TEAM_UNDEAD)
