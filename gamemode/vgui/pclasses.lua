@@ -37,13 +37,13 @@ function MakepClasses()
 	local label = vgui.Create("DLabel", DScrollPanel)
 	label:SetY(25)
 	label:SetSize(tw, th)
-	label:SetPos(w * 0.05, h * 0.0001)
+	label:SetPos(w * 0.05, 0)
 
 	label:SetFont("HUDFontAAFix")
 	label:SetText("Choose a class...")
 	label:SetTextColor(color_white)
 
-	local y = 95
+	local y = 50
 
 	for i, class in ipairs(ZombieClasses) do
 		if not class.Hidden then
