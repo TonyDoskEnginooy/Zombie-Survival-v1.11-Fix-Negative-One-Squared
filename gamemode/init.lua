@@ -117,7 +117,7 @@ local function CheckIfPlayerStuck()
 					end
 
 					for _,ent in pairs(ents.FindInBox(v:GetPos() + v:OBBMins() + Offset, v:GetPos() + v:OBBMaxs() - Offset)) do
-						if IsValid(ent) and ent != v and ent:IsPlayer() and ent:Alive() and ent:IsBot() then
+						if IsValid(ent) and ent != v and ent:IsPlayer() and ent:Alive() then
 						
 							v:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
 							v:SetVelocity(Vector(-10, -10, 0) * 20)
@@ -1316,6 +1316,7 @@ function GM:PlayerSpawn(ply)
 	ply:ShouldDropWeapon(plyteam == TEAM_HUMAN)
 
 	if plyteam == TEAM_UNDEAD then	
+		ply:AddEFlags(EFL_NO_DAMAGE_FORCES)
 		if ply.DeathClass then
 			ply:SetZombieClass(ply.DeathClass)
 			ply.DeathClass = nil
@@ -1323,6 +1324,13 @@ function GM:PlayerSpawn(ply)
 		local class = ply:GetZombieClass()
 		local classtab = ZombieClasses[class]
 		ply:SetModel(classtab.Model)
+		--[[if team.NumPlayers(TEAM_UNDEAD) < math.ceil(player.GetCount() / 8) then
+			ply:SetHealth(classtab.Health * 3)
+		elseif team.NumPlayers(TEAM_UNDEAD) >= math.ceil(player.GetCount() / 8) and team.NumPlayers(TEAM_UNDEAD) < math.ceil(player.GetCount() / 4) then
+			ply:SetHealth(classtab.Health * 2)
+		elseif team.NumPlayers(TEAM_UNDEAD) >= math.ceil(player.GetCount() / 4) then
+			ply:SetHealth(classtab.Health)
+		end]]
 		ply:SetHealth(classtab.Health)
 		ply:Give(classtab.SWEP)
 		self:SetPlayerSpeed(ply, classtab.Speed)
@@ -1331,6 +1339,7 @@ function GM:PlayerSpawn(ply)
 		ply:SetMaxHealth(1) -- To prevent picking up health packs
 		SpawnProtection(ply, math.max( spawnProtectionTime, 0 ) ) -- Less infliction, more spawn protection.
 	elseif plyteam == TEAM_HUMAN then
+		ply:RemoveEFlags(EFL_NO_DAMAGE_FORCES)
 		local modelname = string.lower(player_manager.TranslatePlayerModel(ply:GetInfo("cl_playermodel")))
 		if self.RestrictedModels[modelname] then
 			modelname = "models/player/alyx.mdl"
