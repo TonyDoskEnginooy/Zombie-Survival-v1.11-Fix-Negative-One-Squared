@@ -35,7 +35,6 @@ SWEP.Alive = true
 SWEP.survHit = false
 
 function SWEP:Think()
-	print(self:GetOwner():GetMaxSpeed())
 	if IsValid(self:GetOwner()) then 
 		self.Alive = true
 	else
