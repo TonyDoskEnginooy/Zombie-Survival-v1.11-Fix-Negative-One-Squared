@@ -128,7 +128,7 @@ function SWEP:PrimaryAttack()
 		self.PreHit = ent
 	end
 	timer.Simple(1.5, function() 
-		if self:GetNextSwing() and CurTime() < self:GetNextSwing() then return end
+		if self.Alive and self:GetNextSwing() and CurTime() < self:GetNextSwing() then return end
 		if self.Alive then  
 			self:SendWeaponAnim(ACT_VM_IDLE)
 		end
@@ -137,7 +137,7 @@ end
 
 SWEP.NextYell = 0
 function SWEP:SecondaryAttack()
-	if CurTime() < self.NextYell or self.GrenadeOut == 1 then return end
+	if CurTime() < self.NextYell or self:GetGrenading() == true then return end
 	self:GetOwner():SetAnimation(PLAYER_SUPERJUMP)
 
 	self:GetOwner():EmitSound("npc/zombine/zombine_idle"..math.random(1, 4)..".wav")

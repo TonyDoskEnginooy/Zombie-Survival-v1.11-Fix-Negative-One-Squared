@@ -176,7 +176,7 @@ function SWEP:SecondaryAttack()
 			self:GetOwner():EmitSound("player/footsteps/metalgrate"..math.random(1,4)..".wav")
 			self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
 			timer.Simple(0.5, function() 
-				if self:GetClimbing() then return end
+				if self.Alive and self:GetClimbing() then return end
 				if self.Alive then 
 					self:SendWeaponAnim(ACT_VM_IDLE)
 				end 
