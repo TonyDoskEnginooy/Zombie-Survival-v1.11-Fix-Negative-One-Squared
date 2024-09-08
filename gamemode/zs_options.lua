@@ -38,13 +38,13 @@ GM.STARTLOADOUTS = {
 -- Changing these means you're most likely an idiot.
 
 GM.Rewards = {} -- Leave this.
-GM.Rewards[cvars.Number("zs_rewards_1", 2)] = {"weapon_zs_deagle", "weapon_zs_deagle", "weapon_zs_glock3", "weapon_zs_glock3", "weapon_zs_magnum"}
-GM.Rewards[cvars.Number("zs_rewards_2", 4)] = {"_Heal", "_Heal", "_Shell"}
-GM.Rewards[cvars.Number("zs_rewards_3", 6)] = {"weapon_zs_uzi", "weapon_zs_uzi", "weapon_zs_crossbow", "weapon_zs_smg"}
-GM.Rewards[cvars.Number("zs_rewards_4", 8)] = {"weapon_zs_sweepershotgun", "weapon_zs_slugrifle"}
-GM.Rewards[cvars.Number("zs_rewards_5", 10)] = {"weapon_zs_barricadekit"}
-GM.Rewards[cvars.Number("zs_rewards_6", 12)] = {"_Regeneration", "_Heal"}
-GM.Rewards[cvars.Number("zs_rewards_7", 14)] = {"weapon_slam"}
+GM.Rewards[cvars.Number("zs_rewards_1", 5)] = {"weapon_zs_deagle", "weapon_zs_deagle", "weapon_zs_glock3", "weapon_zs_glock3", "weapon_zs_magnum"}
+GM.Rewards[cvars.Number("zs_rewards_2", 10)] = {"_Heal", "_Heal", "_Shell"}
+GM.Rewards[cvars.Number("zs_rewards_3", 15)] = {"weapon_zs_uzi", "weapon_zs_uzi", "weapon_zs_crossbow", "weapon_zs_smg"}
+GM.Rewards[cvars.Number("zs_rewards_4", 20)] = {"weapon_zs_sweepershotgun", "weapon_zs_slugrifle"}
+GM.Rewards[cvars.Number("zs_rewards_5", 25)] = {"weapon_zs_barricadekit"}
+GM.Rewards[cvars.Number("zs_rewards_6", 35)] = {"_Regeneration", "_Heal"}
+GM.Rewards[cvars.Number("zs_rewards_7", 45)] = {"weapon_slam"}
 
 ----------------------------------
 --		AMMO REGENERATION		--
@@ -477,7 +477,7 @@ ZombieClasses[8] =
 	ANIM = "poisonheadcrab",
 	Model = Model("models/headcrabblack.mdl"),
 	Speed = 140,
-	Description="A poison headcrab. The bane of all encampments.@Unique abilities: poisons players and poison spit!",
+	Description="A poison headcrab. The bane of all encampments.@Unique abilities: Poisons players! Poison spit!",
 	PainSounds = {
 		Sound("npc/headcrab_poison/ph_pain1.wav"),
 		Sound("npc/headcrab_poison/ph_pain2.wav"),
@@ -526,7 +526,7 @@ ZombieClasses[10] =
 	ANIM = "zombine",
 	Model = Model("models/zombie/zombie_soldier.mdl"),
 	Speed = 150,		
-	Description="The slow, sulking bag of flesh and combine technology. This is your barricade destroyer.@Unique abilities: Can go faster when damaged enough.",
+	Description="The slow, sulking bag of flesh and combine technology. This is your barricade destroyer.@Unique abilities: Can pull out a grenade. Goes faster when damaged enough.",
 	PainSounds = {
 		Sound("npc/zombine/zombine_pain1.wav"),
 		Sound("npc/zombine/zombine_pain2.wav"),
