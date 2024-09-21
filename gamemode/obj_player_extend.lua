@@ -39,6 +39,11 @@ hitData = {
 	midZaimDistance = nil -- number
 }
 ]]
+
+function meta:GetFilter()
+	return team.GetPlayers(self:Team())
+end
+
 function meta:CalcMeleeHit(hitData)
 	local tr = {}
 	local vStart = self[hitData.traceStartGet or "GetPos"](self)
@@ -46,7 +51,7 @@ function meta:CalcMeleeHit(hitData)
 
 	tr.start = vStart + Vector(0, 0, hitData.traceStartExtraHeight)
 	tr.endpos = vStart + vEnd * hitData.traceEndDistance + Vector(0, 0, hitData.traceEndExtraHeight)
-	tr.filter = self
+	tr.filter = self:GetFilter()
 	tr.mask = hitData.traceMask or MASK_SOLID
 	local trace = util.TraceLine(tr)
 	local ent = trace.Entity

@@ -83,6 +83,7 @@ local cvar_zs_allow_admin_noclip = GetConVar("zs_allow_admin_noclip")
 local cvar_zs_human_deadline = GetConVar("zs_human_deadline")
 local cvar_zs_intermission_time = GetConVar("zs_intermission_time")
 local cvar_zs_allow_shove = GetConVar("zs_allow_shove")
+local NPCS_COUNT_AS_KILLS = GetConVar("zs_npcs_count_as_kills")
 local stuckCollision = CreateConVar("zs_stuckcollision", "1", {FCVAR_ARCHIVE}, "If you want to not experience any knockback", 0 , 1)
 
 local LastHumanSpawnPoint = NULL
@@ -103,7 +104,7 @@ end
 local function CheckIfPlayerStuck()
 	if stuckCollision:GetInt() >= 1 then 
 		for k,v in pairs(player.GetAll()) do
-			if IsValid(v) and v:IsPlayer() and v:Alive() then
+			if IsValid(v) and v:IsPlayer() and v:Alive() and not v:GetNoCollideWithTeammates() then
 				if !v:InVehicle() then
 					local Offset = Vector(5, 5, 5)
 					local Stuck = false
@@ -117,7 +118,7 @@ local function CheckIfPlayerStuck()
 					end
 
 					for _,ent in pairs(ents.FindInBox(v:GetPos() + v:OBBMins() + Offset, v:GetPos() + v:OBBMaxs() - Offset)) do
-						if IsValid(ent) and ent != v and ent:IsPlayer() and ent:Alive() then
+						if IsValid(ent) and ent != v and ent:IsPlayer() and ent:Alive() and not ent:GetNoCollideWithTeammates() then
 						
 							v:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
 							v:SetVelocity(Vector(-10, -10, 0) * 20)
@@ -544,7 +545,7 @@ function GM:CalculateInfliction()
 end
 
 function GM:OnNPCKilled(ent, attacker, inflictor)
-	if NPCS_COUNT_AS_KILLS and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then
+	if NPCS_COUNT_AS_KILLS:GetBool() and attacker:IsPlayer() and attacker:Team() == TEAM_HUMAN then
 		attacker:AddFrags(1)
 		self:CheckPlayerScore(attacker)
 	end
@@ -961,7 +962,7 @@ local posoffset = Vector(0, 0, -20)
 function SecondWind(ply)
 	if ply and ply:IsValid() and ply:IsPlayer() then
 		if ply.Gibbed or ply:Alive() or ply:Team() ~= TEAM_UNDEAD then return end
-		local pos = ply:GetPos() + posoffset
+		local pos = ply:GetPos()
 		local angles = ply:EyeAngles()
 		local lastattacker = ply.LastAttacker
 		local dclass = ply.DeathClass
@@ -970,7 +971,11 @@ function SecondWind(ply)
 		ply.DeathClass = dclass
 		ply.LastAttacker = lastattacker
 		DeSpawnProtection(ply)
-		ply:SetPos(pos)
+		if ply:IsOnGround() then 
+			ply:SetPos(pos)
+		else
+			ply:SetPos(pos + posoffset)
+		end
 		ply:SetHealth(ply:Health() * 0.2)
 		ply:EmitSound("npc/zombie/zombie_voice_idle"..math.random( 1, 14 )..".wav", 100, 85)
 		ply:SetEyeAngles(angles)
@@ -1317,6 +1322,7 @@ function GM:PlayerSpawn(ply)
 
 	if plyteam == TEAM_UNDEAD then	
 		ply:AddEFlags(EFL_NO_DAMAGE_FORCES)
+		ply:SetNoCollideWithTeammates(true)
 		if ply.DeathClass then
 			ply:SetZombieClass(ply.DeathClass)
 			ply.DeathClass = nil
@@ -1340,6 +1346,7 @@ function GM:PlayerSpawn(ply)
 		SpawnProtection(ply, math.max( spawnProtectionTime, 0 ) ) -- Less infliction, more spawn protection.
 	elseif plyteam == TEAM_HUMAN then
 		ply:RemoveEFlags(EFL_NO_DAMAGE_FORCES)
+		ply:SetNoCollideWithTeammates(false)
 		local modelname = string.lower(player_manager.TranslatePlayerModel(ply:GetInfo("cl_playermodel")))
 		if self.RestrictedModels[modelname] then
 			modelname = "models/player/alyx.mdl"
