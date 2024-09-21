@@ -8,6 +8,7 @@ SWEP.WorldModel = "models/weapons/w_rocket_launcher.mdl"
 
 SWEP.Spawnable = true
 SWEP.AdminSpawnable = true
+SWEP.HoldType = "rpg"
 
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.DefaultClip = 3
@@ -19,6 +20,10 @@ SWEP.Secondary.ClipSize = 1
 SWEP.Secondary.DefaultClip = 1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "CombineCannon"
+
+function SWEP:Initialize()
+	self:SetWeaponHoldType( self.HoldType )
+end
 
 function SWEP:Reload()
 	return true

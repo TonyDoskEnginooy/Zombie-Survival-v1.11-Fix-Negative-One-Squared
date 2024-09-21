@@ -45,7 +45,7 @@ function SWEP:Think()
 	self.NextHit = nil
 
 	local trace, ent = owner:CalcMeleeHit(self.MeleeHitDetection)
-	if not ent:IsValid() and self.PreHit and self.PreHit:IsValid() and self.PreHit:GetPos():Distance(owner:GetShootPos()) < 135 then
+	if (not ent:IsPlayer() or ent:IsPlayer() and ent:Team() ~= owner:Team()) and not ent:IsValid() and self.PreHit and self.PreHit:IsValid() and self.PreHit:GetPos():Distance(owner:GetShootPos()) < 125 then
 		ent = self.PreHit
 		trace.Hit = true
 	end
@@ -59,7 +59,7 @@ function SWEP:Think()
 					fin:Fire("break", "", 0)
 				else
 					local phys = fin:GetPhysicsObject()
-					if fin:IsPlayer() then
+					if fin:IsPlayer() and fin:Team() ~= owner:Team() then
 						if fin:Team() == TEAM_UNDEAD then
 							local vel = owner:GetAimVector() * 400
 							vel.z = 100
@@ -73,8 +73,8 @@ function SWEP:Think()
 					end
 					fin:TakeDamage(damage, owner)
 				end
-				self.survHit = true
-				if fin:IsPlayer() then
+				if fin:IsPlayer() and fin:Team() ~= owner:Team() or fin:IsNPC() or fin:GetClass() == "prop_physics" then
+					self.survHit = true
 					break
 				end
 			end

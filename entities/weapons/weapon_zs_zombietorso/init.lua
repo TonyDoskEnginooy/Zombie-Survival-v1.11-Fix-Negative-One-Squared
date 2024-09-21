@@ -23,12 +23,44 @@ function SWEP:Think()
 	local ply = self:GetOwner()
 
 	local trace, ent = ply:CalcMeleeHit(self.MeleeHitDetection)
-	if not ent:IsValid() and self.PreHit and self.PreHit:IsValid() and self.PreHit:GetPos():Distance(ply:GetPos()) < 110 then
+	if (not ent:IsPlayer() or ent:IsPlayer() and ent:Team() ~= ply:Team()) and not ent:IsValid() and self.PreHit and self.PreHit:IsValid() and self.PreHit:GetPos():Distance(ply:GetShootPos()) < 125 then
 		ent = self.PreHit
 		trace.Hit = true
 	end
 	
 	local damage = 20 + 20 * math.min(GetZombieFocus(ply:GetPos(), 300, 0.001, 0) - 0.3, 1)
+
+	if not ent:IsValid() and not trace.Hit then
+		for _, fin in ipairs(ents.FindInSphere(ply:GetShootPos() + ply:GetAimVector() * 50, 20)) do
+			if fin ~= ply then
+				if fin:GetClass() == "func_breakable_surf" then
+					fin:Fire("break", "", 0)
+				else
+					local phys = fin:GetPhysicsObject()
+					if fin:IsPlayer() and fin:Team() ~= ply:Team() then
+						local vel 
+						if fin:IsOnGround() then 
+							vel = ply:GetAimVector() * 800
+						else
+							vel = ply:GetAimVector() * 300
+						end
+						vel.z = 100
+						fin:SetVelocity(vel)
+					elseif phys:IsValid() and not fin:IsNPC() and phys:IsMoveable() then
+						local vel = damage * 650 * ply:GetAimVector()
+
+						phys:ApplyForceOffset(vel, (fin:NearestPoint(ply:GetShootPos()) + fin:GetPos() * 2) / 3)
+						fin:SetPhysicsAttacker(ply)
+					end
+					fin:TakeDamage(damage, ply)
+				end
+				if fin:IsPlayer() and fin:Team() ~= ply:Team() or fin:IsNPC() or fin:GetClass() == "prop_physics" then
+					self.survHit = true
+					break
+				end
+			end
+		end
+	end
 
 	if ent and ent:IsValid() then
 		if ent:GetClass() == "func_breakable_surf" then
@@ -36,13 +68,15 @@ function SWEP:Think()
 		else
 			local phys = ent:GetPhysicsObject()
 			if ent:IsPlayer() then
-				if ent:Team() == TEAM_UNDEAD then
-					local vel = ply:GetAimVector() * 390
-					vel.z = 95
-					ent:SetVelocity(vel)
+				if ent:IsOnGround() then 
+					vel = ply:GetAimVector() * 800
+				else
+					vel = ply:GetAimVector() * 300
 				end
+				vel.z = 100
+				ent:SetVelocity(vel)
 			elseif phys:IsValid() and not ent:IsNPC() and phys:IsMoveable() then
-				local vel = damage * 487 * ply:GetAimVector()
+				local vel = damage * 650 * ply:GetAimVector()
 
 				phys:ApplyForceOffset(vel, (ent:NearestPoint(ply:GetShootPos()) + ent:GetPos() * 2) / 3)
 				ent:SetPhysicsAttacker(ply)
@@ -51,12 +85,13 @@ function SWEP:Think()
 		end
 	end
 
-	if trace.Hit then
+	if trace.Hit or ent:IsValid() or self.survHit then
 		ply:EmitSound("npc/zombie/claw_strike"..math.random(1, 3)..".wav")
 	end
 
 	ply:EmitSound("npc/zombie/claw_miss"..math.random(1, 2)..".wav")
 	self.PreHit = nil
+	self.survHit = false
 end
 
 SWEP.NextSwing = 0

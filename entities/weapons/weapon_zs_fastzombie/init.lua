@@ -97,7 +97,7 @@ function SWEP:Think()
 	self:SendWeaponAnim(ACT_VM_IDLE)
 	if not owner:KeyDown(IN_ATTACK) then
 		self:SetSwinging(false)
-		//GAMEMODE:SetPlayerSpeed(owner, ZombieClasses[owner:GetZombieClass()].Speed)
+		GAMEMODE:SetPlayerSpeed(owner, ZombieClasses[owner:GetZombieClass()].Speed)
 		return
 	end
 
@@ -140,7 +140,9 @@ end
 
 function SWEP:PrimaryAttack()
 	if self:GetSwinging() or self.Leaping then return end
-	//GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed * 0.5)
+	if not self:GetOwner():HasGodMode() then
+		GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed * 0.5)
+	end
 	self:SetNextSwing(CurTime())
 	self:SetSwinging(true)
 end
