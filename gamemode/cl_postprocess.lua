@@ -143,23 +143,38 @@ function PoisEff()
 	timer.Create("poison", 0, 0, DecayPoisonedEffect)
 end
 
+local cvar_zs_wave0 = GetConVar("zs_wave0")
+
 function DeadC()
-	MotionBlur = 0.91
-	render.SetMaterial(matBlurEdges)
-	render.UpdateScreenEffectTexture()
-	render.DrawScreenQuad()
-	render.DrawScreenQuad()
-	render.DrawScreenQuad()
-	ColorModify["$pp_colour_addr"] = 0.3
-	ColorModify["$pp_colour_addg"] = 0
-	ColorModify["$pp_colour_addb"] = 0
-	ColorModify["$pp_colour_brightness"] = 0
-	ColorModify["$pp_colour_contrast"] = 1
-	ColorModify["$pp_colour_colour"] = 1
-	ColorModify["$pp_colour_mulr"] = 0
-	ColorModify["$pp_colour_mulg"] = 0
-	ColorModify["$pp_colour_mulb"] = 0
-	DLV = nil
+	if cvar_zs_wave0:GetInt() <= CurTime() then 
+		MotionBlur = 0.91
+		render.SetMaterial(matBlurEdges)
+		render.UpdateScreenEffectTexture()
+		render.DrawScreenQuad()
+		render.DrawScreenQuad()
+		render.DrawScreenQuad()
+		ColorModify["$pp_colour_addr"] = 0.3
+		ColorModify["$pp_colour_addg"] = 0
+		ColorModify["$pp_colour_addb"] = 0
+		ColorModify["$pp_colour_brightness"] = 0
+		ColorModify["$pp_colour_contrast"] = 1
+		ColorModify["$pp_colour_colour"] = 1
+		ColorModify["$pp_colour_mulr"] = 0
+		ColorModify["$pp_colour_mulg"] = 0
+		ColorModify["$pp_colour_mulb"] = 0
+		DLV = nil
+	else
+		MotionBlur = 0
+		ColorModify["$pp_colour_addr"] = 0
+		ColorModify["$pp_colour_addg"] = 0
+		ColorModify["$pp_colour_addb"] = 0
+		ColorModify["$pp_colour_brightness"] = 0
+		ColorModify["$pp_colour_contrast"] = 1
+		ColorModify["$pp_colour_colour"] = 0
+		ColorModify["$pp_colour_mulr"] = 0
+		ColorModify["$pp_colour_mulg"] = 0
+		ColorModify["$pp_colour_mulb"] = 0
+	end
 end
 
 function DoZomC()

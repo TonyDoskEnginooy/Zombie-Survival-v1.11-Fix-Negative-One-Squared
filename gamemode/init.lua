@@ -480,6 +480,9 @@ function GM:Think()
 	if cvar_zs_wave0:GetInt() > tim then 
 		for _, ply in ipairs(player.GetAll()) do
 			ply.NextSpawnTime = 99999
+			if not ply:Alive() then
+				ply:Spectate(6)
+			end
 		end
 	else
 		if team.NumPlayers(TEAM_UNDEAD) < 1 and team.NumPlayers(TEAM_HUMAN) >= 3 then 
@@ -495,6 +498,7 @@ function GM:Think()
 			newply:PrintMessage(4, "You've been randomly selected\nto lead the Undead army.")
 			newply:StripWeapons()
 			newply:Spawn()
+			newply:UnSpectate()
 		end
 		if cvar_zs_wave0:GetInt() == tim then 
 			BroadcastLua("GAMEMODE:SplitMessage(h * 0.7, '<color=red><font=HUDFontAAFix>The Infection Has Begun!</font></color>')")
@@ -502,6 +506,7 @@ function GM:Think()
 			for _, ply in ipairs(player.GetAll()) do
 				if not ply:Alive() then
 					ply:Spawn()
+					ply:UnSpectate()
 				end
 			end
 		end

@@ -457,7 +457,7 @@ function GM:CalcView(ply, pos, ang, _fov)
 
 	local ragdoll = ply:GetRagdollEntity()
 
-	if IsValid(ragdoll) then
+	if IsValid(ragdoll) and cvar_zs_wave0:GetInt() <= CurTime() then
 		local lookup = ragdoll:LookupAttachment("eyes")
 		if lookup > 0 then
 			local attach = ragdoll:GetAttachment(lookup)
