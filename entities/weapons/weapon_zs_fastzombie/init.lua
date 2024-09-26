@@ -139,10 +139,10 @@ function SWEP:Think()
 end
 
 function SWEP:PrimaryAttack()
-	if self:GetSwinging() or self.Leaping then return end
-	if not self:GetOwner():HasGodMode() then
+	if self:GetSwinging() and not self:GetOwner():HasGodMode() then
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed * 0.5)
 	end
+	if self:GetSwinging() or self.Leaping then return end
 	self:SetNextSwing(CurTime())
 	self:SetSwinging(true)
 end
