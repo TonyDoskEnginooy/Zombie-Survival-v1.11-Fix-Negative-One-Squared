@@ -19,7 +19,7 @@ function CLASS.CalcMainActivity(ply, velocity)
 		return 1, ply:LookupSequence("pullGrenade")
 	end
 
-	if ply:GetMaxSpeed() == 150 or wep:GetGrenading() == false then 
+	if ply:Team() == TEAM_ZOMBIE and ply:GetMaxSpeed() == 150 or wep:GetGrenading() == false then 
 		if velocity:Length2DSqr() <= 1 then
 			return ACT_IDLE, -1
 		else
