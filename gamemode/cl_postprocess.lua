@@ -3,7 +3,7 @@ DISABLE_PP = CreateClientConVar("_disable_pp", 0, true, false)
 local FILM_GRAIN = CreateClientConVar("_zs_enablefilmgrain", 1, true, false)
 local FILM_GRAIN_OPACITY = CreateClientConVar("_zs_filmgrainopacity", 3, true, false)
 local COLOR_MOD = CreateClientConVar("_zs_enablecolormod", 1, true, false)
-//local MOTION_BLUR = CreateClientConVar("_zs_enablemotionblur", 1, true, false)
+local MOTION_BLUR = CreateClientConVar("_zs_enablemotionblur", 1, true, false)
 
 local tex_MotionBlur = render.GetMoBlurTex0()
 local matBlurEdges = Material("bluredges")
@@ -126,7 +126,7 @@ end
 
 function DeadC()
 	MotionBlur = 0.91
-	--render.SetMaterial(matBlurEdges)
+	render.SetMaterial(matBlurEdges)
 	render.UpdateScreenEffectTexture()
 	render.DrawScreenQuad()
 	render.DrawScreenQuad()
