@@ -100,6 +100,7 @@ local function PaintBlindness()
 end
 
 function EyePoisoned()
+	local ply = LocalPlayer()
 	ply.Blindness = CurTime() + math.random(14, 18)
 	ply.BlindRotate = 0
 	PoisEff()
