@@ -421,6 +421,9 @@ end
 
 local NextAura = 0
 
+local cvar_zs_roundtime = GetConVar("zs_roundtime")
+local cvar_zs_wave0 = GetConVar("zs_wave0")
+
 function GM:ZombieHUD(ply, actionposx, actionposy, killedposx, killedposy)
 	if not ply.Class then return end
 
@@ -464,38 +467,26 @@ function GM:ZombieHUD(ply, actionposx, actionposy, killedposx, killedposy)
 	local allow_redeeming = cvars.Bool("zs_allow_redeeming")
 	local redeem_kills = cvars.Number("zs_redeem_kills")
 	local autoredeem = cvars.Bool("zs_autoredeem")
-	if SMALL_HUD then
-		draw.DrawText("Feed: "..ToMinutesSeconds(cvars.Number("zs_roundtime") - CurTime()), "HUDFontSmallAAFix", actionposx, actionposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
+	local roundtime = cvar_zs_roundtime:GetInt() + cvar_zs_wave0:GetInt()
 
-		if allow_redeeming then
-			if autoredeem then
-				draw.DrawText("Redemption: " .. redeem_kills - killz, "HUDFontSmallAAFix", killedposx, killedposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
-			else
-				if redeem_kills <= killz then
-					draw.DrawText("Redeem: F2!", "HUDFontSmallAAFix", killedposx, killedposy, COLOR_WHITE, TEXT_ALIGN_LEFT)
-				else
-					draw.DrawText("Redemption: " .. redeem_kills - killz, "HUDFontSmallAAFix", killedposx, killedposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
-				end
-			end
+	if cvar_zs_wave0:GetInt() <= CurTime() then 
+		draw.DrawText("Feed: "..ToMinutesSeconds(roundtime - CurTime()), "HUDFontSmallAAFix", actionposx, actionposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
+	else
+		draw.DrawText("Stalk: "..ToMinutesSeconds(cvar_zs_wave0:GetInt() - CurTime()), "HUDFontSmallAAFix", actionposx, actionposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
+	end
+
+	if allow_redeeming then
+		if autoredeem then
+			draw.DrawText("Redemption: " .. redeem_kills - killz, "HUDFontSmallAAFix", killedposx, killedposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
 		else
-			draw.DrawText("Brains: "..killz, "HUDFontSmall", killedposx, killedposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
+			if redeem_kills <= killz then
+				draw.DrawText("Redeem: F2!", "HUDFontSmallAAFix", killedposx, killedposy, COLOR_WHITE, TEXT_ALIGN_LEFT)
+			else
+				draw.DrawText("Redemption: " .. redeem_kills - killz, "HUDFontSmallAAFix", killedposx, killedposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
+			end
 		end
 	else
-		draw.DrawText("Feed: "..ToMinutesSeconds(cvars.Number("zs_roundtime") - CurTime()), "HUDFontSmallAAFix", actionposx, actionposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
-
-		if allow_redeeming then
-			if autoredeem then
-				draw.DrawText("Redemption: " .. redeem_kills - killz, "HUDFontSmallAAFix", killedposx, killedposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
-			else
-				if redeem_kills <= killz then
-					draw.DrawText("Redeem: F2!", "HUDFontSmallAAFix", killedposx, killedposy, COLOR_WHITE, TEXT_ALIGN_LEFT)
-				else
-					draw.DrawText("Redemption: " .. redeem_kills - killz, "HUDFontSmallAAFix", killedposx, killedposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
-				end
-			end
-		else
-			draw.DrawText("Brains: "..killz, "HUDFontSmallAAFix", killedposx, killedposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
-		end
+		draw.DrawText("Brains: "..killz, "HUDFontSmallAAFix", killedposx, killedposy, COLOR_DARKRED, TEXT_ALIGN_LEFT)
 	end
 
 	if NextAura < realtime then

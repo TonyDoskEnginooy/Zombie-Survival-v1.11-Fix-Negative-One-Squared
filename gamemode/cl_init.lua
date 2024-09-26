@@ -54,6 +54,7 @@ NearZombies = 0
 ActualNearZombies = 0
 
 local cvar_zs_roundtime = GetConVar("zs_roundtime")
+local cvar_zs_wave0 = GetConVar("zs_wave0")
 local cvar_zs_intermission_time = GetConVar("zs_intermission_time")
 local LASTHUMANSOUNDLENGTH = SoundDuration(LASTHUMANSOUND)
 local UNLIFESOUNDLENGTH = SoundDuration(UNLIFESOUND)
@@ -357,6 +358,10 @@ function GM:HUDPaint()
 		cvar_zs_roundtime = GetConVar("zs_roundtime")
 	end
 
+	if not cvar_zs_wave0 then
+		cvar_zs_wave0 = GetConVar("zs_wave0")
+	end
+
 	if not cvar_zs_intermission_time then
 		cvar_zs_intermission_time = GetConVar("zs_intermission_time")
 	end
@@ -401,6 +406,8 @@ function GM:HUDPaint()
 	draw.DrawText(humans, "HUDFontAAFix", w05, h05, COLOR_DARKBLUE, TEXT_ALIGN_LEFT)
 	draw.DrawText(humans, "HUDFontAAFix", w05, h05, COLOR_DARKBLUE, TEXT_ALIGN_LEFT)
 
+	local roundtime = cvar_zs_roundtime:GetInt() + cvar_zs_wave0:GetInt()
+
 	-- Death Notice
 	self:DrawDeathNotice(0.8, 0.04)
 
@@ -418,7 +425,11 @@ function GM:HUDPaint()
 			self:HumanHUD(ply, killedposx, killedposy)
 		end
 		
-		draw.DrawText("Survive: "..ToMinutesSeconds(cvar_zs_roundtime:GetInt() - CurTime()), "HUDFontSmallAAFix", actionposx, actionposy, COLOR_CYAN, TEXT_ALIGN_LEFT)
+		if cvar_zs_wave0:GetInt() <= CurTime() then 
+			draw.DrawText("Survive: "..ToMinutesSeconds(roundtime - CurTime()), "HUDFontSmallAAFix", actionposx, actionposy, COLOR_CYAN, TEXT_ALIGN_LEFT)
+		else
+			draw.DrawText("Prepare: "..ToMinutesSeconds(cvar_zs_wave0:GetInt() - CurTime()), "HUDFontSmallAAFix", actionposx, actionposy, COLOR_CYAN, TEXT_ALIGN_LEFT)
+		end
 	end
 
 	-- Infliction
@@ -661,19 +672,20 @@ local function SetInf(infliction)
 				RunConsoleCommand("stopsound")
 				timer.Simple(0.5, LoopHalflife)
 			end
-			surface.PlaySound("ambient/creatures/town_zombie_call1.wav")
+			surface.PlaySound("npc/fast_zombie/fz_alert_far1.wav")
 			GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontBigFix>Half-Life</font></color>", "<color=ltred><font=HUDFontSmallAAFix>Horde locked above 50%</font></color>")
 			GAMEMODE:SetHalflifeText()
 		elseif usesound then
 			if INFLICTION < 0.75 then 
-				surface.PlaySound("ambient/creatures/town_zombie_call1.wav")
+				surface.PlaySound("npc/fast_zombie/fz_alert_far1.wav")
 			else
 				surface.PlaySound("npc/zombie_poison/pz_alert2.wav")
 			end
-			/*if amount > 1 then
+			--[[
 				UnlockedClass =  -- So you can have more than one class with the same infliction without getting spammed.
 			end
-			hook.Add("HUDPaint", "DrawUnlock", DrawUnlock)*/
+			hook.Add("HUDPaint", "DrawUnlock", DrawUnlock)
+			]]
 			if amount == 1 then
 				GAMEMODE:SplitMessage(h * 0.12, "<color=green><font=HUDFontAAFix>"..UnlockedClass.." unlocked!</font></color>")
 			else

@@ -71,6 +71,7 @@ ROUNDWINNER = NULL
 local cvar_zs_ammo_regenerate_rate = GetConVar("zs_ammo_regenerate_rate")
 local cvar_zs_difficulty = GetConVar("zs_difficulty")
 local cvar_zs_roundtime = GetConVar("zs_roundtime")
+local cvar_zs_wave0 = GetConVar("zs_wave0")
 local cvar_zs_allow_map_npcs = GetConVar("zs_allow_map_npcs")
 local cvar_zs_destroy_doors = GetConVar("zs_destroy_doors")
 local cvar_zs_destroy_prop_doors = GetConVar("zs_destroy_prop_doors")
@@ -474,8 +475,37 @@ end
 
 function GM:Think()
 	local tim = CurTime()
+	local roundtime = cvar_zs_roundtime:GetInt() + cvar_zs_wave0:GetInt()
 
-	if cvar_zs_roundtime:GetInt() < tim then
+	if cvar_zs_wave0:GetInt() > tim then 
+		for _, ply in ipairs(player.GetAll()) do
+			ply.NextSpawnTime = 99999
+		end
+	else
+		if team.NumPlayers(TEAM_UNDEAD) < 1 and team.NumPlayers(TEAM_HUMAN) >= 3 then 
+			local plays = player.GetAll()
+			local newply = plays[math.random(1, #plays)]
+			for _, ply in ipairs(plays) do 
+				if ply ~= newply then
+					ply:SetTeam(TEAM_HUMAN)
+				end
+			end
+			newply:SetTeam(TEAM_UNDEAD)
+			DeadSteamIDs[newply:SteamID64()] = true
+			newply:PrintMessage(4, "You've been randomly selected\nto lead the Undead army.")
+			newply:StripWeapons()
+			newply:Spawn()
+		end
+		for _, ply in ipairs(player.GetAll()) do
+			if not ply:Alive() and cvar_zs_wave0:GetInt() == tim then
+				BroadcastLua("GAMEMODE:SplitMessage(h * 0.7, '<color=red><font=HUDFontAAFix>The Infection Has Begun!</font></color>')")
+				BroadcastLua("surface.PlaySound('ambient/creatures/town_zombie_call1.wav')")
+				ply:Spawn()
+			end
+		end
+	end
+
+	if roundtime < tim then
 		self:EndRound(TEAM_HUMAN)
 	elseif NextAmmoDropOff < tim then
 		if SURVIVALMODE then
@@ -484,7 +514,7 @@ function GM:Think()
 		end
 
 		NextAmmoDropOff = CurTime() + cvar_zs_ammo_regenerate_rate:GetInt()
-		INFLICTION = math.max(INFLICTION, CurTime() / cvar_zs_roundtime:GetInt())
+		INFLICTION = math.max(INFLICTION, CurTime() / roundtime)
 		CAPPED_INFLICTION = INFLICTION
 
 		self:SendInfliction()
@@ -788,20 +818,11 @@ function GM:PlayerInitialSpawn(ply)
 	ply.DamageDealt[TEAM_UNDEAD] = 0
 	ply.DamageDealt[TEAM_HUMAN] = 0
 
+	local roundtime = cvar_zs_roundtime:GetInt() + cvar_zs_wave0:GetInt()
+
 	if DeadSteamIDs[ply:SteamID64()] then
 		ply:SetTeam(TEAM_UNDEAD)
-	elseif team.NumPlayers(TEAM_UNDEAD) < 1 and team.NumPlayers(TEAM_HUMAN) >= 3 then
-		local plays = player.GetAll()
-		local newply = plays[math.random(1, #plays)]
-		newply:SetTeam(TEAM_UNDEAD)
-		DeadSteamIDs[newply:SteamID64()] = true
-		newply:PrintMessage(4, "You've been randomly selected\nto lead the Undead army.")
-		newply:StripWeapons()
-		newply:Spawn()
-		if ply ~= newply then
-			ply:SetTeam(TEAM_HUMAN)
-		end
-	elseif INFLICTION >= 0.5 or (CurTime() > cvar_zs_roundtime:GetInt()*0.5 and cvar_zs_human_deadline:GetBool()) or LASTHUMAN then
+	elseif INFLICTION >= 0.5 or (CurTime() > roundtime*0.5 and cvar_zs_human_deadline:GetBool()) or LASTHUMAN then
 		ply:SetTeam(TEAM_UNDEAD)
 		DeadSteamIDs[ply:SteamID64()] = true
 	else
@@ -991,7 +1012,8 @@ function GM:PlayerDeathSound()
 end
 
 function GM:CanPlayerSuicide(ply)
-	if SUPPRESS_SUICIDE and ply:Team() == TEAM_HUMAN and CurTime() < cvar_zs_roundtime:GetInt() * 0.1 then
+	local roundtime = cvar_zs_roundtime:GetInt() + cvar_zs_wave0:GetInt()
+	if SUPPRESS_SUICIDE and ply:Team() == TEAM_HUMAN and CurTime() < roundtime * 0.1 then
 		ply:PrintMessage(4, "Give others time to spawn before suiciding.")
 		return false
 	end
