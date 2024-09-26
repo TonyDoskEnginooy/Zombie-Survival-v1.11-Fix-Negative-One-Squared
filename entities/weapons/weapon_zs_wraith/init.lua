@@ -99,7 +99,7 @@ function SWEP:Think()
 					end
 					fin:TakeDamage(damage, owner)
 				end
-				if fin:IsPlayer() and fin:Team() ~= owner:Team() or fin:IsNPC() or fin:GetClass() == "prop_physics" then
+				if fin:IsPlayer() and fin:Team() ~= owner:Team() or not fin:IsPlayer() and not fin:IsNextBot() then
 					self.survHit = true
 					break
 				end
