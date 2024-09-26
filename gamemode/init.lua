@@ -1214,7 +1214,10 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 				ply:PlayDeathSound()
 				timer.Create(ply:UniqueID().."secondwind", 2.5, 1, function()
 					if IsValid(ply) then
+						local modelname = string.lower(player_manager.TranslatePlayerModel(ply:GetInfo("cl_playermodel")))
+						ply:SetZombieClass(11)
 						SecondWind(ply)
+						ply:SetModel(modelname)
 					end
 				end)
 			end
@@ -1358,7 +1361,9 @@ function GM:PlayerSpawn(ply)
 		end
 		local class = ply:GetZombieClass()
 		local classtab = ZombieClasses[class]
-		ply:SetModel(classtab.Model)
+		if classtab.Model ~= nil then 
+			ply:SetModel(classtab.Model)
+		end
 		--[[if team.NumPlayers(TEAM_UNDEAD) < math.ceil(player.GetCount() / 8) then
 			ply:SetHealth(classtab.Health * 3)
 		elseif team.NumPlayers(TEAM_UNDEAD) >= math.ceil(player.GetCount() / 8) and team.NumPlayers(TEAM_UNDEAD) < math.ceil(player.GetCount() / 4) then

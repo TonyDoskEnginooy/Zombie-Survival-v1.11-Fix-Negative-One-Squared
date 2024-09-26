@@ -319,7 +319,7 @@ util.PrecacheSound("npc/zombine/gear3.wav")
 ZombieClasses[1] =						-- The number should not be the same as any other class. You can't skip numbers.
 {
 	Name = "Zombie",					-- Display name.
-	Revives = false,						-- Zombie will revive if not shot in the head.
+	Revives = true,						-- Zombie will revive if not shot in the head.
 	Health = 125,						-- Obviously enough, health
 	Threshold = 0.0,					-- Infliction <a number between 0.0 and 1.0, 0 being anytime and 1 being when there's 100% zombies> needed in order to change to this class.
 	SWEP = "weapon_zs_zombie",			-- The SWEP to give them.
@@ -519,7 +519,7 @@ ZombieClasses[9] =
 	Hidden = true -- The class won't show up in any menus and can't be switched to unless the script is told to switch to it.
 }
 
-ZombieClasses[10] =						
+ZombieClasses[10] =
 {
 	Name = "Zombine",
 	Health = 175,
@@ -539,6 +539,32 @@ ZombieClasses[10] =
 		Sound("npc/zombine/zombine_die1.wav"),
 		Sound("npc/zombine/zombine_die2.wav")
 	},
+}
+
+ZombieClasses[11] =	
+{
+	Name = "Fresh Meat",
+	Health = 100,
+	Threshold = 0.8,
+	SWEP = "weapon_zs_fresh",
+	ANIM = "zombie",
+	Speed = 200,		
+	Description="The slow, sulking bag of flesh and combine technology. This is your barricade destroyer.@Unique abilities: Can pull out a grenade. Goes faster when damaged enough.",
+	PainSounds = {
+		Sound("npc/zombie/zombie_pain1.wav"),
+		Sound("npc/zombie/zombie_pain2.wav"),
+		Sound("npc/zombie/zombie_pain3.wav"),
+		Sound("npc/zombie/zombie_pain4.wav"),
+		Sound("npc/zombie/zombie_pain5.wav"),
+		Sound("npc/zombie/zombie_pain6.wav")
+	},
+	DeathSounds = {
+		Sound("npc/zombie/zombie_die1.wav"),
+		Sound("npc/zombie/zombie_die2.wav"),
+		Sound("npc/zombie/zombie_die3.wav")
+	},
+	Unlocked = true,
+	Hidden = true
 }
 
 -- Add models to this table to prevent human players from using them (Zombie skins and such).

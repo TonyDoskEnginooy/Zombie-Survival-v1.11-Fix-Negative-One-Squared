@@ -2,6 +2,7 @@
 
 function CLASS.CalcMainActivity(ply, velocity)
 	local wep = ply:GetActiveWeapon()
+	if not wep:IsValid() or not wep.GetGrenading then return end
 	
 	if ply:HasGodMode() then 
 		if velocity:Length2DSqr() <= 1 then
@@ -19,7 +20,7 @@ function CLASS.CalcMainActivity(ply, velocity)
 		return 1, ply:LookupSequence("pullGrenade")
 	end
 
-	if ply:Team() == TEAM_ZOMBIE and ply:GetMaxSpeed() == 150 or wep:GetGrenading() == false then 
+	if and ply:GetMaxSpeed() == 150 or wep.GetGrenading and not wep:GetGrenading() then 
 		if velocity:Length2DSqr() <= 1 then
 			return ACT_IDLE, -1
 		else
@@ -29,7 +30,7 @@ function CLASS.CalcMainActivity(ply, velocity)
 				return ACT_RUN, -1
 			end
 		end
-	elseif ply:GetMaxSpeed() == 200 or wep:GetGrenading() == true then 
+	elseif ply:GetMaxSpeed() == 200 or wep.GetGrenading and wep:GetGrenading() then 
 		if velocity:Length2DSqr() <= 1 then
 			return 1, ply:LookupSequence("Idle_Grenade")
 		else
