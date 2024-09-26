@@ -23,7 +23,6 @@ function SWEP:Deploy()
 	self.InvisAction = 0
 	self:GetOwner():SetColor(DeCloaked)
 	GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
-	self:GetOwner():SetMaxSpeed(ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 	self:SendWeaponAnim(ACT_VM_DRAW)
 	timer.Simple(1, function() 
 		if self.Alive then 
@@ -176,14 +175,12 @@ function SWEP:Reload()
 	if CurTime() < self.InvisAction or self:GetOwner():HasGodMode() then return end
 	if self.Invis == 0 then 
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
-		self:GetOwner():SetMaxSpeed(100)
 		self.InvisAction = CurTime() + 4
 		timer.Simple(2, function() 
 			if self.Alive then 
 				self.Invis = 1
 				self:GetOwner():SetColor(Cloaked)
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
-				self:GetOwner():SetMaxSpeed(300)
 				self:GetOwner():EmitSound("ambient/creatures/town_scared_sob2.wav")
 			end
 		end )
@@ -192,14 +189,12 @@ function SWEP:Reload()
 		self:GetOwner():SetAnimation(PLAYER_SUPERJUMP)
 		self:GetOwner():SetColor(DeCloaked)
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
-		self:GetOwner():SetMaxSpeed(100)
 		self.InvisAction = CurTime() + 2.1
 		self:GetOwner():EmitSound("npc/zombie/zombie_alert"..math.random(1, 3)..".wav")
 		self.Invis = 0
 		timer.Simple(2, function() 
 			if self.Alive then 
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
-				self:GetOwner():SetMaxSpeed(ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 				self.Invis = 0
 				self:GetOwner():SetColor(DeCloaked)
 			end
@@ -222,11 +217,9 @@ hook.Add("PlayerHurt", "ZombieHurt", function(victim, attacker)
 	    	end )
 	    end
 	    if victim:GetMaxSpeed() == ZombieClasses[victim:GetZombieClass()].Speed then 
-		    GAMEMODE:SetPlayerSpeed(victim, 175)
-			victim:SetMaxSpeed(175)
+		    GAMEMODE:SetPlayerSpeed(victim, 150)
 		    timer.Simple(2, function() 
 		        GAMEMODE:SetPlayerSpeed(victim, ZombieClasses[victim:GetZombieClass()].Speed)
-		        victim:SetMaxSpeed(ZombieClasses[victim:GetZombieClass()].Speed)
 		    end )
 		end
     end
