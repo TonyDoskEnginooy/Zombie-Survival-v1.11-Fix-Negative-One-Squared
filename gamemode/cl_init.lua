@@ -154,7 +154,7 @@ function GM:Initialize()
 		shadow = true
 	})
 	surface.CreateFont("HUDFontBigFix", { 
-		font = "typenoksidi",
+		font = "akbar",
 		size = ScrW() * 0.05,
 		weight = 400,
 		antialias = false,
