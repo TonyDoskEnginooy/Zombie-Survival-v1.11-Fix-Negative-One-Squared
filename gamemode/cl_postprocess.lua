@@ -6,6 +6,7 @@ local COLOR_MOD = CreateClientConVar("_zs_enablecolormod", 1, true, false)
 //local MOTION_BLUR = CreateClientConVar("_zs_enablemotionblur", 1, true, false)
 
 local tex_MotionBlur = render.GetMoBlurTex0()
+local matBlurEdges = Material("bluredges")
 
 local MotionBlur = 0.0
 
@@ -35,10 +36,10 @@ if render.GetDXLevel() >= 90 then
 			DrawColorModify(ColorModify)
 		end
 
-		/*if MOTION_BLUR:GetBool() and MotionBlur > 0 then
+		if MotionBlur > 0 then
 			DrawMotionBlur(1 - MotionBlur, 1.0, 0.0)
 			MotionBlur = MotionBlur - 0.3 * FrameTime()
-		end*/
+		end
 
 		if FILM_GRAIN:GetBool() then
 			local texture = matFilmGrain[math.floor(CURRENTGRAIN)]
@@ -67,8 +68,8 @@ if render.GetDXLevel() >= 90 then
 					MotionBlur = 0.4
 				else
 					ColorModify["$pp_colour_addr"] = 0
-					//ColorModify["$pp_colour_mulr"] = 1 + NearZombies * 0.04
-					//ColorModify["$pp_colour_brightness"] = NearZombies * 0.005
+					ColorModify["$pp_colour_mulr"] = 1 + NearZombies * 0.04
+					ColorModify["$pp_colour_brightness"] = NearZombies * 0.005
 				end
 			end
 		end
@@ -125,11 +126,11 @@ end
 
 function DeadC()
 	MotionBlur = 0.91
-	//render.SetMaterial(matBlurEdges)
-	//render.UpdateScreenEffectTexture()
-	//render.DrawScreenQuad()
-	//render.DrawScreenQuad()
-	//render.DrawScreenQuad()
+	--render.SetMaterial(matBlurEdges)
+	render.UpdateScreenEffectTexture()
+	render.DrawScreenQuad()
+	render.DrawScreenQuad()
+	render.DrawScreenQuad()
 	ColorModify["$pp_colour_addr"] = 0.3
 	ColorModify["$pp_colour_addg"] = 0
 	ColorModify["$pp_colour_addb"] = 0
