@@ -29,6 +29,7 @@ killicon.Add("weapon_zs_fastheadcrab", "killicon/zs_zombie", color_white)
 killicon.Add("weapon_zs_poisonheadcrab", "killicon/zs_zombie", color_white)
 killicon.Add("weapon_zs_zombietorso", "killicon/zs_zombie", color_white)
 killicon.Add("weapon_zs_wraith", "killicon/zs_zombie", color_white)
+killicon.Add("weapon_zs_zombine", "killicon/zs_zombie", color_white)
 
 local Deaths = {}
 
