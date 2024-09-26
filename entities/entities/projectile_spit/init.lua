@@ -52,7 +52,7 @@ function ENT:PhysicsCollide(data, phys)
 		local attach = hitent:GetAttachment(1)
 		if attach then
 			if data.HitPos:Distance(hitent:GetAttachment(1).Pos) < 25 then
-				//hitent:SendLua("EyePoisoned()")
+				hitent:SendLua("EyePoisoned()")
 				if hitent.Female then
 					hitent:EmitSound("vo/npc/Alyx/uggh02.wav")
 				else
@@ -64,7 +64,7 @@ function ENT:PhysicsCollide(data, phys)
 						DoPoisoned(hitent, owner, timername)
 					end
 				end)
-				hitent:SendLua("PoisEff()")
+				--hitent:SendLua("PoisEff()")
 			end
 		end
 	end
