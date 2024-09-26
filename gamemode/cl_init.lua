@@ -112,92 +112,92 @@ function GM:Initialize()
 		shadow = true
 	})
 	surface.CreateFont("HUDFontTiny", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = 16,
 		weight = 250,
 		antialias = false,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontSmall", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = 28,
 		weight = 400,
 		antialias = false,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontSmallFix", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = ScrW() * 0.02,
 		weight = 400,
 		antialias = false,
 		shadow = true
 	})
 	surface.CreateFont("HUDFont", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = 42,
 		weight = 400,
 		antialias = false,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontFix", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = ScrW() * 0.03,
 		weight = 400,
 		antialias = false,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontBig", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = 72,
 		weight = 400,
 		antialias = false,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontBigFix", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = ScrW() * 0.05,
 		weight = 400,
 		antialias = false,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontTinyAA", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = 16,
 		weight = 250,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontTinyAAFix", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = ScrW() * 0.015,
 		weight = 250,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontSmallAA", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = 28,
 		weight = 400,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontAA", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = 42,
 		weight = 400,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontSmallAAFix", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = ScrW() * 0.02,
 		weight = 400,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontAAFix", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = ScrW() * 0.03,
 		weight = 400,
 		shadow = true
 	})
 	surface.CreateFont("HUDFontBigAA", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = 72,
 		weight = 400,
 		shadow = true
@@ -240,7 +240,7 @@ function GM:Initialize()
 		shadow = true
 	})
 	surface.CreateFont("DefaultBold", { 
-		font = "akbar",
+		font = "typenoksidi",
 		size = 20,
 		weight = 400,
 		shadow = true
