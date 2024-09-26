@@ -9,6 +9,7 @@ local tex_MotionBlur = render.GetMoBlurTex0()
 local matBlurEdges = Material("bluredges")
 
 local MotionBlur = 0.0
+local Sharpen = 0
 
 ColorModify = {}
 ColorModify["$pp_colour_addr"] = 0
@@ -41,6 +42,10 @@ if render.GetDXLevel() >= 90 then
 			MotionBlur = MotionBlur - 0.3 * FrameTime()
 		end
 
+		if Sharpen > 0 then
+			DrawSharpen(Sharpen, 0.5)
+		end
+
 		if FILM_GRAIN:GetBool() then
 			local texture = matFilmGrain[math.floor(CURRENTGRAIN)]
 
@@ -63,14 +68,28 @@ if render.GetDXLevel() >= 90 then
 				DeadC()
 			elseif ply:Team() == TEAM_HUMAN then
 				if ply:Health() <= 30 then
+					render.SetMaterial(matBlurEdges)
+					render.UpdateScreenEffectTexture()
+					render.DrawScreenQuad()
+					render.DrawScreenQuad()
 					ColorModify["$pp_colour_addr"] = math.Approach(ColorModify["$pp_colour_addr"], 0.12, FrameTime() * 0.04)
 					ColorModify["$pp_colour_mulr"] = 1
 					MotionBlur = 0.4
+					Sharpen = 3
 				else
 					ColorModify["$pp_colour_addr"] = 0
 					ColorModify["$pp_colour_mulr"] = 1 + NearZombies * 0.04
 					ColorModify["$pp_colour_brightness"] = NearZombies * 0.005
+					if not LASTHUMAN then 
+						Sharpen = NearZombies * 1.5
+					else
+						Sharpen = 3
+					end
 				end
+			else
+				render.SetMaterial(matBlurEdges)
+				render.UpdateScreenEffectTexture()
+				render.DrawScreenQuad()
 			end
 		end
 	end
@@ -155,6 +174,7 @@ function DoZomC()
 	ColorModify["$pp_colour_mulb"] = 0
 	DLV = nil
 	MotionBlur = 0
+	Sharpen = 0
 end
 
 function ZomC()
@@ -227,7 +247,7 @@ local function DisablePP(sender, command, arguments)
 	end
 end
 concommand.Add("disable_pp", DisablePP)
-/*
+
 local function ZS_EnableMotionBlur(sender, command, arguments)
 	local ply = LocalPlayer()
 
@@ -239,7 +259,7 @@ local function ZS_EnableMotionBlur(sender, command, arguments)
 		ply:ChatPrint("Motion Blur disabled.")
 	end
 end
-concommand.Add("zs_enablemotionblur", ZS_EnableMotionBlur)*/
+concommand.Add("zs_enablemotionblur", ZS_EnableMotionBlur)
 
 local function ZS_EnableFilmGrain(sender, command, arguments)
 	local ply = LocalPlayer()
