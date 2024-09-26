@@ -496,11 +496,13 @@ function GM:Think()
 			newply:StripWeapons()
 			newply:Spawn()
 		end
-		for _, ply in ipairs(player.GetAll()) do
-			if not ply:Alive() and cvar_zs_wave0:GetInt() == tim then
-				BroadcastLua("GAMEMODE:SplitMessage(h * 0.7, '<color=red><font=HUDFontAAFix>The Infection Has Begun!</font></color>')")
-				BroadcastLua("surface.PlaySound('ambient/creatures/town_zombie_call1.wav')")
-				ply:Spawn()
+		if cvar_zs_wave0:GetInt() == tim then 
+			BroadcastLua("GAMEMODE:SplitMessage(h * 0.7, '<color=red><font=HUDFontAAFix>The Infection Has Begun!</font></color>')")
+			BroadcastLua("surface.PlaySound('ambient/creatures/town_zombie_call1.wav')")
+			for _, ply in ipairs(player.GetAll()) do
+				if not ply:Alive() then
+					ply:Spawn()
+				end
 			end
 		end
 	end
