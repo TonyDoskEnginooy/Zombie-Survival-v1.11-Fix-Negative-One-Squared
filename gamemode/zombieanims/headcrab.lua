@@ -1,4 +1,7 @@
 function CLASS.CalcMainActivity(ply, velocity)
+	local wep = ply:GetActiveWeapon()
+	if not wep:IsValid() or not wep.GetLeaping then return end
+
 	if ply:OnGround() then
 		if velocity:Length2DSqr() > 1 then
 			return ACT_RUN, -1
@@ -11,7 +14,11 @@ function CLASS.CalcMainActivity(ply, velocity)
 		return 1, 6
 	end
 
-	return 1, 5
+	if wep:GetLeaping() then 
+		return 1, 5
+	else
+		return 1, 6
+	end
 end
 
 function CLASS.UpdateAnimation(ply, velocity, maxseqgroundspeed)
