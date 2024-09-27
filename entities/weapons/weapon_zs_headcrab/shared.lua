@@ -26,3 +26,7 @@ function SWEP:Precache()
 	util.PrecacheSound("npc/headcrab/headbite.wav")
 	util.PrecacheSound("npc/headcrab/idle"..math.random(1,2)..".wav")
 end
+
+function SWEP:GetLeaping()
+	return self:GetDTBool(0)
+end
