@@ -243,5 +243,15 @@
 			"default"	"45"
 			"singleplayer" "1"
 		}
+
+		25
+		{
+			"name"		"zs_wave0"
+			"text"		"Time before zombies spawn"
+			"help"		"How much time you have before people get picked as zombie"
+			"type"		"Numeric"
+			"default"	"60"
+			"singleplayer" "1"
+		}
 	}
 }
