@@ -1,5 +1,3 @@
--- WIP
-
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 
@@ -8,21 +6,15 @@ include("shared.lua")
 -- This is to get around that dumb thing where the view anims don't play right.
 SWEP.SwapAnims = false
 
-function SWEP:SetNextSwing(time)
+function SWEP:SetNextYell(time)
 	self:SetDTFloat(0, time)
-end
-
-function SWEP:IsGrenading(bool)
-	self:SetDTBool(1, bool)
 end
 
 function SWEP:Deploy()
 	self:GetOwner():DrawViewModel(true)
 	self:GetOwner():DrawWorldModel(false)
 	self:GetOwner().ZomAnim = math.random(1, 3)
-	self:SetNextSwing(0)
-	self:IsGrenading(false)
-	GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
+	self:SetNextYell(0)
 	self:SendWeaponAnim(ACT_VM_DRAW)
 	timer.Simple(1, function() 
 		if self.Alive then 
@@ -31,7 +23,10 @@ function SWEP:Deploy()
 	end )
 end
 
-SWEP.Alive = true
+-- This is kind of unique. It does a trace on the pre swing to see if it hits anything
+-- and then if the after-swing doesn't hit anything, it hits whatever it hit in
+-- the pre-swing, as long as the distance is low enough.
+
 SWEP.survHit = false
 
 function SWEP:Think()
@@ -41,14 +36,9 @@ function SWEP:Think()
 		self.Alive = false
 	end
 
-	if self:GetOwner():Health() <= ZombieClasses[self:GetOwner():GetZombieClass()].Health / 2 and self:GetGrenading() == false then 
-		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 200)
-	end
-
 	if not self.NextHit then return end
 	if CurTime() < self.NextHit then return end
 	self.NextHit = nil
-	self:GetOwner():GetViewModel():SetPlaybackRate(3)
 
 	local ply = self:GetOwner()
 
@@ -68,7 +58,12 @@ function SWEP:Think()
 				else
 					local phys = fin:GetPhysicsObject()
 					if fin:IsPlayer() and fin:Team() ~= ply:Team() then
-						local vel = ply:GetAimVector() * 300
+						local vel 
+						if fin:IsOnGround() then 
+							vel = ply:GetAimVector() * 800
+						else
+							vel = ply:GetAimVector() * 300
+						end
 						vel.z = 100
 						fin:SetVelocity(vel)
 					elseif phys:IsValid() and not fin:IsNPC() and phys:IsMoveable() then
@@ -92,8 +87,12 @@ function SWEP:Think()
 			ent:Fire("break", "", 0)
 		else
 			local phys = ent:GetPhysicsObject()
-			if ent:IsPlayer() and ent:Team() == ply:Team() then
-				local vel = ply:GetAimVector() * 300
+			if ent:IsPlayer() then
+				if ent:IsOnGround() then 
+					vel = ply:GetAimVector() * 800
+				else
+					vel = ply:GetAimVector() * 300
+				end
 				vel.z = 100
 				ent:SetVelocity(vel)
 			elseif phys:IsValid() and not ent:IsNPC() and phys:IsMoveable() then
@@ -115,59 +114,36 @@ function SWEP:Think()
 	self.survHit = false
 end
 
+SWEP.NextSwing = 0
+
 function SWEP:PrimaryAttack()
-	if CurTime() < self:GetNextSwing() or self:GetGrenading() == true then return end
-	if self.SwapAnims then self:SendWeaponAnim(ACT_VM_HITCENTER) else self:SendWeaponAnim(ACT_VM_SECONDARYATTACK) end
-	self.SwapAnims = not self.SwapAnims
-	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
-	self:GetOwner():EmitSound("npc/zombine/zombine_charge1.wav")
-	self:SetNextSwing(CurTime() + self.Primary.Delay)
-	self.NextHit = CurTime() + 0.1
-	local trace, ent = self:GetOwner():CalcMeleeHit(self.MeleeHitDetection)
-	if ent:IsValid() then
-		self.PreHit = ent
-	end
-	timer.Simple(1.5, function() 
-		if self.Alive and self:GetNextSwing() and CurTime() < self:GetNextSwing() then return end
-		if self.Alive then  
-			self:SendWeaponAnim(ACT_VM_IDLE)
+		if CurTime() < self.NextSwing then return end
+		if self.SwapAnims then self:SendWeaponAnim(ACT_VM_HITCENTER) else self:SendWeaponAnim(ACT_VM_SECONDARYATTACK) end
+		self.SwapAnims = not self.SwapAnims
+		self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+		self:GetOwner():EmitSound("npc/barnacle/barnacle_bark"..math.random(1, 2)..".wav")
+		self.NextSwing = CurTime() + self.Primary.Delay
+		self.NextHit = CurTime() + 0.6
+		local trace, ent = self:GetOwner():CalcMeleeHit(self.MeleeHitDetection)
+		if ent:IsValid() then
+			self.PreHit = ent
 		end
-	end )
+		timer.Simple(1.5, function() 
+			if self.NextSwing and CurTime() < self.NextSwing then return end
+			if self.Alive then  
+				self:SendWeaponAnim(ACT_VM_IDLE)
+			end
+		end )
 end
 
-SWEP.NextYell = 0
 function SWEP:SecondaryAttack()
-	if CurTime() < self.NextYell or self:GetGrenading() == true then return end
+	if CurTime() < self:GetNextYell() then return end
 	self:GetOwner():SetAnimation(PLAYER_SUPERJUMP)
 
-	self:GetOwner():EmitSound("npc/zombine/zombine_idle"..math.random(1, 4)..".wav")
-	self.NextYell = CurTime() + self.YellTime
+	self:GetOwner():EmitSound("npc/barnacle/barnacle_tongue_pull"..math.random(1, 3)..".wav")
+	self:SetNextYell(CurTime() + self.YellTime)
 end
 
-SWEP.GrenadeOut = 0
 function SWEP:Reload()
-	if self:GetOwner():HasGodMode() or self:GetGrenading() == true or CurTime() < self:GetNextSwing() then return end
-	if self:GetGrenading() == false then 
-		self:SendWeaponAnim(ACT_VM_HOLSTER)
-		self:IsGrenading(true)
-		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 1)
-		self:GetOwner():EmitSound("npc/zombine/zombine_alert"..math.random(1, 7)..".wav")
-		timer.Simple(1, function()
-			if self.Alive then  
-				GAMEMODE:SetPlayerSpeed(self:GetOwner(), 200)
-				self:GetOwner():EmitSound("npc/zombine/zombine_charge2.wav")
-				self:GetOwner():SetHealth(self:GetOwner():Health() / 2)
-			end
-			timer.Simple(3.95, function() 
-				if self.Alive then
-					GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
-				end
-			end )
-			timer.Simple(4, function() 
-				if self.Alive then
-					self:GetOwner():Kill()
-				end
-			end )
-		end )
-	end
+	
 end

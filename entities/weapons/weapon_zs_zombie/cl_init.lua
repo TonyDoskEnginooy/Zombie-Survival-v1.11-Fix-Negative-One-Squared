@@ -3,6 +3,7 @@ include("shared.lua")
 SWEP.PrintName = "Zombie"
 
 function SWEP:PreDrawViewModel(vm, weapon, ply)
+	vm:SetColor(Color(255, 255, 255))
 	if ply:IsValid() then
 		if ply:GetColor() == Color(255, 255, 255, 50) then
 			render.SetBlend(0.2)
@@ -13,6 +14,7 @@ function SWEP:PreDrawViewModel(vm, weapon, ply)
 end
 
 function SWEP:PostDrawViewModel(vm, weapon, ply)
+	vm:SetColor(Color(255, 255, 255))
 	if ply:IsValid() then
 		if ply:GetColor() == Color(255, 255, 255, 50) then
 			render.SetBlend(0.2)

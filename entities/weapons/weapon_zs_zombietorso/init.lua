@@ -54,7 +54,7 @@ function SWEP:Think()
 					end
 					fin:TakeDamage(damage, ply)
 				end
-				if fin:IsPlayer() and fin:Team() ~= ply:Team() or not fin:IsPlayer() and not fin:IsNextBot() then
+				if fin:IsPlayer() and fin:Team() ~= ply:Team() or not fin:IsPlayer() and not fin:IsNextBot() and not fin:IsWorld() and fin:GetClass() ~= "trigger_soundscape" and fin:GetClass() ~= "info_target" and fin:GetClass() ~= "zombiegasses" then
 					self.survHit = true
 					break
 				end
