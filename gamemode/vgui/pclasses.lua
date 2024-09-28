@@ -4,6 +4,9 @@ local function SwitchClass(btn)
 	pClasses:SetVisible(false)
 end
 
+local ChooseText = "Choose a class..."
+local bossMode = false
+
 function MakepClasses()
 	if pClasses then
 		pClasses:Remove()
@@ -32,55 +35,131 @@ function MakepClasses()
 	local DScrollPanel = vgui.Create( "DScrollPanel", Window )
 	DScrollPanel:Dock( FILL )
 
-	surface.SetFont("HUDFontAAFix")
-	local tw, th = surface.GetTextSize("Choose a class...")
-	local label = vgui.Create("DLabel", DScrollPanel)
-	label:SetY(25)
-	label:SetSize(tw, th)
-	label:SetPos(w * 0.05, 0)
+	local ClassButton = vgui.Create( "DButton", Window )
+	ClassButton:SetText( "Classes" )
+	ClassButton:SetPos( 25, 0 )
+	ClassButton:SetSize( 150, 30 )
+	ClassButton.DoClick = function()
+		bossMode = false
+		RefreshMenu()
+	end
 
-	label:SetFont("HUDFontAAFix")
-	label:SetText("Choose a class...")
-	label:SetTextColor(color_white)
+	local BossButton = vgui.Create( "DButton", Window )
+	BossButton:SetText( "Bosses" )
+	BossButton:SetPos( 450, 0 )
+	BossButton:SetSize( 150, 30 )
+	BossButton.DoClick = function()
+		bossMode = true
+		RefreshMenu()
+	end
+
+	function RefreshMenu()
+		pClasses:Remove()
+		pClasses = nil
+		MakepClasses()
+	end
+
+	label = vgui.Create("DLabel", DScrollPanel)
 
 	local y = 50
 
-	for i, class in ipairs(ZombieClasses) do
-		if not class.Hidden then
-			local button = vgui.Create("SpawnIcon", DScrollPanel)
-			button:SetPos(41, y)
-			button:SetSize(w * 0.04, h * 0.07)
-			button:SetModel(class.Model)
-			button.Class = class
-			button.OnMousePressed = SwitchClass
+	function MakeButtons()
+		if bossMode then
+			ChooseText = "Choose a boss..."
+		else
+			ChooseText = "Choose a class..."
+		end
 
-			surface.SetFont("HUDFontSmallAAFix")
-			local tw, th = surface.GetTextSize(class.Name)
-			local label = vgui.Create("DLabel", DScrollPanel)
-			label:SetPos(button:GetWide() + 49, y - 5)
-			label:SetSize(tw, th)
-			label:SetFont("HUDFontSmallAAFix")
-			label:SetText(class.Name)
-			if class.Threshold <= INFLICTION then
-				label:SetTextColor(COLOR_LIMEGREEN)
+		surface.SetFont("HUDFontAAFix")
+		tw, th = surface.GetTextSize(ChooseText)
+
+		label:SetY(25)
+		label:SetSize(tw, th)
+		label:SetPos(w * 0.05, 0)
+
+		label:SetFont("HUDFontAAFix")
+		label:SetText(ChooseText)
+		label:SetTextColor(color_white)
+
+		for i, class in ipairs(ZombieClasses) do
+			if not bossMode then 
+				if not class.Hidden and not class.Boss then
+					local button = vgui.Create("SpawnIcon", DScrollPanel)
+					button:SetPos(41, y)
+					button:SetSize(w * 0.04, h * 0.07)
+					button:SetModel(class.Model)
+					button.Class = class
+					button.OnMousePressed = SwitchClass
+
+					surface.SetFont("HUDFontSmallAAFix")
+					local tw, th = surface.GetTextSize(class.Name)
+					local label = vgui.Create("DLabel", DScrollPanel)
+					label:SetPos(button:GetWide() + 49, y - 5)
+					label:SetSize(tw, th)
+					label:SetFont("HUDFontSmallAAFix")
+					label:SetText(class.Name)
+					if class.Threshold <= INFLICTION then
+						label:SetTextColor(COLOR_LIMEGREEN)
+					else
+						label:SetTextColor(COLOR_RED)
+					end
+
+					local yy = y + 2 + th
+					for i, line in ipairs(string.Explode("@", class.Description)) do
+						surface.SetFont("Default")
+						local tw, th = surface.GetTextSize(line)
+						local label = vgui.Create("DLabel", DScrollPanel)
+						label:SetPos(button:GetWide() + 52, yy - 5)
+						label:SetSize(tw, th)
+						label:SetFont("Default")
+						label:SetText(line)
+						label:SetTextColor(COLOR_GRAY)
+						yy = yy + th + 1
+					end
+
+					y = y + button:GetTall() + 16
+				end
 			else
-				label:SetTextColor(COLOR_RED)
-			end
+				if not class.Hidden and class.Boss then
+					local button = vgui.Create("SpawnIcon", DScrollPanel)
+					button:SetPos(41, y)
+					button:SetSize(w * 0.04, h * 0.07)
+					button:SetModel(class.Model)
+					button.Class = class
+					button.OnMousePressed = SwitchClass
 
-			local yy = y + 2 + th
-			for i, line in ipairs(string.Explode("@", class.Description)) do
-				surface.SetFont("Default")
-				local tw, th = surface.GetTextSize(line)
-				local label = vgui.Create("DLabel", DScrollPanel)
-				label:SetPos(button:GetWide() + 52, yy - 5)
-				label:SetSize(tw, th)
-				label:SetFont("Default")
-				label:SetText(line)
-				label:SetTextColor(COLOR_GRAY)
-				yy = yy + th + 1
-			end
+					surface.SetFont("HUDFontSmallAAFix")
+					local tw, th = surface.GetTextSize(class.Name)
+					local label = vgui.Create("DLabel", DScrollPanel)
+					label:SetPos(button:GetWide() + 49, y - 5)
+					label:SetSize(tw, th)
+					label:SetFont("HUDFontSmallAAFix")
+					label:SetText(class.Name)
+					if class.Threshold <= INFLICTION then
+						label:SetTextColor(COLOR_LIMEGREEN)
+					else
+						label:SetTextColor(COLOR_RED)
+					end
 
-			y = y + button:GetTall() + 16
+					local yy = y + 2 + th
+					for i, line in ipairs(string.Explode("@", class.Description)) do
+						surface.SetFont("Default")
+						local tw, th = surface.GetTextSize(line)
+						local label = vgui.Create("DLabel", DScrollPanel)
+						label:SetPos(button:GetWide() + 52, yy - 5)
+						label:SetSize(tw, th)
+						label:SetFont("Default")
+						label:SetText(line)
+						label:SetTextColor(COLOR_GRAY)
+						yy = yy + th + 1
+					end
+
+					y = y + button:GetTall() + 16
+				end
+			end
 		end
 	end
+
+	MakeButtons()
+
 end

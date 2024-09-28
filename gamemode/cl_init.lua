@@ -628,7 +628,7 @@ end
 end*/
 
 local function LoopUnlife()
-	if UNLIFE and not ENDROUND and not LASTHUMAN then
+	if UNLIFE and not ENDROUND and not LASTHUMAN and GetConVar("zs_test"):GetInt() < 1 then
 		surface.PlaySound(UNLIFESOUND)
 		timer.Simple(UNLIFESOUNDLENGTH, LoopUnlife)
 	end
@@ -879,40 +879,3 @@ function Rewarded()
 	GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontSmallAAFix>Arsenal Upgraded</font></color>", "<color=ltred><font=HL2MPTypeDeath>0</font></color>")
 end
 rW = Rewarded
-
-hook.Add( "PlayerFootstep", "ZombieFootsteps", function( ply, pos, foot, sound, volume, rf )
-	if ply:Team() == TEAM_HUMAN then 
-
-		return false
-	else
-		if ply:GetZombieClass() == 1 and ply:GetColor() == Color(255, 255, 255, 255) or ply:GetZombieClass() == 9 then
-			if math.random(1, 10) == 1 then  
-				ply:EmitSound("npc/zombie/foot_slide"..math.random(1,3)..".wav")
-			else
-				ply:EmitSound("npc/zombie/foot"..math.random(1,3)..".wav")
-			end
-		elseif ply:GetZombieClass() == 2 then
-			ply:EmitSound("npc/fast_zombie/foot"..math.random(1,4)..".wav")
-		elseif ply:GetZombieClass() == 3 then
-			if math.random(1, 5) == 1 then
-				ply:EmitSound("npc/zombie_poison/pz_right_foot1.wav")
-			else
-				ply:EmitSound("npc/zombie_poison/pz_left_foot1.wav")
-			end
-		elseif ply:GetZombieClass() == 4 then
-			ply:EmitSound("npc/combine_soldier/gear"..math.random(1,6)..".wav")
-		elseif ply:GetZombieClass() == 5 and ply:GetVelocity():Length() > 120 then
-			if math.random(1, 2) == 1 then 
-				ply:EmitSound("npc/stalker/stalker_footstep_left"..math.random(1,2)..".wav")
-			else
-				ply:EmitSound("npc/stalker/stalker_footstep_right"..math.random(1,2)..".wav")
-			end
-		elseif ply:GetZombieClass() > 5 and ply:GetZombieClass() < 9 then
-			ply:EmitSound("npc/headcrab_poison/ph_step"..math.random(1,4)..".wav")
-		elseif ply:GetZombieClass() == 10 then
-			ply:EmitSound("npc/zombine/gear"..math.random(1,3)..".wav")
-		end
-
-		return true
-	end
-end )

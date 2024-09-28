@@ -6,17 +6,13 @@ function CLASS.CalcMainActivity(ply, velocity)
 		return ACT_ZOMBIE_CLIMB_UP, -1
 	end
 
-	if wep:GetPounceTime() > 0 then
-		return ACT_ZOMBIE_LEAP_START, -1
-	end
-
 	if not ply:OnGround() or ply:WaterLevel() >= 3 then
 		return ACT_ZOMBIE_LEAPING, -1
 	end
 
 	local speed = velocity:Length2DSqr()
 
-	if speed > 256 and wep:GetSwinging() then --16^2
+	if speed > 256 and wep:GetSwinging() and not ply:Crouching() then --16^2
 		return ACT_HL2MP_RUN_ZOMBIE, -1
 	end
 
@@ -49,25 +45,12 @@ function CLASS.UpdateAnimation(ply, velocity, maxseqgroundspeed)
 		local vel = ply:GetVelocity()
 		local speed = vel:LengthSqr()
 		if speed > 64 then --8^2
-			ply:SetPlaybackRate(math.Clamp(speed / 25600, 0, 1) * (vel.z < 0 and -1 or 1)) --160^2
+			ply:SetPlaybackRate(2) --160^2
 		else
 			ply:SetPlaybackRate(0)
 		end
 
 		return true
-	end
-
-	if wep:GetPounceTime() > 0 then
-		ply:SetPlaybackRate(0.25)
-
-		if not ply.m_PrevFrameCycle then
-			ply.m_PrevFrameCycle = true
-			ply:SetCycle(0)
-		end
-
-		return true
-	elseif ply.m_PrevFrameCycle then
-		ply.m_PrevFrameCycle = nil
 	end
 
 	if not ply:OnGround() or ply:WaterLevel() >= 3 then

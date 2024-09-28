@@ -175,11 +175,13 @@ function meta:Redeem()
 	self:StripWeapons()
 	self:SetTeam(TEAM_HUMAN)
 	self:Spawn()
+	self:UnSpectate()
 	self:DrawViewModel(true)
 	self:DrawWorldModel(true)
 	self:SetFrags(0)
 	self:SetDeaths(0)
 	self.DeathClass = nil
+	self.BossClass = nil
 	self.LastAttacker = nil
 	self.Class = 1
 	self.SpawnedTime = CurTime()

@@ -319,7 +319,8 @@ util.PrecacheSound("npc/zombine/gear3.wav")
 ZombieClasses[1] =						-- The number should not be the same as any other class. You can't skip numbers.
 {
 	Name = "Zombie",					-- Display name.
-	Revives = true,						-- Zombie will revive if not shot in the head.
+	Revives = false,					-- Zombie will revive if not shot in the head.
+	Boss = false,						-- Determines if a zombie is a boss zombie or not.
 	Health = 125,						-- Obviously enough, health
 	Threshold = 0.0,					-- Infliction <a number between 0.0 and 1.0, 0 being anytime and 1 being when there's 100% zombies> needed in order to change to this class.
 	SWEP = "weapon_zs_zombie",			-- The SWEP to give them.
@@ -347,6 +348,8 @@ ZombieClasses[1] =						-- The number should not be the same as any other class.
 ZombieClasses[2] = 
 {
 	Name = "Fast Zombie",
+	Revives = false,
+	Boss = false,
 	Health = 100,
 	Threshold = 0.5,
 	SWEP = "weapon_zs_fastzombie",
@@ -367,6 +370,8 @@ ZombieClasses[2] =
 ZombieClasses[3] =
 {
 	Name = "Poison Zombie",
+	Revives = false,
+	Boss = false,
 	Health = 325,
 	Threshold = 0.65,
 	SWEP = "weapon_zs_poisonzombie",
@@ -388,6 +393,8 @@ ZombieClasses[3] =
 ZombieClasses[4] =
 {
 	Name = "Chem-Zombie",
+	Revives = false,
+	Boss = false,
 	Health = 40,
 	Threshold = 0.75,
 	SWEP = "weapon_zs_chemzombie",
@@ -410,6 +417,8 @@ ZombieClasses[4] =
 ZombieClasses[5] =
 {
 	Name = "Wraith",
+	Revives = false,
+	Boss = false,
 	Health = 75,
 	Threshold = 0.4,
 	SWEP = "weapon_zs_wraith",
@@ -431,6 +440,8 @@ ZombieClasses[5] =
 ZombieClasses[6] =
 {
 	Name = "Headcrab",
+	Revives = false,
+	Boss = false,
 	Health = 35,
 	Threshold = 0.26,
 	SWEP = "weapon_zs_headcrab",
@@ -452,6 +463,8 @@ ZombieClasses[6] =
 ZombieClasses[7] =
 {
 	Name = "Fast Headcrab",
+	Revives = false,
+	Boss = false,
 	Health = 20,
 	Threshold = 0.3333,
 	SWEP = "weapon_zs_fastheadcrab",
@@ -473,6 +486,8 @@ ZombieClasses[7] =
 ZombieClasses[8] =
 {
 	Name = "Poison Headcrab",
+	Revives = false,
+	Boss = false,
 	Health = 60,
 	Threshold = 0.6,
 	SWEP = "weapon_zs_poisonheadcrab",
@@ -495,6 +510,8 @@ ZombieClasses[8] =
 ZombieClasses[9] =
 {
 	Name = "Zombie Torso",
+	Revives = false,
+	Boss = false,
 	Health = 30,
 	Threshold = 0,
 	SWEP = "weapon_zs_zombietorso",
@@ -522,12 +539,14 @@ ZombieClasses[9] =
 ZombieClasses[10] =
 {
 	Name = "Zombine",
+	Revives = false,
+	Boss = false,
 	Health = 175,
 	Threshold = 0.8,
 	SWEP = "weapon_zs_zombine",
 	ANIM = "zombine",
 	Model = Model("models/zombie/zombie_soldier.mdl"),
-	Speed = 150,		
+	Speed = 150,
 	Description="The slow, sulking bag of flesh and combine technology. This is your barricade destroyer.@Unique abilities: Can pull out a grenade. Goes faster when damaged enough.",
 	PainSounds = {
 		Sound("npc/zombine/zombine_pain1.wav"),
@@ -544,12 +563,14 @@ ZombieClasses[10] =
 ZombieClasses[11] =	
 {
 	Name = "Fresh Meat",
+	Revives = false,
+	Boss = false,
 	Health = 100,
-	Threshold = 0.8,
+	Threshold = 0.0,
 	SWEP = "weapon_zs_fresh",
 	ANIM = "zombie",
-	Speed = 200,		
-	Description="The slow, sulking bag of flesh and combine technology. This is your barricade destroyer.@Unique abilities: Can pull out a grenade. Goes faster when damaged enough.",
+	Speed = 200,
+	Description="Bleh",
 	PainSounds = {
 		Sound("npc/zombie/zombie_pain1.wav"),
 		Sound("npc/zombie/zombie_pain2.wav"),
@@ -565,6 +586,29 @@ ZombieClasses[11] =
 	},
 	Unlocked = true,
 	Hidden = true
+}
+
+ZombieClasses[12] =	
+{
+	Name = "NightMare",
+	Revives = false,
+	Boss = true,
+	Health = 2000,
+	Threshold = 0.0,
+	SWEP = "weapon_zs_nightmare",
+	ANIM = "zombie",
+	Model = Model("models/player/charple.mdl"),
+	Speed = 130,
+	Description="The slow, sulking bag of flesh and combine technology. This is your barricade destroyer.@Unique abilities: Can pull out a grenade. Goes faster when damaged enough.",
+	PainSounds = {
+		Sound("npc/barnacle/barnacle_crunch2.wav"),
+		Sound("npc/barnacle/barnacle_crunch3.wav")
+	},
+	DeathSounds = {
+		Sound("npc/barnacle/neck_snap1.wav"),
+		Sound("npc/barnacle/neck_snap2.wav")
+	},
+	Unlocked = true
 }
 
 -- Add models to this table to prevent human players from using them (Zombie skins and such).
