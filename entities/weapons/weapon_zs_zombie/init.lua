@@ -14,6 +14,7 @@ local Cloaked = Color(255, 255, 255, 50)
 local DeCloaked = Color(255, 255, 255, 255)
 
 function SWEP:Deploy()
+	self.Living = true
 	self:GetOwner():DrawViewModel(true)
 	self:GetOwner():DrawWorldModel(false)
 	self:GetOwner():SetRenderMode(RENDERMODE_TRANSCOLOR)
@@ -25,7 +26,7 @@ function SWEP:Deploy()
 	GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 	self:SendWeaponAnim(ACT_VM_DRAW)
 	timer.Simple(1, function() 
-		if self.Alive then 
+		if self.Living then 
 			self:SendWeaponAnim(ACT_VM_IDLE)
 		end
 	end )
@@ -35,23 +36,23 @@ end
 -- and then if the after-swing doesn't hit anything, it hits whatever it hit in
 -- the pre-swing, as long as the distance is low enough.
 
-SWEP.Alive = true
+SWEP.Living = true
 local Touching = Vector(50, 50, 50)
 SWEP.survHit = false
 
 function SWEP:Think()
 	if IsValid(self:GetOwner()) then 
-		self.Alive = true
+		self.Living = true
 	else
-		self.Alive = false
+		self.Living = false
 	end
 	
 	if self:GetOwner():GetColor() == Cloaked then 
 		for _,surv in pairs(ents.FindInBox(self:GetOwner():GetPos() + self:GetOwner():OBBMins() + Touching, self:GetOwner():GetPos() + self:GetOwner():OBBMaxs() - Touching)) do
-			if IsValid(surv) and surv ~= self:GetOwner() and surv:IsPlayer() and surv:Alive() and surv:Team() ~= self:GetOwner():Team() then
+			if IsValid(surv) and surv ~= self:GetOwner() and surv:IsPlayer() and surv:Living() and surv:Team() ~= self:GetOwner():Team() then
 				self:GetOwner():SetColor(DeCloaked)
 				timer.Simple(0.5, function() 
-					if self.Alive and self.Invis == 1 then 
+					if self.Living and self.Invis == 1 then 
 						self:GetOwner():SetColor(Cloaked)
 					end
 				end )
@@ -153,7 +154,7 @@ function SWEP:PrimaryAttack()
 		end
 		timer.Simple(1.5, function() 
 			if self.NextSwing and CurTime() < self.NextSwing then return end
-			if self.Alive then  
+			if self.Living then  
 				self:SendWeaponAnim(ACT_VM_IDLE)
 			end
 		end )
@@ -177,7 +178,7 @@ function SWEP:Reload()
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 100)
 		self.InvisAction = CurTime() + 4
 		timer.Simple(2, function() 
-			if self.Alive then 
+			if self.Living then 
 				self.Invis = 1
 				self:GetOwner():SetColor(Cloaked)
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
@@ -193,14 +194,14 @@ function SWEP:Reload()
 		self:GetOwner():EmitSound("npc/zombie/zombie_alert"..math.random(1, 3)..".wav")
 		self.Invis = 0
 		timer.Simple(2, function() 
-			if self.Alive then 
+			if self.Living then 
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 				self.Invis = 0
 				self:GetOwner():SetColor(DeCloaked)
 			end
 		end )
 		timer.Simple(2.6, function() 
-			if self.Alive then
+			if self.Living then
 				self.Invis = 0
 				self:GetOwner():SetColor(DeCloaked)
 			end

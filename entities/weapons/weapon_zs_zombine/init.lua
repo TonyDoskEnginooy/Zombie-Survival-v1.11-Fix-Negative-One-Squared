@@ -25,20 +25,20 @@ function SWEP:Deploy()
 	GAMEMODE:SetPlayerSpeed(self:GetOwner(), ZombieClasses[self:GetOwner():GetZombieClass()].Speed)
 	self:SendWeaponAnim(ACT_VM_DRAW)
 	timer.Simple(1, function() 
-		if self.Alive then 
+		if self.Living then 
 			self:SendWeaponAnim(ACT_VM_IDLE)
 		end
 	end )
 end
 
-SWEP.Alive = true
+SWEP.Living = true
 SWEP.survHit = false
 
 function SWEP:Think()
 	if IsValid(self:GetOwner()) then 
-		self.Alive = true
+		self.Living = true
 	else
-		self.Alive = false
+		self.Living = false
 	end
 
 	if self:GetOwner():Health() <= ZombieClasses[self:GetOwner():GetZombieClass()].Health / 2 and self:GetGrenading() == false then 
@@ -128,8 +128,8 @@ function SWEP:PrimaryAttack()
 		self.PreHit = ent
 	end
 	timer.Simple(1.5, function() 
-		if self.Alive and self:GetNextSwing() and CurTime() < self:GetNextSwing() then return end
-		if self.Alive then  
+		if self.Living and self:GetNextSwing() and CurTime() < self:GetNextSwing() then return end
+		if self.Living then  
 			self:SendWeaponAnim(ACT_VM_IDLE)
 		end
 	end )
@@ -153,18 +153,18 @@ function SWEP:Reload()
 		GAMEMODE:SetPlayerSpeed(self:GetOwner(), 1)
 		self:GetOwner():EmitSound("npc/zombine/zombine_alert"..math.random(1, 7)..".wav")
 		timer.Simple(1, function()
-			if self.Alive then  
+			if self.Living then  
 				GAMEMODE:SetPlayerSpeed(self:GetOwner(), 200)
 				self:GetOwner():EmitSound("npc/zombine/zombine_charge2.wav")
 				self:GetOwner():SetHealth(self:GetOwner():Health() / 2)
 			end
 			timer.Simple(3.95, function() 
-				if self.Alive then
+				if self.Living then
 					GAMEMODE:SetPlayerSpeed(self:GetOwner(), 300)
 				end
 			end )
 			timer.Simple(4, function() 
-				if self.Alive then
+				if self.Living then
 					self:GetOwner():Kill()
 				end
 			end )

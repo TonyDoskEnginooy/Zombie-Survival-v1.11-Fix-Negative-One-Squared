@@ -30,13 +30,13 @@ function SWEP:Deploy()
 	self:SetNextSwing(0)
 	self:SendWeaponAnim(ACT_VM_DRAW)
 	timer.Simple(0.5, function()
-		if self.Alive then 
+		if self.Living then 
 			self:SendWeaponAnim(ACT_VM_IDLE)
 		end 
 	end )
 end
 
-SWEP.Alive = true
+SWEP.Living = true
 SWEP.Scream = false
 SWEP.ScreamDuration = CurTime() + SoundDuration("npc/fast_zombie/fz_frenzy1.wav")
 
@@ -52,12 +52,12 @@ function SWEP:Think()
 	end
 
 	if IsValid(owner) then 
-		self.Alive = true
+		self.Living = true
 	else
-		self.Alive = false
+		self.Living = false
 	end
 
-	if not self.Alive then 
+	if not self.Living then 
 		owner:StopSound("npc/fast_zombie/gurgle_loop1.wav")
 	end
 
@@ -178,7 +178,7 @@ function SWEP:SecondaryAttack()
 	if onground and not self:GetClimbing() and CurTime() >= self:GetPounceTime() then 
 		self:SendWeaponAnim(ACT_VM_THROW)
 		timer.Simple(0.5, function()
-			if self.Alive then 
+			if self.Living then 
 				self:SendWeaponAnim(ACT_VM_IDLE)
 			end 
 		end )
@@ -202,8 +202,8 @@ function SWEP:SecondaryAttack()
 			owner:EmitSound("player/footsteps/metalgrate"..math.random(1,4)..".wav")
 			self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
 			timer.Simple(0.5, function() 
-				if self.Alive and self:GetClimbing() then return end
-				if self.Alive then 
+				if self.Living and self:GetClimbing() then return end
+				if self.Living then 
 					self:SendWeaponAnim(ACT_VM_IDLE)
 				end 
 			end )
