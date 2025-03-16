@@ -3,6 +3,10 @@ AddCSLuaFile("shared.lua")
 
 include("shared.lua")
 
+function SWEP:SetLeaping(leaping)
+	self:SetDTBool(0, leaping)
+end
+
 function SWEP:Deploy()
 	local owner = self:GetOwner()
 	owner:DrawViewModel(false)
@@ -10,13 +14,14 @@ function SWEP:Deploy()
 	net.Start("RcHCScale")
 		net.WriteEntity(owner)
 	net.Broadcast()
+	self:SetLeaping(false)
 end
 
 function SWEP:Think()
-	if self.Leaping then
+	if self:GetLeaping() then
 		local owner = self:GetOwner()
 		if owner:OnGround() or 0 < owner:WaterLevel() then
-			self.Leaping = false
+			self:SetLeaping(false)
 			self.NextLeap = CurTime() + 0.75
 			--self:GetOwner():SetViewOffset(self.OriginalViewOffset)
 		else
@@ -37,14 +42,14 @@ function SWEP:Think()
 					end
 					ent:TakeDamage(damage, owner)
 				end
-				self.Leaping = false
+				self:SetLeaping(false)
 				self.NextLeap = CurTime() + 1
 				--self:GetOwner():SetViewOffset(self.OriginalViewOffset)
 				owner:EmitSound("npc/headcrab/headbite.wav", 85, 115)
 				owner:ViewPunch(Angle(math.random(0, 30), math.random(0, 30), math.random(0, 30)))
 			elseif trace.HitWorld then
 				owner:EmitSound("physics/flesh/flesh_strider_impact_bullet1.wav", 85, 115)
-				self.Leaping = false
+				self:SetLeaping(false)
 				self.NextLeap = CurTime() + 1
 				--self:GetOwner():SetViewOffset(self.OriginalViewOffset)
 			end
@@ -54,7 +59,7 @@ end
 
 SWEP.NextLeap = 0
 function SWEP:PrimaryAttack()
-	if self.Leaping or CurTime() < self.NextLeap or not self:GetOwner():OnGround() then return end
+	if self:GetLeaping() or CurTime() < self.NextLeap or not self:GetOwner():OnGround() then return end
 	self:GetOwner():Fire("IgnoreFallDamage", "", 0)
 
 	local vel = self:GetOwner():GetAimVector()
@@ -74,7 +79,7 @@ function SWEP:PrimaryAttack()
 	self:GetOwner():EmitSound("npc/headcrab/attack"..math.random(1,3)..".wav", 85, 115)
 	self:GetOwner():SetAnimation(PLAYER_ATTACK1)
 
-	self.Leaping = true
+	self:SetLeaping(true)
 end
 
 SWEP.NextYell = 0

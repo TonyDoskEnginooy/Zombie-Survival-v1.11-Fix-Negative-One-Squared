@@ -25,3 +25,7 @@ function SWEP:Precache()
 	util.PrecacheSound("npc/headcrab/attack3.wav")
 	util.PrecacheSound("npc/headcrab/headbite.wav")
 end
+
+function SWEP:GetLeaping()
+	return self:GetDTBool(0)
+end

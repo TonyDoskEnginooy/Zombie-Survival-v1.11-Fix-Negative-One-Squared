@@ -15,6 +15,10 @@ function SWEP:SetNextLeap(time)
 	self:SetDTFloat(1, time)
 end
 
+function SWEP:SetScuttling(scuttle)
+	self:SetDTBool(1, scuttle)
+end
+
 function SWEP:Deploy()
 	local owner = self:GetOwner()
 	owner:DrawViewModel(false)

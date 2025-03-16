@@ -48,6 +48,10 @@ function SWEP:GetLeaping()
 end
 SWEP.IsLeaping = SWEP.GetLeaping
 
+function SWEP:GetScuttling()
+	return self:GetDTBool(1)
+end
+
 function SWEP:GetNextLeap()
 	return self:GetDTFloat(1)
 end
