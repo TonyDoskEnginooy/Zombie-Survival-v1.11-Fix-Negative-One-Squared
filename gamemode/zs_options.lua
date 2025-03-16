@@ -599,7 +599,7 @@ ZombieClasses[12] =
 	ANIM = "zombie",
 	Model = Model("models/player/charple.mdl"),
 	Speed = 130,
-	Description="The slow, sulking bag of flesh and combine technology. This is your barricade destroyer.@Unique abilities: Can pull out a grenade. Goes faster when damaged enough.",
+	Description="A slow, haunting depiction of your worst nightmares, strong enough to follow you anywhere.@Unique abilities: Dims the vision of whoever is hit by you.",
 	PainSounds = {
 		Sound("npc/barnacle/barnacle_crunch2.wav"),
 		Sound("npc/barnacle/barnacle_crunch3.wav")

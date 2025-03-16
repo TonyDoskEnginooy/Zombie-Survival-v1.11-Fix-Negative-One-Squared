@@ -949,20 +949,36 @@ end
 function GM:PlayerHurt(victim, attacker, healthRemaining, damageTaken)
 	if not damageTaken then return end
 	if not attacker:IsPlayer() and victim:IsPlayer() then return end
+	local class = victim:GetZombieClass()
+	local classtab = ZombieClasses[class]
+	local wep = victim:GetActiveWeapon()
 
-	if victim:Team() == TEAM_SURVIVORS then
-		for i=1, math.ceil(math.min(3, damageTaken * 0.05)) do
-			local effectdata = EffectData()
-				effectdata:SetOrigin(victim:GetPos() + Vector(0,0,48))
-				effectdata:SetMagnitude(math.random(1, 3))
-			util.Effect("bloodstream", effectdata, true, true)
-		end
+	for i=1, math.ceil(math.min(3, damageTaken * 0.05)) do
+		local effectdata = EffectData()
+			effectdata:SetOrigin(victim:GetPos() + Vector(0,0,48))
+			effectdata:SetMagnitude(math.random(1, 3))
+		util.Effect("bloodstream", effectdata, true, true)
 	end
 
 	local victimteam = victim:Team()
 	if attacker:Team() ~= victimteam then
 		local myteam = attacker:Team()
 		attacker.DamageDealt[myteam] = attacker.DamageDealt[myteam] + damageTaken
+	end
+
+	if victim:Team() == TEAM_ZOMBIE and classtab.Name == "Poison Headcrab" then
+		if wep:GetScuttling() == false then
+			victim:SetVelocity(Vector(0,0,300))
+			GAMEMODE:SetPlayerSpeed(victim, classtab.Speed * 2)
+			wep:SetScuttling(true)
+			wep:SetHurt(true)
+			timer.Simple(3, function() 
+				if IsValid(victim) and IsValid(wep) then 
+					wep:SetScuttling(false)
+					GAMEMODE:SetPlayerSpeed(victim, classtab.Speed)
+				end
+			end )
+		end
 	end
 end
 
@@ -1556,17 +1572,17 @@ concommand.Add("zs_class", function(sender, command, arguments)
 	for i=1, #ZombieClasses do
 		if string.lower(ZombieClasses[i].Name) == string.lower(arguments) then
 			if ZombieClasses[i].Hidden then
-				sender:PrintMessage(HUD_PRINTTALK, "AND STOP SHOUTING! I'M NOT DEAF!")
+				sender:SendLua("GAMEMODE:SplitMessage(h*0.65,\"<color=red><font=HUDFontAAFix>AND STOP SHOUTING! I'M NOT DEAF!</font></color>\")")
 			elseif ZombieClasses[i].Threshold > INFLICTION and not ZombieClasses[i].Unlocked then
-				sender:PrintMessage(HUD_PRINTTALK, "There are too many living to use that class. Kill some more humans to unlock it.")
+				sender:SendLua("GAMEMODE:SplitMessage(h*0.65,\"<color=red><font=HUDFontAAFix>There are too many living to use that class.</font></color>\", \"<color=ltred><font=HUDFontSmallAAFix>Kill some more humans to unlock it.</font></color>\")")
 			elseif sender.Class == i and not sender.DeathClass then
-				sender:PrintMessage(HUD_PRINTTALK, "You are already a "..ZombieClasses[i].Name.."!")
+				sender:SendLua("GAMEMODE:SplitMessage(h*0.65,\"<color=red><font=HUDFontAAFix>You are already a "..ZombieClasses[i].Name..".</font></color>\")")
 			else
-				if not ZombieClasses[i].Boss then 
-					sender:PrintMessage(HUD_PRINTTALK, "You will respawn as a "..ZombieClasses[i].Name..".")
+				if not ZombieClasses[i].Boss then
+					sender:SendLua("GAMEMODE:SplitMessage(h*0.65,\"<color=red><font=HUDFontAAFix>You will respawn as a "..ZombieClasses[i].Name..".</font></color>\")")
 					sender.DeathClass = i
 				else
-					sender:PrintMessage(HUD_PRINTTALK, "You will become a "..ZombieClasses[i].Name..".")
+					sender:SendLua("GAMEMODE:SplitMessage(h*0.65,\"<color=red><font=HUDFontAAFix>You will rise as "..ZombieClasses[i].Name..".</font></color>\")")
 					sender.BossClass = i
 				end
 			end

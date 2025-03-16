@@ -609,23 +609,29 @@ function Intermission(nextmap, winner)
 	end
 end
 
-/*function DrawUnlock()
+function GM:DrawUnlock(amt, uncl)
 	if ENDROUND then
 		hook.Remove("HUDPaint", "DrawUnlock")
 		DrawRewardTime = nil
 		return
 	end
 	DrawUnlockTime = DrawUnlockTime or RealTime() + 3
-	draw.RoundedBox(16, w * 0.375, h * 0.07, w * 0.25, h * 0.06, color_black_alpha180)
-	draw.DrawText(UnlockedClass.." unlocked!", "HUDFontSmallFix", w*0.5 + XNameBlur2, h*0.085 + YNameBlur, Color(200, 0, 0, 180), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-	draw.DrawText(UnlockedClass.." unlocked!", "HUDFontSmallFix", w*0.5, h*0.085, COLOR_RED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	if amt == 1 then 
+		draw.RoundedBox(16, w*0.35, h*0.07, w*0.3, h*0.06, color_black_alpha90)
+		draw.SimpleText(uncl.." unlocked!", "HUDFontSmall", w*0.5 + XNameBlur2, h*0.1 + YNameBlur, COLOR_INFLICTION, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(uncl.." unlocked!", "HUDFontSmall", w*0.5, h*0.1, COLOR_RED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	elseif amt > 1 then 
+		draw.RoundedBox(16, w*0.35, h*0.07, w*0.3, h*0.06, color_black_alpha90)
+		draw.SimpleText(amt.." classes unlocked!", "HUDFontSmall", w*0.5 + XNameBlur2, h*0.1 + YNameBlur, COLOR_INFLICTION, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+		draw.SimpleText(amt.." classes unlocked!", "HUDFontSmall", w*0.5, h*0.1, COLOR_RED, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	end
 	if RealTime() > DrawUnlockTime then
 		hook.Remove("HUDPaint", "DrawUnlock")
 		DrawUnlockTime = nil
 		UnlockedClass = nil
 		return
 	end
-end*/
+end
 
 local function LoopUnlife()
 	if UNLIFE and not ENDROUND and not LASTHUMAN and GetConVar("zs_test"):GetInt() < 1 then
@@ -664,7 +670,7 @@ local function SetInf(infliction)
 				RunConsoleCommand("stopsound")
 				timer.Simple(0.5, LoopUnlife)
 			end
-			GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontBigFix>Un-Life</font></color>", "<color=ltred><font=HUDFontSmallAAFix>Horde locked at 75%</font></color>")
+			GAMEMODE:SplitMessage(h * 0.725, "<color=red><font=HUDFontBigFix>Un-Life</font></color>", "<color=ltred><font=HUDFontSmallAAFix>Horde locked at 75%</font></color>")
 			GAMEMODE:SetUnlifeText()
 		elseif INFLICTION >= 0.5 and not HALFLIFE then
 			HALFLIFE = true
@@ -673,7 +679,7 @@ local function SetInf(infliction)
 				timer.Simple(0.5, LoopHalflife)
 			end
 			surface.PlaySound("npc/fast_zombie/fz_alert_far1.wav")
-			GAMEMODE:SplitMessage(h * 0.725, "<color=ltred><font=HUDFontBigFix>Half-Life</font></color>", "<color=ltred><font=HUDFontSmallAAFix>Horde locked above 50%</font></color>")
+			GAMEMODE:SplitMessage(h * 0.725, "<color=red><font=HUDFontBigFix>Half-Life</font></color>", "<color=ltred><font=HUDFontSmallAAFix>Horde locked above 50%</font></color>")
 			GAMEMODE:SetHalflifeText()
 		elseif usesound then
 			if INFLICTION < 0.75 then 
@@ -681,16 +687,16 @@ local function SetInf(infliction)
 			else
 				surface.PlaySound("npc/zombie_poison/pz_alert2.wav")
 			end
+			hook.Add("HUDPaint", "DrawUnlock", function()
+				GAMEMODE:DrawUnlock(amount, UnlockedClass) 
+			end )
 			--[[
-				UnlockedClass =  -- So you can have more than one class with the same infliction without getting spammed.
-			end
-			hook.Add("HUDPaint", "DrawUnlock", DrawUnlock)
-			]]
 			if amount == 1 then
 				GAMEMODE:SplitMessage(h * 0.12, "<color=green><font=HUDFontAAFix>"..UnlockedClass.." unlocked!</font></color>")
 			else
 				GAMEMODE:SplitMessage(h * 0.12, "<color=green><font=HUDFontAAFix>"..amount.." classes unlocked!</font></color>")
 			end
+			]]
 		end
 	end
 end

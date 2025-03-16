@@ -1,6 +1,10 @@
 function CLASS.CalcMainActivity(ply, velocity)
     local wep = ply:GetActiveWeapon()
 	if wep:IsValid() then
+		if not ply:OnGround() and wep.GetHurt and wep:GetHurt() then 
+			return 1, 10
+		end
+
 		if wep.ShouldPlayLeapAnimation and wep:ShouldPlayLeapAnimation() then
 			return 1, 7
 		end
@@ -11,14 +15,18 @@ function CLASS.CalcMainActivity(ply, velocity)
 	end
 
 	if ply:OnGround() then
-		if velocity:Length2DSqr() > 1 then
-			return ACT_RUN, -1
+		if velocity:Length2DSqr() > 1 and wep:IsValid() then
+			if wep.GetScuttling and wep:GetScuttling() then 
+				return ACT_RUN, -1
+			else
+				return 1, 15
+			end
 		end
 
 		return 1, 4
 	end
 
-	return 1, 21 -- 15
+	return 1, 21
 end
 
 function CLASS.UpdateAnimation(ply, velocity, maxseqgroundspeed)
@@ -51,6 +59,11 @@ function CLASS.UpdateAnimation(ply, velocity, maxseqgroundspeed)
 			end
 			ply:SetPlaybackRate(0)
 
+			return true
+		end
+	else
+		if not ply:OnGround() then  
+			ply:SetPlaybackRate(1)
 			return true
 		end
 	end

@@ -12,7 +12,7 @@ function CLASS.CalcMainActivity(ply, velocity)
 		return 1, 9
 	end
 
-	if wep:GetLeaping() then 
+	if wep.GetLeaping and wep:GetLeaping() then 
 		return 1, 3
 	else
 		return 1, 9
