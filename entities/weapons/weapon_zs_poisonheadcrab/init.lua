@@ -19,6 +19,10 @@ function SWEP:SetScuttling(scuttle)
 	self:SetDTBool(1, scuttle)
 end
 
+function SWEP:SetHurt(hurt)
+	self:SetDTBool(2, hurt)
+end
+
 function SWEP:Deploy()
 	local owner = self:GetOwner()
 	owner:DrawViewModel(false)
@@ -28,10 +32,15 @@ function SWEP:Deploy()
 	net.Broadcast()
 	self:SetNextSpit(0)
 	self:SetNextLeap(0)
+	self:SetScuttling(false)
+	self:SetHurt(false)
 end
 
 function SWEP:Think()
 	local owner = self:GetOwner()
+	if owner:OnGround() then
+		self:SetHurt(false)
+	end
 	if self:IsGoingToSpit() and CurTime() > self:GetNextSpit() then
 		owner:Freeze(false)
 		self:SetNextSpit(0)

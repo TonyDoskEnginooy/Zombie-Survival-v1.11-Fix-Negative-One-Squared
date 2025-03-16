@@ -17,7 +17,7 @@ function SWEP:Deploy()
 	self:SetNextYell(0)
 	self:SendWeaponAnim(ACT_VM_DRAW)
 	timer.Simple(1, function() 
-		if self.Alive then 
+		if self.Living then 
 			self:SendWeaponAnim(ACT_VM_IDLE)
 		end
 	end )
@@ -31,9 +31,9 @@ SWEP.survHit = false
 
 function SWEP:Think()
 	if IsValid(self:GetOwner()) then 
-		self.Alive = true
+		self.Living = true
 	else
-		self.Alive = false
+		self.Living = false
 	end
 
 	if not self.NextHit then return end
@@ -130,7 +130,7 @@ function SWEP:PrimaryAttack()
 		end
 		timer.Simple(1.5, function() 
 			if self.NextSwing and CurTime() < self.NextSwing then return end
-			if self.Alive then  
+			if self.Living then  
 				self:SendWeaponAnim(ACT_VM_IDLE)
 			end
 		end )

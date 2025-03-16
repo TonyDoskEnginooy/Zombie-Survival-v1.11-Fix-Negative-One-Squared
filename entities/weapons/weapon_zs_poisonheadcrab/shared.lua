@@ -52,6 +52,10 @@ function SWEP:GetScuttling()
 	return self:GetDTBool(1)
 end
 
+function SWEP:GetHurt()
+	return self:GetDTBool(2)
+end
+
 function SWEP:GetNextLeap()
 	return self:GetDTFloat(1)
 end
