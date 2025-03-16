@@ -18,7 +18,7 @@ function CLASS.CalcMainActivity(ply, velocity)
 		return 1, 4
 	end
 
-	return 1, 6
+	return 1, 21 -- 15
 end
 
 function CLASS.UpdateAnimation(ply, velocity, maxseqgroundspeed)
