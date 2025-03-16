@@ -17,9 +17,9 @@ function CLASS.CalcMainActivity(ply, velocity)
 	if ply:OnGround() then
 		if velocity:Length2DSqr() > 1 and wep:IsValid() then
 			if wep.GetScuttling and wep:GetScuttling() then 
-				return ACT_RUN, -1
-			else
 				return 1, 15
+			else
+				return ACT_RUN, -1
 			end
 		end
 
