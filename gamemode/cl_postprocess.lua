@@ -157,7 +157,7 @@ function DeadC()
 		ColorModify["$pp_colour_addg"] = 0
 		ColorModify["$pp_colour_addb"] = 0
 		ColorModify["$pp_colour_brightness"] = 0
-		ColorModify["$pp_colour_contrast"] = 1
+		ColorModify["$pp_colour_contrast"] = 0.75
 		ColorModify["$pp_colour_colour"] = 1
 		ColorModify["$pp_colour_mulr"] = 0
 		ColorModify["$pp_colour_mulg"] = 0

@@ -225,6 +225,7 @@ function GM:Initialize()
 
 	RunConsoleCommand("mp_mm_max_spectators", "0")
 	RunConsoleCommand("mp_allowspectators", "0")
+	RunConsoleCommand("mp_falldamage", "1")
 end
 
 function GM:UnlockAllWeapons(sender)
@@ -528,7 +529,7 @@ function GM:Think()
 		if team.NumPlayers(TEAM_ZOMBIE) < 1 and team.NumPlayers(TEAM_SURVIVORS) >= 3 then 
 			local plays = player.GetAll()
 			local newply = plays[math.random(1, #plays)]
-			for _, ply in ipairs(plays) do 
+			for _, ply in ipairs(plays) do
 				if ply ~= newply then
 					ply:SetTeam(TEAM_SURVIVORS)
 				end
@@ -935,6 +936,8 @@ function GM:PlayerSay(ply, text, teamonly)
 end
 
 function GM:PlayerDeathThink(ply)
+	ply:SetRenderMode(RENDERMODE_NORMAL)
+	ply:GetViewModel():SetColor(Color(255, 255, 255, 255))
 	if CurTime() > ply.NextSpawnTime then
 		if ply:Team() == TEAM_ZOMBIE then
 			if ply:KeyDown(IN_ATTACK) then
@@ -1136,7 +1139,6 @@ local function ChemBomb(ply, refrag)
 end
 
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
-	ply:StopSound("npc/fast_zombie/gurgle_loop1.wav")
 	ply:SetLocalVelocity(ply:GetVelocity() * 2.5)
 
 	ply:Freeze(false)
@@ -1400,7 +1402,8 @@ local color_normal = Color(255, 255, 255, 255)
 function GM:PlayerSpawn(ply)
 	local plyteam = ply:Team()
 	local spawnProtectionTime = ( team.NumPlayers(TEAM_SURVIVORS) / player.GetCount() ) * 5
-	ply:StopSound("npc/fast_zombie/gurgle_loop1.wav")
+	ply:SetRenderMode(RENDERMODE_NORMAL)
+	ply:GetViewModel():SetColor(Color(255, 255, 255, 255))
 
 	if plyteam == TEAM_SPECTATOR then
 		ply:SetTeam(TEAM_ZOMBIE)
