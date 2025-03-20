@@ -54,3 +54,13 @@ function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 	draw.SimpleText(self.PrintName, "HUDFontSmallAA", XNameBlur2 + x + wide * 0.5, YNameBlur + y + tall * 0.5, color_blur1, TEXT_ALIGN_CENTER)
 	draw.SimpleText(self.PrintName, "HUDFontSmallAA", XNameBlur + x + wide * 0.5, YNameBlur + y + tall * 0.5, color_blu1, TEXT_ALIGN_CENTER)
 end
+
+function SWEP:PreDrawViewModel(vm, weapon, ply)
+    vm:SetRenderMode(RENDERMODE_NORMAL)
+    vm:SetColor(Color(255, 255, 255))
+end
+
+function SWEP:PostDrawViewModel(vm, weapon, ply)
+    vm:SetRenderMode(RENDERMODE_NORMAL)
+    vm:SetColor(Color(255, 255, 255))
+end
