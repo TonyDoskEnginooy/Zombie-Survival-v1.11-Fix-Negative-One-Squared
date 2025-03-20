@@ -936,8 +936,6 @@ function GM:PlayerSay(ply, text, teamonly)
 end
 
 function GM:PlayerDeathThink(ply)
-	ply:SetRenderMode(RENDERMODE_NORMAL)
-	ply:GetViewModel():SetColor(Color(255, 255, 255, 255))
 	if CurTime() > ply.NextSpawnTime then
 		if ply:Team() == TEAM_ZOMBIE then
 			if ply:KeyDown(IN_ATTACK) then
@@ -1402,8 +1400,6 @@ local color_normal = Color(255, 255, 255, 255)
 function GM:PlayerSpawn(ply)
 	local plyteam = ply:Team()
 	local spawnProtectionTime = ( team.NumPlayers(TEAM_SURVIVORS) / player.GetCount() ) * 5
-	ply:SetRenderMode(RENDERMODE_NORMAL)
-	ply:GetViewModel():SetColor(Color(255, 255, 255, 255))
 
 	if plyteam == TEAM_SPECTATOR then
 		ply:SetTeam(TEAM_ZOMBIE)
