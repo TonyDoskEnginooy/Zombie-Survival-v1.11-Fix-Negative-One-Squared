@@ -25,7 +25,8 @@ function SWEP:Deploy()
 	local owner = self:GetOwner()
 	owner:DrawViewModel(true)
 	owner:DrawWorldModel(false)
-	owner:StopLoopingSound(owner:StartLoopingSound("npc/fast_zombie/gurgle_loop1.wav"))
+	self:StopSound("npc/fast_zombie/gurgle_loop1.wav")
+	self:StopLoopingSound(self:StartLoopingSound("npc/fast_zombie/gurgle_loop1.wav"))
 	self:SetPounceTime(0)
 	self:SetNextSwing(0)
 	self:SendWeaponAnim(ACT_VM_DRAW)
@@ -58,14 +59,16 @@ function SWEP:Think()
 	end
 
 	if not self.Living then 
-		owner:StopSound("npc/fast_zombie/gurgle_loop1.wav")
+		self:StopSound("npc/fast_zombie/gurgle_loop1.wav")
+		self:StopLoopingSound(self:StartLoopingSound("npc/fast_zombie/gurgle_loop1.wav"))
 	end
 
 	if self:GetSwinging() then
 		self.Scream = true
-		owner:StartLoopingSound("npc/fast_zombie/gurgle_loop1.wav")
+		self:StartLoopingSound("npc/fast_zombie/gurgle_loop1.wav")
 	else
-		owner:StopSound("npc/fast_zombie/gurgle_loop1.wav")
+		self:StopSound("npc/fast_zombie/gurgle_loop1.wav")
+		self:StopLoopingSound(self:StartLoopingSound("npc/fast_zombie/gurgle_loop1.wav"))
 		if self.Scream then
 			if self.ScreamDuration <= CurTime() then
 				owner:EmitSound("npc/fast_zombie/fz_frenzy1.wav")
